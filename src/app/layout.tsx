@@ -1,12 +1,11 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
 import "./globals.css";
-
-const inter = Inter({ subsets: ["latin"] });
+import { ClerkProvider } from '@clerk/nextjs';
+import Navigation from '../components/Navigation';
 
 export const metadata: Metadata = {
   title: "Calorie Tracker App",
-  description: "Track your calories and stay healthy!",
+  description: "Track your calories and stay healthy!"
 };
 
 export default function RootLayout({
@@ -14,9 +13,16 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  return (
-    <html lang="en">
-      <body className={inter.className}>{children}</body>
-    </html>
-  );
+    return (
+    <ClerkProvider>
+      <html lang="en">
+        <body>
+          <Navigation></Navigation>
+          <div className='container mx-auto'>
+            {children}
+          </div>
+        </body>
+      </html>
+    </ClerkProvider>
+  )
 }
