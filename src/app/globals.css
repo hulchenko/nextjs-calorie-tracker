@@ -2,15 +2,3 @@
 @tailwind components;
 @tailwind utilities;
 
-body {
-  /* TODO update */
-  margin: 0;
-  padding: 0;
-  text-align: center;
-}
-
-@layer utilities {
-  .text-balance {
-    text-wrap: balance;
-  }
-}
