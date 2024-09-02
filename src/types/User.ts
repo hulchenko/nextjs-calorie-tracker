@@ -1,8 +1,6 @@
-// TODO replace this
-
 export interface User {
-  id: string;
-  firstName: string;
-  lastName: number;
-  emailAddresses: any[];
+  user_id: string;
+  first_name: string;
+  last_name: number;
+  email: string;
 }

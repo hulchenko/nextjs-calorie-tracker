@@ -1,15 +1,16 @@
+import { checkUserDB } from '@/lib/db';
 import GreetingPage from '../components/GreetingPage';
 import LandingPage from '../components/LandingPage';
-import {auth, currentUser} from '@clerk/nextjs/server'
+import {currentUser} from '@clerk/nextjs/server'
 
 
 const HomePage = async () => {
-  const user = await currentUser(); 
-  console.log(`USER:`, user?.firstName)
+  const authUser = await currentUser();
+  const userDB = authUser ? await checkUserDB(authUser) : null;
 
-    if(user) {
+    if(userDB) {
       return ( 
-        <LandingPage user={user}></LandingPage>
+        <LandingPage user={userDB}></LandingPage>
       );
     } else {
       return (
