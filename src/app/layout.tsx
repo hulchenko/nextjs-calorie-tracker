@@ -1,3 +1,4 @@
+import { Nunito } from 'next/font/google';
 import type { Metadata } from "next";
 import "./globals.css";
 import { ClerkProvider } from '@clerk/nextjs';
@@ -8,6 +9,12 @@ export const metadata: Metadata = {
   description: "Track your calories and stay healthy!"
 };
 
+const roboto = Nunito({
+  weight: '400',
+  subsets: ['latin'],
+  display: 'swap'
+})
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -16,7 +23,7 @@ export default function RootLayout({
     return (
     <ClerkProvider>
       <html lang="en">
-        <body>
+        <body className={roboto.className}>
           <Navigation></Navigation>
           <div className='container mx-auto'>
             {children}
