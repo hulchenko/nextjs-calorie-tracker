@@ -1,7 +1,7 @@
 import { Nunito } from 'next/font/google';
 import type { Metadata } from "next";
 import "./globals.css";
-import { ClerkProvider } from '@clerk/nextjs';
+import { ChakraProvider } from '@chakra-ui/react';
 import Navigation from '../components/Navigation';
 
 export const metadata: Metadata = {
@@ -20,16 +20,18 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+
+  
     return (
-    <ClerkProvider>
+    
       <html lang="en">
         <body className={roboto.className}>
           <Navigation></Navigation>
           <div className='container mx-auto'>
-            {children}
+            <ChakraProvider>{children}</ChakraProvider>
           </div>
         </body>
       </html>
-    </ClerkProvider>
+    
   )
 }
