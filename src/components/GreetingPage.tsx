@@ -1,10 +1,15 @@
-import { SignInButton } from '@clerk/nextjs';
-const GreetingPage = (user: any) => {
+"use client";
+
+import SignInForm from '../components/SignInForm';
+import SignUpForm from './SignUpForm';
+
+
+const GreetingPage = () => {
     return (
-        <div className='container mx-auto px-20 mt-40'>
-            <div className='text-xl text-center'>
-                <h1 className='text-2xl p-4'>Welcome!</h1>
-                <h3><span className='bg-white hover:bg-gray-100 text-gray-800 font-semibold py-2 px-4 rounded shadow'><SignInButton /></span> to experience the app.</h3>
+        <div className='container mx-auto px-15 mt-40'>
+            <div className='text-xl text-center flex'>
+                <SignUpForm />
+                <SignInForm />
             </div>
         </div>
      );
