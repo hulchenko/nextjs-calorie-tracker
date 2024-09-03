@@ -3,6 +3,7 @@ import type { Metadata } from "next";
 import "./globals.css";
 import { ChakraProvider } from '@chakra-ui/react';
 import Navigation from '../components/Navigation';
+import Footer from '@/components/Footer';
 
 export const metadata: Metadata = {
   title: "Calorie Tracker App",
@@ -23,7 +24,6 @@ export default function RootLayout({
 
   
     return (
-    
       <html lang="en">
         <body className={roboto.className}>
           <Navigation></Navigation>
@@ -31,6 +31,7 @@ export default function RootLayout({
             <ChakraProvider>{children}</ChakraProvider>
           </div>
         </body>
+        <Footer></Footer>
       </html>
     
   )
