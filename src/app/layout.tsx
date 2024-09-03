@@ -27,7 +27,7 @@ export default function RootLayout({
       <html lang="en">
         <body className={roboto.className}>
           <Navigation></Navigation>
-          <div className='container mx-auto'>
+          <div className='container mx-auto w-3/5 text-xl'>
             <ChakraProvider>{children}</ChakraProvider>
           </div>
         </body>

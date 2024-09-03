@@ -1,5 +1,4 @@
 import { checkUserDB } from '@/lib/db';
-import { User } from '@/types/User';
 import {
   Modal,
   ModalOverlay,
@@ -21,43 +20,20 @@ const SignUpForm = () => {
     const toast = useToast();
 
     const { isOpen, onOpen, onClose } = useDisclosure();
-    const [firstName, setFirstName] = useState('');
-    const [lastName, setLastName] = useState('');
-    const [email, setEmail] = useState('');
-
-    const onChangeHandler = (event) => {
-      // Create handler to correct ts error with event.target.value on the input fields
-
-      event.preventDefault();
-      const target = event.target.name;
-      const value = event?.target?.value?.trim() || '';
-      switch (target) {
-        case 'first':
-          setFirstName(value)
-          break;
-        case 'last':
-          setLastName(value)
-          break;
-        case 'email':
-          setEmail(value)
-          break;
-      }
-    }
-
+    const [userData, setUserData] = useState({
+      firstName: '',
+      lastName: '',
+      email: ''
+    });
     
-    const submitHandler =  () => {
-      event.preventDefault()
-        const user: User = {
-          firstName,
-          lastName,
-          email
-        }
-        console.log(`USER: `, user)
+    const submitHandler =  (event) => {
+      event.preventDefault() // prevent modal from closing until successful promise result
+        console.log(`USER: `, userData)
 
-        checkUserDB(user, false)
+        checkUserDB(userData, false)
           .then(_ => { 
             toast({ title: 'Success', description: 'Account has been created.', status: 'success' });
-            onClose()
+            onClose() // close modal on success
           })
           .catch((err) => { toast({ title: 'Error', description: `${err.message}`, status: 'error'}) })
     }
@@ -83,17 +59,17 @@ const SignUpForm = () => {
             <ModalBody pb={6}>
               <FormControl isRequired>
                 <FormLabel>First name</FormLabel>
-                <Input name='first' placeholder='First name' type='text' onChange={(e) => onChangeHandler(e)}/>
+                <Input name='first' placeholder='First name' type='text' onChange={(e) => setUserData((props) => ({...props, firstName: e.target.value}))}/>
               </FormControl>
 
               <FormControl mt={4}>
                 <FormLabel>Last name</FormLabel>
-                <Input name='last' placeholder='Last name' type='text' onChange={(e) => onChangeHandler(e)}/>
+                <Input name='last' placeholder='Last name' type='text' onChange={(e) => setUserData((props) => ({...props, lastName: e.target.value}))}/>
               </FormControl>
 
               <FormControl mt={4} isRequired>
                 <FormLabel>Email</FormLabel>
-                <Input name='email' placeholder='email@example.com' type='email' onChange={(e) => onChangeHandler(e)}/>
+                <Input name='email' placeholder='email@example.com' type='email' onChange={(e) => setUserData((props) => ({...props, email: e.target.value}))}/>
               </FormControl>
             </ModalBody>
 

@@ -6,8 +6,8 @@ import SignUpForm from './SignUpForm';
 
 const GreetingPage = () => {
     return (
-        <div className='container mx-auto px-15 mt-40'>
-            <div className='text-xl text-center flex'>
+        <div className='mx-auto mt-40'>
+            <div className='text-center flex justify-between'>
                 <SignUpForm />
                 <SignInForm />
             </div>
