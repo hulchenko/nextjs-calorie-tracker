@@ -6,11 +6,10 @@ import SignUpForm from './SignUpForm';
 
 const GreetingPage = () => {
     return (
-        <div className='mx-auto mt-40'>
-            <div className='text-center flex justify-between'>
-                <SignUpForm />
+        <div className='mx-auto mt-40 items-center flex flex-col'>
+            <h1 className='text-6xl p-6'>Lead your healthy <span className='text-teal-700'>life</span> here!</h1>
                 <SignInForm />
-            </div>
+                <SignUpForm />
         </div>
      );
 }
