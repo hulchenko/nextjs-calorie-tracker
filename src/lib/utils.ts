@@ -1,20 +1,18 @@
-"use server";
+"use server"; // XXX all of the functions implicitly turn to async
 
 import bcrypt from 'bcrypt';
 
-export const passwordValidator = (password: string): boolean => {
+export const passwordValidator = async (password: string): Promise<boolean> => {
     const regex = new RegExp(/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{6,}$/gm);
     return regex.test(password);
 }
 
 export const encryptPassword = async (password: string): Promise<string> => {
     const saltRounds = 10;
-    console.log(`ORIGINAL PASSWORD: `, password);
     const hashedPassword = await bcrypt.hash(password, saltRounds);
-    console.log(`HASHED PASSWORD: `, hashedPassword);
     return hashedPassword;
 }
 
-export const validateHashedPassword = (password: string, hashedPassword: string): boolean => {
+export const validateHashedPassword = async (password: string, hashedPassword: string): Promise<boolean> => {
     return bcrypt.compareSync(password, hashedPassword);
 }
