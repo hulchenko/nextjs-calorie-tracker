@@ -21,18 +21,13 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-
-  
     return (
       <html lang="en">
-        <body className={roboto.className}>
+        <body className={`${roboto.className} min-h-screen bg-gray-50 min-w-fit`}>
           <Navigation></Navigation>
-          <div className='container mx-auto w-3/5 text-xl'>
-            <ChakraProvider>{children}</ChakraProvider>
-          </div>
+              <ChakraProvider>{children}</ChakraProvider>
+          <Footer></Footer>
         </body>
-        <Footer></Footer>
       </html>
-    
   )
 }

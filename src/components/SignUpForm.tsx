@@ -1,5 +1,8 @@
-import { checkUserDB } from '@/lib/db';
-import { passwordValidator } from '@/lib/utils';
+"use client";
+
+import { FormEvent } from 'react';
+import { checkUserDB } from '@/server/checkUserDB';
+import { encryptPassword, passwordValidator } from '@/lib/utils';
 import {
   Modal,
   ModalOverlay,
@@ -26,19 +29,21 @@ const SignUpForm = () => {
     const { isOpen, onOpen, onClose } = useDisclosure();
     const [showPassword, setShowPassword] = useState(false);
     const [isPasswordValid, setIsPasswordValid] = useState(true);
-    const [userData, setUserData] = useState({
-      firstName: '',
-      lastName: '',
-      email: '',
-      password: ''
-    });
-    
-    const submitHandler = (event) => {
+
+    const submitHandler = async (event: FormEvent<HTMLFormElement>) => {
       event.preventDefault() // prevent modal from closing until successful promise result
-      console.log(`NEW USER: `, userData)
-      setIsPasswordValid(passwordValidator(userData.password));
+      const formData = new FormData(event.currentTarget);
+      const password = formData.get('password');
+      const hashedPassword = await encryptPassword(password as string);
+      const newUser = {
+        firstName: formData.get('first'),
+        lastName: formData.get('last'),
+        email: formData.get('email'),
+        password: hashedPassword
+      };
+      setIsPasswordValid(passwordValidator(password as string));
       if (isPasswordValid){
-        checkUserDB(userData, false)
+        checkUserDB(newUser, false)
           .then(_ => { 
             toast({ title: 'Success', description: 'Account has been created.', status: 'success' });
             onClose() // close modal on success
@@ -66,17 +71,17 @@ const SignUpForm = () => {
             <ModalBody pb={6}>
               <FormControl isRequired>
                 <FormLabel>First name</FormLabel>
-                <Input focusBorderColor='teal.600' name='first' placeholder='First name' type='text' onChange={(e) => setUserData((props) => ({...props, firstName: e.target.value.trim()}))}/>
+                <Input focusBorderColor='teal.600' name='first' placeholder='First name' type='text'/>
               </FormControl>
 
               <FormControl mt={4}>
                 <FormLabel>Last name</FormLabel>
-                <Input focusBorderColor='teal.600' name='last' placeholder='Last name' type='text' onChange={(e) => setUserData((props) => ({...props, lastName: e.target.value.trim()}))}/>
+                <Input focusBorderColor='teal.600' name='last' placeholder='Last name' type='text'/>
               </FormControl>
 
               <FormControl mt={4} isRequired>
                 <FormLabel>Email</FormLabel>
-                <Input focusBorderColor='teal.600'name='email' placeholder='email@example.com' type='email' onChange={(e) => setUserData((props) => ({...props, email: e.target.value.trim()}))}/>
+                <Input focusBorderColor='teal.600' name='email' placeholder='email@example.com' type='email'/>
               </FormControl>
 
               <FormControl mt={4} isRequired isInvalid={!isPasswordValid}>
@@ -85,10 +90,9 @@ const SignUpForm = () => {
                       <Input
                         focusBorderColor='teal.600'
                         pr='4.5rem'
+                        name='password'
                         type={showPassword ? 'text' : 'password'}
-                        placeholder='Enter password'
-                        onChange={(e) => setUserData((props) => ({...props, password: e.target.value.trim()}))}
-                      />
+                        placeholder='Enter password'/>
                       <InputRightElement width='4.5rem'>
                         <Button h='1.75rem' size='md' onClick={() => setShowPassword(!showPassword)}>
                           {showPassword ? 'Hide' : 'Show'}
