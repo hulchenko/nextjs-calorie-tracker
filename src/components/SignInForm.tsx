@@ -38,15 +38,16 @@ const SignInForm = () => {
                 })
                 
                 if (response.ok){
-                    router.push('/dashboard')
-                    toast({title: 'Logged in', status: 'success'})
+                    router.push('/dashboard');
+                    // TODO introduce loader here
+                    toast({title: 'Logged in', status: 'success'});
                 } else {
-                    const { error } = await response.json()
-                    toast({title: `${error}`, status: 'error'})
+                    const { error } = await response.json();
+                    toast({title: `${error}`, status: 'error'});
                 }
 
             } catch (error) {
-                console.error('Error occured during login:', error)
+                console.error('Error occured during login:', error);
             }
         }
     }

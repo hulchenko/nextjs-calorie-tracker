@@ -1,7 +1,6 @@
 "use client";
 
 import { FormEvent } from 'react';
-import { checkUserDB } from '@/server/checkUserDB';
 import { encryptPassword, passwordValidator } from '@/lib/utils';
 import {
   Modal,
@@ -22,33 +21,53 @@ import {
   FormErrorMessage
 } from '@chakra-ui/react';
 import { useState } from 'react';
+import { useRouter } from 'next/navigation';
 
 const SignUpForm = () => {
     const toast = useToast();
+    const router = useRouter();
 
     const { isOpen, onOpen, onClose } = useDisclosure();
     const [showPassword, setShowPassword] = useState(false);
-    const [isPasswordValid, setIsPasswordValid] = useState(true);
+    const [isFormValid, setIsFormValid] = useState(true);
 
     const submitHandler = async (event: FormEvent<HTMLFormElement>) => {
       event.preventDefault() // prevent modal from closing until successful promise result
+      
       const formData = new FormData(event.currentTarget);
       const password = formData.get('password');
       const hashedPassword = await encryptPassword(password as string);
+
       const newUser = {
         firstName: formData.get('first'),
         lastName: formData.get('last'),
         email: formData.get('email'),
         password: hashedPassword
       };
-      setIsPasswordValid(passwordValidator(password as string));
+
+      const isPasswordValid = await passwordValidator(password as string);
+      setIsFormValid(isPasswordValid);
+
       if (isPasswordValid){
-        checkUserDB(newUser, false)
-          .then(_ => { 
-            toast({ title: 'Success', description: 'Account has been created.', status: 'success' });
-            onClose() // close modal on success
-          })
-          .catch((err) => { toast({ title: 'Error', description: `${err.message}`, status: 'error'}) })
+        try {
+          const response = await fetch('/api/auth/register', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({ newUser })
+        });
+
+          if (response.ok){
+            // TODO once session is controlled, log in and authorize user on sign up
+            const body = await response.json();
+            toast({title: `Welcome, ${body.first_name}!`, status: 'success'});
+            router.push('/dashboard');
+            // TODO introduce loader here
+          }
+          const body = await response.json();
+          console.log(`BODY IN SIGN UP: `, body);
+        } catch (error) {
+          console.error('Error occured during sign up:', error);
+        }
       }
     }
 
@@ -61,7 +80,7 @@ const SignUpForm = () => {
         </div>
 
 
-      {/* Sign Up modal */}  
+      {/* Sign Up modal using Chakra UI */}  
       <Modal isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />
         <ModalContent>
@@ -84,7 +103,7 @@ const SignUpForm = () => {
                 <Input focusBorderColor='teal.600' name='email' placeholder='email@example.com' type='email'/>
               </FormControl>
 
-              <FormControl mt={4} isRequired isInvalid={!isPasswordValid}>
+              <FormControl mt={4} isRequired isInvalid={!isFormValid}>
                 <FormLabel>Password</FormLabel>
                     <InputGroup size='md'>
                       <Input
@@ -99,7 +118,7 @@ const SignUpForm = () => {
                         </Button>
                       </InputRightElement>
                     </InputGroup>
-                    {!isPasswordValid && (
+                    {!isFormValid && (
                         <FormErrorMessage>
                           Password must have at least 6 characters. A combination of uppercase and lowercase letters, numbers. Can contain special characters.
                         </FormErrorMessage>

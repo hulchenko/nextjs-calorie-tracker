@@ -1,4 +1,4 @@
-"use server"; // XXX all of the functions implicitly turn to async
+"use server"; // all of the functions implicitly turn to async
 
 import bcrypt from 'bcrypt';
 
@@ -14,5 +14,8 @@ export const encryptPassword = async (password: string): Promise<string> => {
 }
 
 export const validateHashedPassword = async (password: string, hashedPassword: string): Promise<boolean> => {
-    return bcrypt.compareSync(password, hashedPassword);
+    if (password && hashedPassword){
+        return bcrypt.compareSync(password, hashedPassword);
+    }
+    return false;
 }

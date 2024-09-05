@@ -1,22 +1,22 @@
-import { checkUserDB } from '@/lib/db';
-import GreetingPage from '../components/GreetingPage';
-import LandingPage from '../components/LandingPage';
-import {currentUser} from '@clerk/nextjs/server'
+// import { checkUserDB } from '@/server/checkUserDB';
+// import LoginPage from '../components/LoginPage';
+// import Dashboard from '../components/Dashboard';
 
 
-const HomePage = async () => {
-  const authUser = await currentUser();
-  const userDB = authUser ? await checkUserDB(authUser) : null;
+// const HomePage = async () => {
+//   const authUser = await currentUser();
+//   const userDB = authUser ? await checkUserDB(authUser) : null;
 
-    if(userDB) {
-      return ( 
-        <LandingPage user={userDB}></LandingPage>
-      );
-    } else {
-      return (
-        <GreetingPage></GreetingPage>
-      )
-    }
-}
+//     if(userDB) {
+//       return ( 
+//         <Dashboard user={userDB}></Dashboard>
+//       );
+//     } else {
+//       return (
+//         <GreetingPage></GreetingPage>
+//       )
+//     }
+//     return (<LoginPage></LoginPage>)
+// }
  
-export default HomePage;
+// export default HomePage;

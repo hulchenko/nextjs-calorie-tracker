@@ -1,4 +1,3 @@
-import { SignedIn, SignedOut, SignInButton, UserButton } from '@clerk/nextjs';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faWeightScale } from '@fortawesome/free-solid-svg-icons';
 
@@ -6,7 +5,7 @@ const Navigation = () => {
     return ( 
         <>
         <div>
-          <SignedOut>
+          {/* <SignedOut>
             <div className="flex items-center bg-teal-800 p-4">
               <FontAwesomeIcon className='h-10 text-white px-4' icon={faWeightScale} />
               <h3 className='text-2xl text-white flex-1'>Calorie Tracker</h3>
@@ -23,7 +22,7 @@ const Navigation = () => {
                 <UserButton />
               </div>
             </div>
-        </SignedIn>
+        </SignedIn> */}
         </div>
         </>
      );
