@@ -2,7 +2,7 @@ import { Nunito } from 'next/font/google';
 import type { Metadata } from "next";
 import "./globals.css";
 import { ChakraProvider } from '@chakra-ui/react';
-import Navigation from '../components/Navigation';
+import Navigation from '@/components/Navigation';
 import Footer from '@/components/Footer';
 
 export const metadata: Metadata = {

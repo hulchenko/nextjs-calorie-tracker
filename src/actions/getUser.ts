@@ -1,7 +1,7 @@
 "use server";
 
-import { UserDB } from '../types/User';
-import { sql } from '@/lib/db';
+import { UserDB } from '@/types/User';
+import { sql } from '@/db/client';
 
 export const getUser = async (prop, queryById): Promise<UserDB[] | any> => {
     // redundant code due to query builder doesn't handle variable interpolation correctly (e.g. dynamically swapping between the user_id/email properties)
@@ -13,7 +13,7 @@ export const getUser = async (prop, queryById): Promise<UserDB[] | any> => {
             const response = await sql `SELECT * FROM users WHERE email = ${prop}`;
             return response[0];
         }
-    } catch(error) {
+    } catch (error) {
         throw new Error('Error getting user', error);
     }    
 }

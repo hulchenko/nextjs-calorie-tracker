@@ -1,8 +1,8 @@
 "use server";
 
-import {sql} from '../lib/db';
-import {v4 as uuidv4} from 'uuid';
-import { UserDB } from '../types/User';
+import { sql } from '@/db/client';
+import { v4 as uuidv4 } from 'uuid';
+import { UserDB } from '@/types/User';
 import { revalidatePath } from 'next/cache'; // purges cached data
 
 export const createUser = async (user): Promise<UserDB[] | any> => {
