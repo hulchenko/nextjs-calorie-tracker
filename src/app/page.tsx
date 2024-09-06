@@ -1,22 +1,7 @@
-// import { checkUserDB } from '@/server/checkUserDB';
-// import LoginPage from '../components/LoginPage';
-// import Dashboard from '../components/Dashboard';
+import { redirect } from 'next/navigation';
 
-
-// const HomePage = async () => {
-//   const authUser = await currentUser();
-//   const userDB = authUser ? await checkUserDB(authUser) : null;
-
-//     if(userDB) {
-//       return ( 
-//         <Dashboard user={userDB}></Dashboard>
-//       );
-//     } else {
-//       return (
-//         <GreetingPage></GreetingPage>
-//       )
-//     }
-//     return (<LoginPage></LoginPage>)
-// }
+const HomePage = async () => {
+    redirect('/login');
+}
  
-// export default HomePage;
+export default HomePage;

@@ -2,9 +2,9 @@ import { verifyUserDB } from '@/actions/checkUserDB';
 import { NextRequest, NextResponse } from 'next/server';
 import { createSession } from '@/lib/session';
 
-export async function POST(req: NextRequest) {
+export async function POST(request: NextRequest) {
     try {
-        const { newUser } = await req.json();
+        const { newUser } = await request.json();
         const dbUser = await verifyUserDB(newUser, false);
         await createSession(dbUser.user_id)
         return NextResponse.json(dbUser);

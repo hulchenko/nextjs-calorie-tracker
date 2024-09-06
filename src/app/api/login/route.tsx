@@ -3,10 +3,10 @@ import { getUser } from '@/actions/getUser';
 import { validateHashedPassword } from '@/lib/utils';
 import { createSession } from '@/lib/session';
 
-export async function POST(req: NextRequest) {
+export async function POST(request: NextRequest) {
 
   try {
-    const body = await req.json();
+    const body = await request.json();
     const { email, password } = body;
     
     const user = await getUser(email, false);
