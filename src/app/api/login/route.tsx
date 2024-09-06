@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getUser } from '@/actions/getUser';
 import { validateHashedPassword } from '@/lib/utils';
+import { createSession } from '@/lib/session';
 
 export async function POST(req: NextRequest) {
 
@@ -18,7 +19,8 @@ export async function POST(req: NextRequest) {
     console.log(`isPasswordCorrect: `, isPasswordCorrect);
 
     if (isPasswordCorrect) {
-      return NextResponse.json({ success: true });
+      await createSession(user.user_id)
+      return NextResponse.json(user);
     } else {
       return NextResponse.json({ error: 'Invalid credentials.' }, { status: 401 });
     }

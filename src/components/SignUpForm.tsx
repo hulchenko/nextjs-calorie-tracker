@@ -59,6 +59,7 @@ const SignUpForm = () => {
           if (response.ok){
             // TODO once session is controlled, log in and authorize user on sign up
             const body = await response.json();
+
             toast({title: `Welcome, ${body.first_name}!`, status: 'success'});
             router.push('/dashboard');
             // TODO introduce loader here
