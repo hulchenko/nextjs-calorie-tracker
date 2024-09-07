@@ -38,7 +38,7 @@ export const createSession = async (userId: string) => {
     })
 }
 
-export const updateSession = async (request: NextRequest) => {
+export const updateSession = async () => {
     const session = cookies().get('session')?.value;
 
     if (!session){

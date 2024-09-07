@@ -9,6 +9,6 @@ export async function POST(request: NextRequest) {
         await createSession(dbUser.user_id)
         return NextResponse.json(dbUser);
     } catch (error) {
-        return NextResponse.json({error: 'User creation failed.'}, { status: 500 })
+        return NextResponse.json({error: `${error}`}, { status: 409 })
     }
 }
