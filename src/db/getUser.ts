@@ -4,7 +4,7 @@ import { UserDB } from '@/types/User';
 import { sql } from '@/db/client';
 
 export const getUser = async (prop, queryById): Promise<UserDB[] | any> => {
-    // redundant code due to query builder doesn't handle variable interpolation correctly (e.g. dynamically swapping between the user_id/email properties)
+    // query builder does not support variable interpolation correctly (e.g. dynamically swapping between the user_id/email properties)
     try {
         if(queryById) {
             const response = await sql `SELECT * FROM users WHERE user_id = ${prop}`;
