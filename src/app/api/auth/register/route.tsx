@@ -1,4 +1,4 @@
-import { verifyUserDB } from '@/db/checkUserDB';
+import { verifyUserDB } from '@/db/verifyUserDB';
 import { NextRequest, NextResponse } from 'next/server';
 import { createSession } from '@/lib/session';
 
