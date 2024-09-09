@@ -16,7 +16,6 @@ export async function POST(request: NextRequest) {
     }
 
     const isPasswordCorrect = await validateHashedPassword(password, user?.password);
-    console.log(`isPasswordCorrect: `, isPasswordCorrect);
 
     if (isPasswordCorrect) {
       await createSession(user.user_id)

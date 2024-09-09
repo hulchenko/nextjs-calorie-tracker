@@ -1,7 +1,6 @@
 import 'server-only';
 import {SignJWT, jwtVerify, JWTPayload} from 'jose';
 import { cookies } from 'next/headers';
-import { NextRequest } from 'next/server';
 
 const secretKey = process.env.SESSION_SECRET;
 const encodedKey = new TextEncoder().encode(secretKey); // secretKey in bytes
@@ -65,7 +64,7 @@ export const deleteSession = () => {
     cookies().delete('session');
 }
 
-export const getSession = async () => {
+export const verifySession = async () => {
     const session = cookies().get('session')?.value;
 
     if (!session){

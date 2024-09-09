@@ -25,7 +25,7 @@ const ActivityListener = () => {
 
     const updateSession = async () => {
         try {
-            const response = await fetch('/api/auth/session/update', {
+            const response = await fetch('/api/auth/session', {
                 method: 'POST'
             });
             if (response.ok) {

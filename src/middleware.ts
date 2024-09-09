@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { decrypt, updateSession } from './lib/session';
 import { cookies } from 'next/headers'; // cannot be modified, but can be fetched in middleware
-import { getSession } from './lib/session';
+import { verifySession } from './lib/session';
 import { redirect } from 'next/navigation';
 
 const protectedRoutes = ['/dashboard', '/profile'];
@@ -12,7 +12,7 @@ export default async function middleware(request: NextRequest) {
     const requestedUrl = request.nextUrl.pathname;
     const isProtectedRoute = protectedRoutes.includes(requestedUrl);
     const isAuthRoute = authRoutes.includes(requestedUrl);
-    const session = await getSession();
+    const session = await verifySession();
 
     if(requestedUrl === '/'){
       if (!session) {
