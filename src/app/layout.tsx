@@ -5,6 +5,7 @@ import { ChakraProvider } from '@chakra-ui/react';
 import Navigation from '@/components/Navigation';
 import Footer from '@/components/Footer';
 import ActivityListener from '@/components/ActivityListener';
+import { SessionProvider } from './context/SessionProvider';
 
 export const metadata: Metadata = {
   title: "Calorie Tracker App",
@@ -26,10 +27,12 @@ export default async function RootLayout({
     return (
       <html lang="en">
         <body className={`${roboto.className} min-h-screen bg-gray-50 min-w-fit`}>
-          <ActivityListener />
-          <Navigation />
-          <ChakraProvider>{children}</ChakraProvider>
-          <Footer />
+          <SessionProvider>
+            <ActivityListener />
+            <Navigation/>
+            <ChakraProvider>{children}</ChakraProvider>
+            <Footer />
+          </SessionProvider>
         </body>
       </html>
   )

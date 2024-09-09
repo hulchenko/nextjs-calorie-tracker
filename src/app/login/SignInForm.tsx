@@ -3,11 +3,13 @@
 import { FormEvent, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useToast } from '@chakra-ui/react';
+import { useSession } from '../context/SessionProvider';
 
 const SignInForm = () => {
     const toast = useToast();
     const router = useRouter();
 
+    const { setSession } = useSession();
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [isFormValid, setIsFormValid] = useState({
@@ -35,8 +37,9 @@ const SignInForm = () => {
                     headers: { 'Content-Type': 'application/json'},
                     body: JSON.stringify({email, password})
                 })
-                
                 if (response.ok){
+                    const sessionData = await response.json();
+                    setSession(sessionData);
                     router.push('/dashboard');
                     // TODO introduce loader here
                     toast({title: 'Signed in', status: 'info'});
