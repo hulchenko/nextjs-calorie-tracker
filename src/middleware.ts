@@ -2,18 +2,18 @@ import { NextRequest, NextResponse } from 'next/server';
 import { verifySession } from './lib/session';
 
 const protectedRoutes = ['/dashboard', '/profile'];
-const authRoutes = ['/login'];
+const publicRoutes = ['/login'];
 
 export default async function middleware(request: NextRequest) {
-
     const requestedUrl = request.nextUrl.pathname;
     const isProtectedRoute = protectedRoutes.includes(requestedUrl);
-    const isAuthRoute = authRoutes.includes(requestedUrl);
+    const isAuthRoute = publicRoutes.includes(requestedUrl);
+
     const session = await verifySession();
 
     if(requestedUrl === '/'){ // default home page
       if (!session) {
-        return NextResponse.redirect(new URL('/login', request.nextUrl))
+        return NextResponse.redirect(new URL('/login', request.nextUrl));
       }
      return NextResponse.redirect(new URL('/dashboard', request.nextUrl))
     }

@@ -1,8 +1,7 @@
 import { NextResponse } from 'next/server';
 import { verifySession, updateSession } from '@/lib/session';
 
-export async function POST() {
-    // update session
+export async function POST() { // refresh session
     const session = await verifySession();
     if (session) {
         await updateSession();
@@ -12,7 +11,7 @@ export async function POST() {
     }
 }
 
-export async function GET() {
+export async function GET() { // verify current session
     const session = await verifySession();
     if(session) {
         return NextResponse.json(session);

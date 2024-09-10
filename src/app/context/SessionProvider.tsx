@@ -1,13 +1,16 @@
 // Context shares data state with entire app
 
 'use client';
-import { createContext, useContext, useMemo, useState, useEffect } from 'react';
+import { createContext, useContext, useState, useEffect, useRef } from 'react';
 import { Session } from '@/types/Session';
+import { useRouter } from 'next/navigation';
 
 const SessionContext = createContext<{session: Session | null, setSession: (session: Session | null) => void}>({session: null, setSession: () => {}}); // define passing value
 
 export const SessionProvider = ({children}) => {
     const [session, setSession] = useState<Session | null>(null);
+    const authenticated = useRef(false); // keep track of the user's authenticated state
+    const router = useRouter();
     
     const getSession = async () => {
     try {
@@ -15,6 +18,10 @@ export const SessionProvider = ({children}) => {
         const session = await response.json();
         if(response.ok){
             setSession(session);
+            authenticated.current = true;
+        } else {
+            setSession(null);
+            handleAuthenticated();
         }
     } catch (error) {
         console.error('Error getting session', error);
@@ -22,8 +29,19 @@ export const SessionProvider = ({children}) => {
         }
     };
 
+    const handleAuthenticated = () => {
+        if(authenticated.current){ // kick out authenticated user to /login on expired session
+            router.push('/login')
+        }
+    }
+
     useEffect(() => {
+        // initiate session provider
         getSession();
+
+        // set periodic interval to sync session state
+        const sessionCheck = setInterval(() => getSession(), 5 * 60 * 1000); // every 5 minutes
+        return () => clearInterval(sessionCheck); // clean up interval
     }, []);
 
     return ( 
