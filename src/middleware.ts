@@ -14,7 +14,7 @@ export default async function middleware(request: NextRequest) {
     const isAuthRoute = authRoutes.includes(requestedUrl);
     const session = await verifySession();
 
-    if(requestedUrl === '/'){
+    if(requestedUrl === '/'){ // default home page
       if (!session) {
         return NextResponse.redirect(new URL('/login', request.nextUrl))
       }
