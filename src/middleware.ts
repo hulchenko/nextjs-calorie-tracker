@@ -1,8 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { decrypt, updateSession } from './lib/session';
-import { cookies } from 'next/headers'; // cannot be modified, but can be fetched in middleware
 import { verifySession } from './lib/session';
-import { redirect } from 'next/navigation';
 
 const protectedRoutes = ['/dashboard', '/profile'];
 const authRoutes = ['/login'];
