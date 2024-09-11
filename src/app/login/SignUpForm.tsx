@@ -60,7 +60,6 @@ const SignUpForm = () => {
             const body = await response.json();
             toast({title: `Welcome, ${body.first_name}!`, status: 'success'});
             router.push('/dashboard');
-            // TODO introduce loader here
           } else {
             const { error } = await response.json();
             toast({title: `${error}`, status: 'error'});
