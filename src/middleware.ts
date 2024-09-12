@@ -18,11 +18,11 @@ export default async function middleware(request: NextRequest) {
      return NextResponse.redirect(new URL('/dashboard', request.nextUrl))
     }
 
-    if (isProtectedRoute && !session?.userId) { // not authorized + route attempt to /dashboard or /profile, default to /login
+    if (isProtectedRoute && !session?.user?.user_id) { // not authorized + route attempt to /dashboard or /profile, default to /login
         return NextResponse.redirect(new URL('/login', request.nextUrl))
     } 
 
-    if (isAuthRoute && session?.userId) { // authorized + route attempt to /login, default to /dashboard
+    if (isAuthRoute && session?.user?.user_id) { // authorized + route attempt to /login, default to /dashboard
         return NextResponse.redirect(new URL('/dashboard', request.nextUrl))
     }
   return NextResponse.next()

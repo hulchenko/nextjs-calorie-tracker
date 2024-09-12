@@ -44,11 +44,17 @@ const Navigation = () => {
               <ul className='flex justify-end w-80 space-x-4 text-lg'>
                 {session && (
                   <>
-                    <li className='hover:text-teal-200'><Link href={'/dashboard'}>Dashboard</Link></li>
-                    <li className='hover:text-teal-200'><Link href={'/profile'}>Profile</Link></li>
+                    <li className='hover:text-teal-200'>
+                      <Link href={'/dashboard'}>Dashboard</Link>
+                    </li>
+                    <li className='hover:text-teal-200'>
+                      <Link href={'/profile'}>Profile</Link>
+                    </li>
                   </>
                 )}
-                <li className='hover:text-teal-200'><Link href={'/about'}>About</Link></li>
+                <li className='hover:text-teal-200'>
+                  <Link href={'/about'}>About</Link>
+                </li>
                 <li className='hover:text-teal-200'>
                   <button onClick={authStateHandler}>{session ? 'Sign Out' : 'Sign In'}</button>
                 </li>

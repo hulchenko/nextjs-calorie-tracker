@@ -1,15 +1,20 @@
 // Context shares data state with entire app
 
 'use client';
+
 import { createContext, useContext, useState, useEffect, useRef } from 'react';
 import { Session } from '@/types/Session';
 import { useRouter } from 'next/navigation';
 
-const SessionContext = createContext<{session: Session | null, setSession: (session: Session | null) => void}>({session: null, setSession: () => {}}); // define passing value
+const SessionContext = createContext<{session: Session | null, setSession: (session: Session | null) => void}>({
+    session: null,
+    setSession: () => {}
+}); // define passing value
 
-export const SessionProvider = ({children}) => {
-    const [session, setSession] = useState<Session | null>(null);
-    const authenticated = useRef(false); // keep track of the user's authenticated state
+export const SessionProvider = ({children, initialSession}) => {
+    const [session, setSession] = useState<Session | null>(initialSession);
+
+    const authenticated = useRef(false); // keep track of the user's authenticated state. Its value persists between renders, unlike useState()
     const router = useRouter();
     
     const getSession = async () => {
@@ -26,8 +31,7 @@ export const SessionProvider = ({children}) => {
     } catch (error) {
         console.error('Error getting session', error);
         setSession(null);   
-        }
-    };
+    }};
 
     const handleAuthenticated = () => {
         if(authenticated.current){ // kick out authenticated user to /login on expired session
