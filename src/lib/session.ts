@@ -24,9 +24,11 @@ export const decrypt = async (session) => {
     }
 }
 
-export const createSession = async (userId: string) => {
+export const createSession = async (user) => {
+    delete user.password;
+    
     const expiresAt = new Date(Date.now() + 60 * 60 * 1000); // 1 hour
-    const session = await encrypt({userId, expiresAt});
+    const session = await encrypt({user, expiresAt});
 
     cookies().set('session', session, {
         httpOnly: true,
@@ -64,7 +66,7 @@ export const deleteSession = () => {
     cookies().delete('session');
 }
 
-export const verifySession = async () => {
+export const verifySession = async (): Promise<any> => {
     const session = cookies().get('session')?.value;
 
     if (!session){

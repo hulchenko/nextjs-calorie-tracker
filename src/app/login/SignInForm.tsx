@@ -1,4 +1,4 @@
-"use client";
+'use client';
 
 import { FormEvent, useState } from 'react';
 import { useRouter } from 'next/navigation';
@@ -40,8 +40,7 @@ const SignInForm = () => {
                 if (response.ok){
                     const sessionData = await response.json();
                     setSession(sessionData);
-                    router.push('/dashboard');
-                    // TODO introduce loader here
+                    router.push('/dashboard'); 
                     toast({title: 'Signed in', status: 'info'});
                 } else {
                     const { error } = await response.json();
