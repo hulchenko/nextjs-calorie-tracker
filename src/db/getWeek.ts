@@ -7,6 +7,6 @@ export const getWeek = async (userId: string, firstWeekDay: string | any) => {
         console.log(`WEEKLY RESPONSE: `, response);
         return response[0];
     } catch (error) {
-        throw Error ('Error getting weekly summary from database');
+        throw new Error ('Error getting weekly summary from database', error);
     }
 }

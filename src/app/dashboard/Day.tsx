@@ -1,13 +1,17 @@
 import moment from 'moment';
+import Link from 'next/link';
 
 const Day = ({data}) => {
-    const date = moment(data.date).format('MMM Do');
+    const dateURL = data.day.date;
+    const weekDay = data.day.weekDay;
+    const userId = data.userId;
+    const displayDate = moment(data.day.date).format('MMM Do');
     return ( 
-        <li className='border my-3 p-2 shadow-sm'>
-            <div className='flex'>
-                <div>{data.weekday}</div>
-                <div>{date}</div>
-            </div>
+        <li>
+            <Link href={{ pathname: `/day/${dateURL}`, query: {userId} }} className='flex border my-3 p-2 shadow-md'>
+                <div>{weekDay}</div>
+                <div>{displayDate}</div>
+            </Link>
         </li>
      );
 }

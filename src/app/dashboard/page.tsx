@@ -6,7 +6,7 @@ const DashboardPage = async () => {
     
     const session = await verifySession();
     const { user_id, first_name } = session.user;
-
+    
     const greeting = generateGreeting();
 
     return ( 
