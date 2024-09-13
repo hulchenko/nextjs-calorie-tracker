@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { verifySession, updateSession } from '@/lib/session';
+import { verifySession, updateSession, deleteSession } from '@/lib/session';
 
 export async function POST() { // refresh session
     const session = await verifySession();
@@ -7,6 +7,7 @@ export async function POST() { // refresh session
         await updateSession();
         return NextResponse.json({message: 'Session updated'}, {status: 200});
     } else {
+        deleteSession();
         return NextResponse.json({message: 'Unauthorized'}, {status: 401});
     }
 }
@@ -16,6 +17,7 @@ export async function GET() { // verify current session
     if(session) {
         return NextResponse.json(session);
     } else {
+        deleteSession();
         return NextResponse.json({message: 'Unauthorized'}, {status: 401});
     }
 }

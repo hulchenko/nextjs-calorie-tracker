@@ -20,6 +20,10 @@ export const decrypt = async (session) => {
         });
         return payload; // minimum user data: contains only user id
     } catch (error) {
+        if (error.code === 'ERR_JWT_EXPIRED'){
+            console.error('Token has expired');
+            return null;
+        }
         console.error('Failed to verify session', error)
     }
 }
