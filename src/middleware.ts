@@ -1,11 +1,14 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { verifySession } from './lib/session';
 
-const protectedRoutes = ['/dashboard', '/profile'];
+const protectedRoutes = ['/dashboard', '/profile', '/day', ];
 const publicRoutes = ['/login'];
 
 export default async function middleware(request: NextRequest) {
-    const requestedUrl = request.nextUrl.pathname;
+    let requestedUrl = request.nextUrl.pathname;
+    if (requestedUrl !== '/') {
+      requestedUrl = '/' + request.nextUrl.pathname.split('/')[1];
+    }
     const isProtectedRoute = protectedRoutes.includes(requestedUrl);
     const isAuthRoute = publicRoutes.includes(requestedUrl);
 
@@ -29,5 +32,5 @@ export default async function middleware(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ['/((?!api|_next/static|_next/image|.*\\.png$).*)'],
+  matcher: ['/((?!api|_next/static|_next/image|.*\\.png$).*)']
 }
