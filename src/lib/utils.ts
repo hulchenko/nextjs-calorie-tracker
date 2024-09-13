@@ -24,33 +24,32 @@ export const validateHashedPassword = async (password: string, hashedPassword: s
 export const generateWeek = () => {
     const firstWeekDay = moment().startOf('isoWeek'); // '2024-09-09'
     const lastWeekDay = moment().endOf('isoWeek'); // '2024-09-15'
-    const week: Array<any> = [];
-    let week_day = firstWeekDay.clone(); // initialize first weekday from the given week
+    const generatedWeek: Array<any> = [];
+    let dayOfWeek = firstWeekDay.clone(); // initialize first week day from the given week
 
-    while (week_day.isSameOrBefore(lastWeekDay)){
-        const date = week_day.seconds(0).milliseconds(0).toISOString();
-        const weekday = week_day.format('dddd');
-        week.push({weekday, date});
-        week_day.add(1, 'day');
+    while (dayOfWeek.isSameOrBefore(lastWeekDay)){
+        const date = dayOfWeek.seconds(0).milliseconds(0).toISOString();
+        const weekDay = dayOfWeek.format('dddd');
+        generatedWeek.push({weekDay, date});
+        dayOfWeek.add(1, 'day');
     }
     
-    return {week, firstWeekDay};
+    return {generatedWeek, firstWeekDay};
 }
 
 export const generateGreeting = () => {
-    // TODO add emojis
     const currentHour = new Date(Date.now()).getHours();
     const morning = currentHour >= 3 && currentHour < 12;
     const afternoon = currentHour >= 12 && currentHour < 17;
     const evening = (currentHour >= 17 && currentHour <= 23) || (currentHour >= 0 && currentHour < 3);
     if (morning){
-        return 'Good morning';
+        return 'Good Morning 🌅';
     }
     if (afternoon){
-        return 'Good afternoon';
+        return 'Good Afternoon 🌞';
     }
     if (evening){
-        return 'Good evening';
+        return 'Good Evening 🌚';
     }
     return 'Hello';
 }
