@@ -11,7 +11,7 @@ const DashboardPage = async () => {
 
     return ( 
         <div className='mx-auto pt-60 items-center flex flex-col text-xl'>
-            <h1>{greeting}, <b>{first_name}</b>!</h1>
+            <h1><b>{first_name}</b>, {greeting}!</h1>
             <Week userId={user_id}/>
         </div> 
      );

@@ -22,10 +22,12 @@ import {
 } from '@chakra-ui/react';
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
+import { useSession } from '../context/SessionProvider';
 
 const SignUpForm = () => {
     const toast = useToast();
     const router = useRouter();
+    const { setSession } = useSession();
 
     const { isOpen, onOpen, onClose } = useDisclosure();
     const [showPassword, setShowPassword] = useState(false);
@@ -57,8 +59,9 @@ const SignUpForm = () => {
         });
 
           if (response.ok){
-            const body = await response.json();
-            toast({title: `Welcome, ${body.first_name}!`, status: 'success'});
+            const sessionData = await response.json();
+            setSession(sessionData);
+            toast({title: `Welcome, ${sessionData.first_name}!`, status: 'success'});
             router.push('/dashboard');
           } else {
             const { error } = await response.json();
