@@ -11,18 +11,7 @@ const Week = async ({userId}) => {
     const goal = weekDB?.daily_goals_met || 0;
     return ( 
         <>
-        <div className='flex'>
-            <div>
-                Weekly Goal {goal}/7 
-            </div>
-            <div>
-                {
-                goal === 7 ? 
-                  (<FontAwesomeIcon icon={faSquareCheck} />) :
-                  (<FontAwesomeIcon icon={faSquareXmark}/>)
-                }
-            </div>
-        </div>
+            <WeeklyGoal goal={goal} />
             <ul>
                 {generatedWeek
                 .map((day) => (
@@ -31,6 +20,20 @@ const Week = async ({userId}) => {
             </ul>
         </>
      );
+}
+
+const WeeklyGoal = async ({goal}) => {
+    return (
+        <div className='flex'>
+            <div>
+                Weekly Goal {goal}/7 
+            </div>
+            <div className='text-orange-600'>{ goal === 7 ? 
+                  (<FontAwesomeIcon icon={faSquareCheck} />) :
+                  (<FontAwesomeIcon icon={faSquareXmark}/>)}
+            </div>
+        </div>
+    )
 }
  
 export default Week;

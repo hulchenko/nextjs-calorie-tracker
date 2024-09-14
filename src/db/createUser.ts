@@ -20,7 +20,6 @@ export const createUser = async (user): Promise<UserDB[] | any> => {
         revalidatePath('/');
         return userData;
     } catch (error) {
-        console.error('Error creating a user');
-        throw error
+        throw new Error('Error creating a user', error);
     }
 }

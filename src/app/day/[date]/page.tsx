@@ -1,25 +1,22 @@
 import { getDay } from '@/db/getDay';
+import DayForm from './DayForm';
+import { Day } from '@/types/Day';
 
 const DayPage = async (context) => {
     const date = decodeURIComponent(context.params.date);
     const userId = context.searchParams.userId;
     console.log(date, userId);
 
-    let day = defaultDay(userId, date);
-    const dayDB = await getDay(userId, date);
-
-    if (dayDB){
-        day = dayDB;
-    }
+    const day: Day = await getDay(userId, date) || defaultDay(userId, date);
 
     return ( 
-        <h1>{JSON.stringify(day)}</h1>
+        <DayForm data={day}/>
      );
 }
  
 export default DayPage;
 
-const defaultDay = (userId, date) => {
+const defaultDay = (userId: string, date: string) => {
     return {
             user_id: userId,
             date,

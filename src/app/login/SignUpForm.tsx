@@ -1,6 +1,5 @@
 'use client';
 
-import { FormEvent } from 'react';
 import { encryptPassword, passwordValidator } from '@/lib/utils';
 import {
   Modal,
@@ -33,10 +32,9 @@ const SignUpForm = () => {
     const [showPassword, setShowPassword] = useState(false);
     const [isFormValid, setIsFormValid] = useState(true);
 
-    const submitHandler = async (event: FormEvent<HTMLFormElement>) => {
-      event.preventDefault() // prevent modal from closing until successful promise result
-      
-      const formData = new FormData(event.currentTarget);
+    const submitHandler = async (formData: FormData) => {
+      event?.preventDefault() // prevent modal from closing until successful promise result
+
       const password = formData.get('password');
       const hashedPassword = await encryptPassword(password as string);
 
@@ -86,7 +84,7 @@ const SignUpForm = () => {
       <Modal isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />
         <ModalContent>
-          <form onSubmit={submitHandler}>
+          <form action={submitHandler}>
             <ModalHeader className='text-teal-700'>Create your account</ModalHeader>
             <ModalCloseButton />
             <ModalBody pb={6}>
