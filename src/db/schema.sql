@@ -8,4 +8,4 @@ CREATE TABLE daily_goals (day_id SERIAL PRIMARY KEY, user_id UUID REFERENCES use
 CREATE TABLE weekly_summary (week_id SERIAL PRIMARY KEY, user_id UUID REFERENCES users(user_id) ON DELETE CASCADE, start_date DATE NOT NULL, end_date DATE NOT NULL, daily_goals_met INT DEFAULT 0);
 
 -- Meals
-CREATE TABLE meals (meal_id SERIAL PRIMARY KEY, day_id INT REFERENCES daily_goals(day_id) ON DELETE CASCADE, meal_type VARCHAR(100) NOT NULL, calories INT NOT NULL, created_at TIMESTAMP NOT NULL);
+CREATE TABLE meals (id SERIAL PRIMARY KEY, meal_id UUID NOT NULL, day_id INT REFERENCES daily_goals(day_id) ON DELETE CASCADE, meal_type VARCHAR(100) NOT NULL, calories INT NOT NULL, created_at TIMESTAMP NOT NULL);

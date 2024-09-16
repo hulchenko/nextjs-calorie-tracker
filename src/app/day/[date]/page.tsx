@@ -1,6 +1,7 @@
 import { getDay } from '@/db/getDay';
 import DayForm from './DayForm';
 import { Day } from '@/types/Day';
+import DayDisplayInfo from './DayDisplayInfo';
 
 const DayPage = async (context) => {
     const date = decodeURIComponent(context.params.date);
@@ -10,7 +11,10 @@ const DayPage = async (context) => {
     const day: Day = await getDay(userId, date) || defaultDay(userId, date);
 
     return ( 
-        <DayForm data={day}/>
+        <>
+            <DayDisplayInfo day={day} />
+            <DayForm day={day}/>
+        </>
      );
 }
  
