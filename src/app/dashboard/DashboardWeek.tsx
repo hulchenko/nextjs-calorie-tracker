@@ -2,10 +2,10 @@ import { faSquareXmark, faSquareCheck } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { getWeek } from '@/db/getWeek';
 import { generateWeek } from '@/lib/utils';
-import Day from './Day';
+import DashboardDay from './DashboardDay';
 
 
-const Week = async ({userId}) => {
+const DashboardWeek = async ({userId}) => {
     const { generatedWeek, firstWeekDay } = await generateWeek();
     const weekDB = await getWeek(userId, firstWeekDay);
     const goal = weekDB?.daily_goals_met || 0;
@@ -15,7 +15,7 @@ const Week = async ({userId}) => {
             <ul>
                 {generatedWeek
                 .map((day) => (
-                    <Day key={day.date} data={{day, userId}}/>
+                    <DashboardDay key={day.date} data={{day, userId}}/>
                 ))}
             </ul>
         </>
@@ -36,4 +36,4 @@ const WeeklyGoal = async ({goal}) => {
     )
 }
  
-export default Week;
+export default DashboardWeek;

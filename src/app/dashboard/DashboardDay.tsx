@@ -1,7 +1,7 @@
 import moment from 'moment';
 import Link from 'next/link';
 
-const Day = ({data}) => {
+const DashboardDay = ({data}) => {
     const dateURL = data.day.date;
     const weekDay = data.day.weekDay;
     const userId = data.userId;
@@ -16,4 +16,4 @@ const Day = ({data}) => {
      );
 }
  
-export default Day;
+export default DashboardDay;

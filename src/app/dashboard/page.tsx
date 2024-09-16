@@ -1,4 +1,4 @@
-import Week from './Week';
+import DashboardWeek from './DashboardWeek';
 import { verifySession } from '@/lib/session';
 import { generateGreeting } from '@/lib/utils';
 
@@ -11,7 +11,7 @@ const DashboardPage = async () => {
     return ( 
         <div className='mx-auto pt-60 items-center flex flex-col text-xl'>
             <h1><b>{first_name}</b>, {greeting}</h1>
-            <Week userId={user_id}/>
+            <DashboardWeek userId={user_id}/>
         </div> 
      );
 }
