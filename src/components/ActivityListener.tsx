@@ -17,7 +17,7 @@ const ActivityListener = () => {
             clicks.current += 1;
             const count = clicks.current;
 
-            if (count > 15) { // update session after 15 interactive clicks
+            if (count > 5) { // update session after 5 interactive clicks
                 await updateSession();
                 clicks.current = 0; // Reset clicks count
             }
