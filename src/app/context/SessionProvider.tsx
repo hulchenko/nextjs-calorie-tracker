@@ -16,22 +16,6 @@ export const SessionProvider = ({children, initialSession}) => {
 
     const authenticated = useRef(false); // keep track of the user's authenticated state. Its value persists between renders, unlike useState()
     const router = useRouter();
-    
-    const getSession = async () => {
-    try {
-        const response = await fetch('/api/auth/session');
-        const session = await response.json();
-        if(response.ok){
-            setSession(session);
-            authenticated.current = true;
-        } else {
-            setSession(null);
-            handleAuthenticated();
-        }
-    } catch (error) {
-        console.error('Error getting session', error);
-        setSession(null);   
-    }};
 
     const handleAuthenticated = () => {
         if(authenticated.current){ // kick out authenticated user to /login on expired session
@@ -41,6 +25,23 @@ export const SessionProvider = ({children, initialSession}) => {
 
     useEffect(() => {
         // initiate session provider
+        const getSession = async () => {
+            try {
+                const response = await fetch('/api/auth/session');
+                const session = await response.json();
+                if(response.ok){
+                    setSession(session);
+                    authenticated.current = true;
+                } else {
+                    setSession(null);
+                    handleAuthenticated();
+                }
+            } catch (error) {
+                console.error('Error getting session', error);
+                setSession(null);   
+            }
+        };
+
         getSession();
 
         // set periodic interval to sync session state
