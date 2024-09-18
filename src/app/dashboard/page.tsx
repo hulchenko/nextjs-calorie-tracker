@@ -5,12 +5,12 @@ import { generateGreeting } from '@/lib/utils';
 const DashboardPage = async () => {
     
     const session = await verifySession();
-    const { user_id, first_name } = session.user;
+    const { user_id, name } = session.user;
     const greeting = generateGreeting();
 
     return ( 
         <div className='mx-auto pt-60 items-center flex flex-col text-xl'>
-            <h1><b>{first_name}</b>, {greeting}</h1>
+            <h1><b>{name}</b>, {greeting}</h1>
             <DashboardWeek userId={user_id}/>
         </div> 
      );

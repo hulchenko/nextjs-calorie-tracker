@@ -39,8 +39,7 @@ const SignUpForm = () => {
       const hashedPassword = await encryptPassword(password as string);
 
       const newUser = {
-        firstName: formData.get('first'),
-        lastName: formData.get('last'),
+        name: formData.get('name'),
         email: formData.get('email'),
         password: hashedPassword
       };
@@ -59,7 +58,7 @@ const SignUpForm = () => {
           if (response.ok){
             const sessionData = await response.json();
             setSession(sessionData);
-            toast({title: `Welcome, ${sessionData.first_name}!`, status: 'success'});
+            toast({title: `Welcome, ${sessionData.name}!`, status: 'success'});
             router.push('/dashboard');
           } else {
             const { error } = await response.json();
@@ -89,13 +88,8 @@ const SignUpForm = () => {
             <ModalCloseButton />
             <ModalBody pb={6}>
               <FormControl isRequired>
-                <FormLabel>First name</FormLabel>
-                <Input focusBorderColor='teal.600' name='first' placeholder='First name' type='text'/>
-              </FormControl>
-
-              <FormControl mt={4}>
-                <FormLabel>Last name</FormLabel>
-                <Input focusBorderColor='teal.600' name='last' placeholder='Last name' type='text'/>
+                <FormLabel>Name</FormLabel>
+                <Input focusBorderColor='teal.600' name='name' placeholder='Your name' type='text'/>
               </FormControl>
 
               <FormControl mt={4} isRequired>

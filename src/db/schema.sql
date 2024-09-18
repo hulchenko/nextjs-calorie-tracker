@@ -1,5 +1,5 @@
 -- Users
-CREATE TABLE users (user_id UUID DEFAULT gen_random_uuid() PRIMARY KEY, first_name VARCHAR(50) NOT NULL, last_name VARCHAR(50), email VARCHAR(100) UNIQUE NOT NULL, password VARCHAR(100) NOT NULL);
+CREATE TABLE users (user_id UUID DEFAULT gen_random_uuid() PRIMARY KEY, name VARCHAR(50) NOT NULL, email VARCHAR(100) UNIQUE NOT NULL, password VARCHAR(100) NOT NULL);
 
 -- Daily Goals
 CREATE TABLE daily_goals (day_id SERIAL PRIMARY KEY, user_id UUID REFERENCES users(user_id) ON DELETE CASCADE, date DATE NOT NULL, calorie_target INT NOT NULL, calories_consumed INT DEFAULT 0, goal_met BOOLEAN DEFAULT false);
@@ -10,3 +10,4 @@ CREATE TABLE weekly_summary (week_id SERIAL PRIMARY KEY, user_id UUID REFERENCES
 
 -- Meals
 CREATE TABLE meals (id SERIAL PRIMARY KEY, meal_id UUID NOT NULL, day_id INT REFERENCES daily_goals(day_id) ON DELETE CASCADE, meal_type VARCHAR(100) NOT NULL, calories NUMERIC NOT NULL, items JSONB);
+ALTER TABLE meals ADD COLUMN user_id UUID REFERENCES users(user_id) ON DELETE CASCADE;
