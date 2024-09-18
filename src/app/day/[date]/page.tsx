@@ -1,12 +1,13 @@
 import { getDay } from '@/db/getDay';
 import DayForm from './DayForm';
 import { Day } from '@/types/Day';
+import { revalidatePath } from 'next/cache';
 
 const DayPage = async (context) => {
+    revalidatePath('/'); // somehow without this getDay() returns undefined
     const date = decodeURIComponent(context.params.date);
     const userId = context.searchParams.userId;
-    console.log(date, userId);
-
+    
     const day: Day = await getDay(userId, date) || defaultDay(userId, date);
 
     return (
