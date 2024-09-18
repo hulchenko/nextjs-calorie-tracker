@@ -53,3 +53,7 @@ export const generateGreeting = () => {
     }
     return 'Hello';
 }
+
+export const sumCalories = (meals) => {
+    return meals.reduce((total, curr) => total + (curr.calories || 0), 0) || 0;
+}
