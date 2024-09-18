@@ -22,15 +22,14 @@ const MealInputForm = () => {
     const handleMealList = (e) => {
         e.preventDefault();
         const action = e.nativeEvent.submitter.value;
-        console.log(`DIFFERENCE? `, action);
+
         if (action === 'Add'){
             setMealList(prev => [...prev, meal]);
-            setMeal(blankMeal);
             console.log(`MEAL INPUT MEAL LIST: `, mealList);
             formRef.current?.reset();
         }
-        // if (action === 'Remove'){
-        //     const indexToRemove = 0; // TODO this will be by index eventually
+        // if (action === 'Remove'){ // TODO this will be by index eventually
+        //     const indexToRemove = 0; 
         //     setMealList(prev => prev.filter((meal, index) => index !== indexToRemove));
         // }
     }
