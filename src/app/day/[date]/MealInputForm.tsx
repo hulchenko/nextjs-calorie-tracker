@@ -4,20 +4,13 @@ import { useContext, useEffect, useState } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 import { useRef } from 'react';
 
-const blankMeal = {
-    meal_id: uuidv4(),
-    type: '',
-    items: [],
-    calories: 0
-}
-
 const MealInputForm = () => {
     const formRef = useRef<HTMLFormElement>(null);
     const {mealList, setMealList} = useContext(MealContext);
 
     const [query, setQuery] = useState('');
     const [delayedFetch, setDelayedFetch] = useState(query)
-    const [meal, setMeal] = useState(blankMeal);
+    const [meal, setMeal] = useState(newMealObj());
 
     const handleMealList = (e) => {
         e.preventDefault();
@@ -26,6 +19,7 @@ const MealInputForm = () => {
         if (action === 'Add'){
             setMealList(prev => [...prev, meal]);
             console.log(`MEAL INPUT MEAL LIST: `, mealList);
+            setMeal(newMealObj());
             formRef.current?.reset();
         }
         // if (action === 'Remove'){ // TODO this will be by index eventually
@@ -63,21 +57,18 @@ const MealInputForm = () => {
             <div className='border'>
                 <h1 className='text-blue-400'>MEAL INPUT FORM</h1>
                 <form ref={formRef} onSubmit={(e) => handleMealList(e)}>
-                <FormLabel>Type</FormLabel>
-                <Select placeholder='Please Select' onChange={(e) => setMeal({...meal, type: e.target.value})}>
-                    <option value='breakfast'>Breakfast</option>
-                    <option value='lunch'>Lunch</option>
-                    <option value='dinner'>Dinner</option>
-                    <option value='other'>Other</option>
-                </Select>
-                <FormLabel>Food</FormLabel>
-                <Input placeholder='e.g. 2 eggs and a toast' onChange={(e) => setQuery(e.target.value)}/>
-                <FormLabel>Total Calories</FormLabel>
-                <Input placeholder='0' value={meal.calories} isDisabled/>
-                    <div className='flex w-40 justify-between'>
-                        <button type='submit' disabled={meal.items.length === 0 || meal.type === ''} value='Add'>ADD</button>
-                        {/* <button type='submit' value='Remove'>REMOVE</button> */}
-                    </div>
+                    <FormLabel>Type</FormLabel>
+                    <Select placeholder='Please Select' onChange={(e) => setMeal({...meal, type: e.target.value})}>
+                        <option value='breakfast'>Breakfast</option>
+                        <option value='lunch'>Lunch</option>
+                        <option value='dinner'>Dinner</option>
+                        <option value='other'>Other</option>
+                    </Select>
+                    <FormLabel>Food</FormLabel>
+                    <Input placeholder='e.g. 2 eggs and a toast' onChange={(e) => setQuery(e.target.value)}/>
+                    <FormLabel>Total Calories</FormLabel>
+                    <Input className='pointer-events-none' placeholder='0' value={meal.calories} readOnly/>
+                    <button className='border m-2 p-2 mx-auto flex' type='submit' disabled={meal.items.length === 0 || meal.type === ''} value='Add'>ADD</button>
                 </form>
             </div>
     )
@@ -88,4 +79,12 @@ export default MealInputForm;
 const sumMealCalories = (data) => {
     const sum = data.items.map(i => i.calories).reduce((a, b) => (a + b), 0); // will return 0 if empty
     return Math.round(sum);
+}
+const newMealObj = () => {
+        return {
+        meal_id: uuidv4(),
+        type: '',
+        items: [],
+        calories: 0
+    }
 }
