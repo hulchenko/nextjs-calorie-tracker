@@ -5,7 +5,7 @@ const MealDisplayInfo = ({meal}) => {
             <h1 className='text-green-600'>MEAL DISPLAY COMPONENT</h1>
             <div key={meal.meal_id}>
                 <div>ID: {meal.meal_id}</div>
-                <div>Type: {meal.type}</div>
+                <div>Type: {meal.meal_type}</div>
                 <div>Items:</div>
                 <ul>
                     {meal.items?.map((item) => (

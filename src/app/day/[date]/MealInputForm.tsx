@@ -53,7 +53,7 @@ const MealInputForm = () => {
                 <h1 className='text-blue-400'>MEAL INPUT FORM</h1>
                 <form ref={formRef} onSubmit={(e) => handleMealList(e)}>
                     <FormLabel>Type</FormLabel>
-                    <Select placeholder='Please Select' onChange={(e) => setMeal({...meal, type: e.target.value})}>
+                    <Select placeholder='Please Select' onChange={(e) => setMeal({...meal, meal_type: e.target.value})}>
                         <option value='breakfast'>Breakfast</option>
                         <option value='lunch'>Lunch</option>
                         <option value='dinner'>Dinner</option>
@@ -63,7 +63,7 @@ const MealInputForm = () => {
                     <Input placeholder='e.g. 2 eggs and a toast' onChange={(e) => setQuery(e.target.value)}/>
                     <FormLabel>Total Calories</FormLabel>
                     <Input className='pointer-events-none' placeholder='0' value={meal.calories} readOnly/>
-                    <button className='border m-2 p-2 mx-auto flex' type='submit' disabled={meal.items.length === 0 || meal.type === ''} value='Add'>ADD</button>
+                    <button className='border m-2 p-2 mx-auto flex' type='submit' disabled={meal.items.length === 0 || meal.meal_type === ''} value='Add'>ADD</button>
                 </form>
             </div>
     )
@@ -78,7 +78,7 @@ const sumMealCalories = (data) => {
 const newMealObj = () => {
         return {
         meal_id: uuidv4(),
-        type: '',
+        meal_type: '',
         items: [],
         calories: 0
     }

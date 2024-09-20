@@ -13,7 +13,7 @@ export async function POST(request: NextRequest) {
 }
 
 export async function GET(request: NextRequest){
-    const day_id = request.nextUrl.searchParams.get('day');
+    const day_id = request.nextUrl.searchParams.get('day_id');
     const user_id = request.nextUrl.searchParams.get('user');
     
     try {

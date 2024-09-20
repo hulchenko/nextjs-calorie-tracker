@@ -1,10 +1,9 @@
 'use client';
 
-import { useToast, Input, Select, FormLabel } from '@chakra-ui/react';
+import { useToast } from '@chakra-ui/react';
 import { useState, createContext, useEffect } from 'react';
 import MealInputForm from './MealInputForm';
 import MealDisplayInfo from './MealDisplayInfo';
-import { Meal } from '@/types/Meal';
 import { sumCalories } from '@/lib/utils';
 
 const DayForm = async ({initDay}) => {
@@ -14,7 +13,6 @@ const DayForm = async ({initDay}) => {
     const [mealList, setMealList] = useState([]);
     const [loading, setLoading] = useState(true);
 
-    // const cachedMealList // TODO?
 
     useEffect(() => {
         // get meals from DB
@@ -22,7 +20,7 @@ const DayForm = async ({initDay}) => {
         if (day_id && user_id){
             const getMeals = async () => {
                 try {
-                    const response = await fetch(`/api/db/meal?day=${day_id}&user=${user_id}`);
+                    const response = await fetch(`/api/db/meal?day_id=${day_id}&user=${user_id}`);
                     const meals = await response.json();
                     console.log(`MEALS FROM DB: `, meals);
                     if(response.ok){
@@ -80,20 +78,18 @@ const DayForm = async ({initDay}) => {
     }
 
     const submitHandler = async () => {
-        // Additional search bar + recipies will be part of meal table, referencing the day_id + user_id
         const dailyCalories = await sumCalories(mealList);
         const isDayChanged = dailyCalories !== initDay.calories_consumed;
         const isMealListChanged = mealList.length;
 
         if (isDayChanged){
-            const existingDay = 'day_id' in day; // day_id is generated in DB
+            const existingDay = 'id' in day; // id is generated in DB
 
             const newDayData = {
                 ...day,
                 calories_consumed: dailyCalories,
                 goal_met: dailyCalories >= day.calorie_target
             };
-
             setDay(newDayData);
             console.log(`WRITE DAY DATA: `, newDayData);
 

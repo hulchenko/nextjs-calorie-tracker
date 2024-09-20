@@ -29,7 +29,7 @@ const ActivityListener = () => {
                 method: 'POST'
             });
             if (response.ok) {
-                console.log('User clicked, updating session...');
+                console.log('Updating session...');
             }
         } catch (error) {
             console.error('Error updating session:', error);
