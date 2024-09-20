@@ -43,14 +43,9 @@ const MealInputForm = () => {
     }, [delayedFetch])
 
     useEffect(() => {
-        // delay fetch by 2 seconds after the user interracted with the input field
-        const delayHandler = setTimeout(() => {
-            setDelayedFetch(query)
-        }, 2000); 
+        const delayHandler = setTimeout(() => setDelayedFetch(query), 2000); // delay fetch by 2 seconds after the user interracted with the input field
 
-        return () => {
-            clearTimeout(delayHandler); // reset if the user starts typing again
-        }
+        return () => clearTimeout(delayHandler); // reset if the user starts typing again
     }, [query]);
     
     return (
