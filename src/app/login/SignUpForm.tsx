@@ -84,29 +84,33 @@ const SignUpForm = () => {
         <ModalOverlay />
         <ModalContent>
           <form action={submitHandler}>
-            <ModalHeader className='text-teal-700'>Create your account</ModalHeader>
+            <ModalHeader className='text-teal-700'>Sign Up</ModalHeader>
             <ModalCloseButton />
             <ModalBody pb={6}>
               <FormControl isRequired>
                 <FormLabel>Name</FormLabel>
-                <Input focusBorderColor='teal.600' name='name' placeholder='Your name' type='text'/>
+                <InputGroup size='lg'>
+                  <Input focusBorderColor='teal.600' name='name' placeholder='Your name' type='text'/>
+                </InputGroup>
               </FormControl>
 
               <FormControl mt={4} isRequired>
                 <FormLabel>Email</FormLabel>
-                <Input focusBorderColor='teal.600' name='email' placeholder='email@example.com' type='email'/>
+                <InputGroup size='lg'>
+                  <Input focusBorderColor='teal.600' name='email' placeholder='email@example.com' type='email'/>
+                </InputGroup>
               </FormControl>
 
               <FormControl mt={4} isRequired isInvalid={!isFormValid}>
                 <FormLabel>Password</FormLabel>
-                    <InputGroup size='md'>
+                    <InputGroup size='lg'>
                       <Input
                         focusBorderColor='teal.600'
                         pr='4.5rem'
                         name='password'
                         type={showPassword ? 'text' : 'password'}
                         placeholder='Enter password'/>
-                      <InputRightElement width='4.5rem'>
+                      <InputRightElement className='mr-2' width='4.5rem'>
                         <Button h='1.75rem' size='md' onClick={() => setShowPassword(!showPassword)}>
                           {showPassword ? 'Hide' : 'Show'}
                         </Button>
