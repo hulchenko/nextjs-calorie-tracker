@@ -6,6 +6,7 @@ const MealDisplayInfo = ({meal}) => {
             <div key={meal.meal_id}>
                 <div>ID: {meal.meal_id}</div>
                 <div>Type: {meal.meal_type}</div>
+                <div>Description: {meal.meal_description}</div>
                 <div>Items:</div>
                 <ul>
                     {meal.items?.map((item) => (

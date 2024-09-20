@@ -9,6 +9,6 @@ ALTER TABLE daily_goals ADD CONSTRAINT unique_user_date UNIQUE (user_id, date); 
 CREATE TABLE weekly_summary (week_id SERIAL PRIMARY KEY, user_id UUID REFERENCES users(user_id) ON DELETE CASCADE, start_date DATE NOT NULL, end_date DATE NOT NULL, daily_goals_met INT DEFAULT 0);
 
 -- Meals
-CREATE TABLE meals (id SERIAL PRIMARY KEY, meal_id UUID NOT NULL, day_id UUID NOT NULL, meal_type VARCHAR(100) NOT NULL, calories NUMERIC NOT NULL, items JSONB);
+CREATE TABLE meals (id SERIAL PRIMARY KEY, meal_id UUID NOT NULL, day_id UUID NOT NULL, meal_type VARCHAR(100) NOT NULL, meal_description VARCHAR(255) NOT NULL, calories NUMERIC NOT NULL, items JSONB);
 ALTER TABLE meals ADD COLUMN user_id UUID REFERENCES users(user_id) ON DELETE CASCADE;
 ALTER TABLE meals ADD CONSTRAINT unique_meal_id UNIQUE (day_id, meal_id);
