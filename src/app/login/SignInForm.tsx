@@ -58,13 +58,13 @@ const SignInForm = () => {
         <>
             <form onSubmit={submitHandler} className='bg-white shadow-md rounded px-8 py-8 mb-4 max-w-md flex flex-col'>
                 <div className='mb-6'>
-                    <input onChange={e => setEmail(e.target.value)} className='shadow border rounded w-full py-3 px-3 text-gray-700  focus:outline-teal-700' type="email" name='email' placeholder='Email' />
+                    <input onChange={e => setEmail(e.target.value)} className='shadow border rounded w-full py-3 px-3 text-gray-600  focus:outline-teal-700' type="email" name='email' placeholder='Email' />
                     {!email && !isFormValid.email && (
                         <span className='text-red-500 mt-1 text-sm block'>Email cannot be empty</span> 
                     )}
                 </div>
                 <div className='mb-6'>
-                    <input onChange={e => setPassword(e.target.value)} className='shadow border rounded w-full py-3 px-3 text-gray-700  focus:outline-teal-700' type="password" name='password' placeholder='Password' />
+                    <input onChange={e => setPassword(e.target.value)} className='shadow border rounded w-full py-3 px-3 text-gray-600  focus:outline-teal-700' type="password" name='password' placeholder='Password' />
                     {!password && !isFormValid.password && (
                         <span className='text-red-500 mt-1 text-sm block'>Password cannot be empty</span> 
                     )}

@@ -24,6 +24,7 @@ import { useContext, useEffect, useState } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 import { faUtensils } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { Meal } from '@/types/Meal';
 
 const MealInputForm = () => {
     const {mealList, setMealList} = useContext(MealContext);
@@ -35,11 +36,10 @@ const MealInputForm = () => {
     const { isOpen, onOpen, onClose } = useDisclosure(); // modal props
     console.log(`MEAL LIST: `, mealList);
 
-    const handleMealList = () => {
-        setMealList(prev => [...prev, meal]);
-        console.log(`MEAL INPUT MEAL LIST: `, mealList);
-        // setMeal(newMealObj());
-    }
+    // const handleMealList = () => {
+    //     setMealList(prev => [...prev, meal]);
+    //     console.log(`MEAL INPUT MEAL LIST: `, mealList);
+    // }
 
     useEffect(() => {
         // search and get nutritions
@@ -83,7 +83,7 @@ const MealInputForm = () => {
             <Modal isOpen={isOpen} onClose={onClose} scrollBehavior='outside'>
                 <ModalOverlay />
                     <ModalContent>
-                        <form action={handleMealList}>
+                        <form action={() => setMealList(prev => [...prev, meal])}>
                             <ModalHeader className='text-teal-700'>Add a New Meal</ModalHeader>
                             <ModalCloseButton />
                             <ModalBody pb={6}>
@@ -100,7 +100,7 @@ const MealInputForm = () => {
                                 </FormControl>
 
                                 <FormControl mt={4}>
-                                    <FormLabel>Food</FormLabel>
+                                    <FormLabel>Description</FormLabel>
                                     <InputGroup size='lg'>
                                         <Input placeholder='e.g. 2 eggs and a toast' onChange={(e) => {
                                             setQuery(e.target.value)
@@ -109,13 +109,12 @@ const MealInputForm = () => {
                                 </FormControl>
 
                                 <FormControl mt={4}>
-                                    <FormLabel>Nutritions</FormLabel>
-                                        {/* <InputGroup size='sm'> */}
-                                            {/* <Input className='pointer-events-none' placeholder='0' value={meal.calories} readOnly/> */}
+                                    <FormLabel>Nutrition List</FormLabel>
                                             <Stack>
                                                 {meal?.items.map(i => (
                                                     <div className='ml-2 border border-teal-600 rounded p-4'>
-                                                        <Text>Ingridient: <b>{i?.name}</b></Text>
+                                                        <Text>Ingridient(s): <b>{i?.name}</b></Text>
+                                                        <Text>Calories: {i?.calories}</Text>
                                                         <Text>Carbohydrates: {i?.carbohydrates_total_g} g</Text>
                                                         <Text>Cholesterol: {i?.cholesterol_mg} mg</Text>
                                                         <Text>Saturated Fat: {i?.fat_saturated_g} g</Text>
@@ -129,7 +128,6 @@ const MealInputForm = () => {
                                                     </div>
                                                 ))}
                                             </Stack>
-                                        {/* </InputGroup> */}
                                 </FormControl>
 
                                 <FormControl mt={4}>
@@ -159,12 +157,13 @@ const sumMealCalories = (data) => {
     return Math.round(sum);
 }
 
-const newMealObj = () => {
+const newMealObj = () : Meal => {
         return {
-        meal_id: uuidv4(),
-        meal_type: '',
-        meal_description: '',
-        items: [],
-        calories: 0
+            day_id: '',
+            meal_id: uuidv4(),
+            meal_type: '',
+            meal_description: '',
+            items: [],
+            calories: 0
     }
 }
