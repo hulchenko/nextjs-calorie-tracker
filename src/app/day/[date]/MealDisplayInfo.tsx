@@ -29,11 +29,13 @@ const MealDisplayInfo = ({meal}) => {
                     headers: {'Content-Type': 'application/json'},
                     body: JSON.stringify(meal)
                 });
-                if(response.ok){
-                    filterMeals()
+                if (!response.ok){
+                    const {error} = await response.json();
+                    throw error;
                 }
+                filterMeals()
             } catch (error) {
-                toast({ title: `${error}`, status: 'error'});
+                toast({ title: `${error}`, status: 'error' });
             }
         } else {
             filterMeals()

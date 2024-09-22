@@ -37,18 +37,16 @@ const SignInForm = () => {
                     headers: { 'Content-Type': 'application/json'},
                     body: JSON.stringify({email, password})
                 })
-                if (response.ok){
-                    const sessionData = await response.json();
-                    setSession(sessionData);
-                    router.push('/dashboard'); 
-                    toast({title: 'Signed in', status: 'info'});
-                } else {
-                    const { error } = await response.json();
-                    toast({title: `${error}`, status: 'error'});
+                if (!response.ok){
+                    const {error} = await response.json();
+                    throw error;
                 }
-
+                const sessionData = await response.json();
+                setSession(sessionData);
+                router.push('/dashboard'); 
+                toast({title: 'Signed in', status: 'info'});
             } catch (error) {
-                console.error('Error occured during login:', error);
+                toast({title: `${error}`, status: 'error'});
             }
         }
     }

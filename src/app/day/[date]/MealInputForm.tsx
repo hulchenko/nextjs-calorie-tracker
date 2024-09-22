@@ -16,7 +16,8 @@ import {
     Spinner,
     Stack,
     Text,
-    useDisclosure
+    useDisclosure,
+    useToast
 } from '@chakra-ui/react';
 import { faPlus, faUtensils } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -25,6 +26,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { MealContext } from './DayForm';
 
 const MealInputForm = () => {
+    const toast = useToast();
     const {mealList, setMealList, setSaveReady} = useContext(MealContext);
 
     const [query, setQuery] = useState('');
@@ -39,11 +41,20 @@ const MealInputForm = () => {
         if(query.length >= 3 && delayedFetch){
             setLoading(true)
             const getFoodData = async () => {
-                const response = await fetch(`/api/other/food?query=${query}`);
-                const data = await response.json();
-                const calories = sumMealCalories(data);
-                setMeal((prevState) => ({...prevState, items: data.items, calories}));
-                setLoading(false);
+                try {
+                    const response = await fetch(`/api/other/food?query=${query}`);
+                    if (!response.ok){
+                        const {error} = await response.json();
+                        throw error;
+                    }
+                    const data = await response.json();
+                    const calories = sumMealCalories(data);
+                    setMeal((prevState) => ({...prevState, items: data.items, calories}));
+                    setLoading(false);
+                } catch (error) {
+                    toast({title: `${error}`, status: 'error'});
+                    setLoading(false);
+                }
             };
             getFoodData();
         }

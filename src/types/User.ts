@@ -1,11 +1,7 @@
-export interface UserDB {
-  user_id: string;
-  name: string;
-  email: string;
-}
-
 export interface User {
+  id?: number;
   name: string;
+  password: string;
   lastName: string;
   email: string;
 }

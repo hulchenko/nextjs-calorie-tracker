@@ -6,6 +6,6 @@ export const removeMeal = async (meal) => {
         await sql `DELETE FROM meals WHERE id=${id} AND meal_id=${meal_id} AND day_id=${day_id}`;
         return 'Success';
     } catch (error) {
-        throw new Error('Error removing meal from database', error);
+        throw Error('Error removing meal');
     }
 }

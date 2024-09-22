@@ -6,10 +6,10 @@ import { NextRequest, NextResponse } from 'next/server';
 export async function POST(request: NextRequest) {
     try {
         const data = await request.json();
-        const meal = await createMeal(data);
-        return NextResponse.json(meal);
+        const response = await createMeal(data);
+        return NextResponse.json(response);
     } catch (error) {
-        return NextResponse.json({error: `${error}`, status: 500});
+        return NextResponse.json({error: `${error}`}, { status: 500 });
     }
 }
 
@@ -18,10 +18,10 @@ export async function GET(request: NextRequest){
     const user_id = request.nextUrl.searchParams.get('user');
     
     try {
-        const data = await getMeals(day_id, user_id);
-        return NextResponse.json(data);
+        const response = await getMeals(day_id, user_id);
+        return NextResponse.json(response);
     } catch (error) {
-        return NextResponse.json({error: `${error}`, status: 500});
+        return NextResponse.json({error: `${error}`}, { status: 500 });
     }
 }
 
@@ -31,6 +31,6 @@ export async function DELETE(request: NextRequest){
         const response = await removeMeal(data);
         return NextResponse.json(response);
     } catch (error) {
-        return NextResponse.json({error: `${error}`, status: 500});
+        return NextResponse.json({error: `${error}`}, { status: 500 });
     }
 }

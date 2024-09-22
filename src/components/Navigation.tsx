@@ -18,16 +18,15 @@ const Navigation = () => {
           const response = await fetch('/api/auth/logout', {
             method: 'POST'
           });
-          if (response.ok){
-            setSession(null);
-            router.push('/login');
-            toast({title: 'Sign out', status: 'info'});
-          } else {
+        if (!response.ok){
             const {error} = await response.json();
-            toast({title: `${error}`, status: 'error'});
-          }
+            throw error;
+        }
+        setSession(null);
+        router.push('/login');
+        toast({title: 'Sign out', status: 'info'});
         } catch (error) {
-          console.error('Error occured during logout:', error);
+          toast({title: `${error}`, status: 'error'});
         }
       } else {
         router.push('/login');

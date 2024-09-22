@@ -22,20 +22,19 @@ const DayForm = async ({initDay}) => {
             const getMeals = async () => {
                 try {
                     const response = await fetch(`/api/db/meal?day_id=${day_id}&user=${user_id}`);
-                    const meals = await response.json();
-                    console.log(`MEALS FROM DB: `, meals);
-                    if(response.ok){
-                        setMealList(meals);
-                        setLoading(false);
-                    } else {
-                        setMealList([]);
-                        setLoading(false);
+                    if (!response.ok){
+                        const {error} = await response.json();
+                        throw error;
                     }
+                    const meals = await response.json();
+                    setMealList(meals);
+                    setLoading(false);
                 } catch (error) {
-                    console.error('Error getting meals', error);
+                    toast({title: `${error}`, status: 'error'});
                     setMealList([]);
+                    setLoading(false);
                 }
-            }
+            };
             getMeals();
         } else {
             setLoading(false);
@@ -43,28 +42,37 @@ const DayForm = async ({initDay}) => {
     }, [])
 
     const writeDayData = async (obj, methodType) => {
-        const response = await fetch('/api/db/day', {
-            method: methodType,
-            headers: {'Content-Type': 'application/json'},
-            body: JSON.stringify(obj)
-        })
-        if (!response.ok){
-            const {error} = await response.json();
-            toast({title: `${error}`, status: 'error'});
+        try {
+            const response = await fetch('/api/db/day', {
+                method: methodType,
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify(obj)
+            })
+            if (!response.ok){
+                const {error} = await response.json();
+                throw error;
+            }
+        } catch (error) {
+            toast({ title: `${error}`, status: 'error' });
         }
     }
 
     const writeMealData = async (day, meal, methodType) => {
-        meal.day_id = day.day_id; // append day id for reference
-        meal.user_id = day.user_id;
-        const response = await fetch('/api/db/meal', {
-            method: methodType,
-            headers: {'Content-Type': 'application/json'},
-            body: JSON.stringify(meal)
-        })
-        if (!response.ok){
-            const {error} = await response.json();
-            toast({title: `${error}`, status: 'error'});
+        try {
+            meal.day_id = day.day_id; // append day id for reference
+            meal.user_id = day.user_id;
+            const response = await fetch('/api/db/meal', {
+                method: methodType,
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify(meal)
+            })
+            if (!response.ok){
+                const {error} = await response.json();
+                throw error;
+            }
+            return response;
+        } catch (error) {
+            throw error;
         }
     }
 
@@ -73,13 +81,13 @@ const DayForm = async ({initDay}) => {
             const mealPromises = mealList.map(meal => {
                 const existingMeal = 'id' in meal;
                 if(!existingMeal){
-                    writeMealData(day, meal, 'POST')
+                    return writeMealData(day, meal, 'POST')
                 }   
             });
             await Promise.all(mealPromises);
             toast({ title: 'All meals saved successfully', status: 'success' });
         } catch (error) {
-            toast({ title: `Error saving meals: ${error.message}`, status: 'error' });
+            toast({ title: `${error}`, status: 'error' });
         }
     }
 

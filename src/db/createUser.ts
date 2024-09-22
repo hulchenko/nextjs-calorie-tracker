@@ -2,10 +2,10 @@
 
 import { sql } from '@/db/client';
 import { v4 as uuidv4 } from 'uuid';
-import { UserDB } from '@/types/User';
+import { User } from '@/types/User';
 import { revalidatePath } from 'next/cache'; // purges cached data
 
-export const createUser = async (user): Promise<UserDB[] | any> => {
+export const createUser = async (user): Promise<User[] | any> => {
     try {
         const {name, email, password} = user;
         const id = uuidv4();
@@ -19,6 +19,6 @@ export const createUser = async (user): Promise<UserDB[] | any> => {
         revalidatePath('/');
         return userData;
     } catch (error) {
-        throw new Error('Error creating a user in database', error);
+        throw Error('Creating user failed');
     }
 }
