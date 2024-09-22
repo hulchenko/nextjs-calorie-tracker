@@ -1,17 +1,18 @@
 'use client';
 
-import { useToast } from '@chakra-ui/react';
-import { useState, createContext, useEffect } from 'react';
-import MealInputForm from './MealInputForm';
-import MealDisplayInfo from './MealDisplayInfo';
 import { sumCalories } from '@/lib/utils';
+import { Meal } from '@/types/Meal';
+import { Grid, useToast } from '@chakra-ui/react';
+import { createContext, useEffect, useState } from 'react';
+import MealDisplayInfo from './MealDisplayInfo';
+import MealInputForm from './MealInputForm';
 
 const DayForm = async ({initDay}) => {
-    console.log(`DATA: `, initDay);
     const toast = useToast();
     const [day, setDay] = useState(initDay);
     const [mealList, setMealList] = useState([]);
     const [loading, setLoading] = useState(true);
+    const [saveReady, setSaveReady] = useState(false);
 
 
     useEffect(() => {
@@ -39,7 +40,7 @@ const DayForm = async ({initDay}) => {
         } else {
             setLoading(false);
         }
-    }, [day])
+    }, [])
 
     const writeDayData = async (obj, methodType) => {
         const response = await fetch('/api/db/day', {
@@ -69,7 +70,12 @@ const DayForm = async ({initDay}) => {
 
     const saveAllMeals = async (day, mealList) => {
         try {
-            const mealPromises = mealList.map(meal => writeMealData(day, meal, 'POST'));
+            const mealPromises = mealList.map(meal => {
+                const existingMeal = 'id' in meal;
+                if(!existingMeal){
+                    writeMealData(day, meal, 'POST')
+                }   
+            });
             await Promise.all(mealPromises);
             toast({ title: 'All meals saved successfully', status: 'success' });
         } catch (error) {
@@ -81,6 +87,12 @@ const DayForm = async ({initDay}) => {
         const dailyCalories = await sumCalories(mealList);
         const isDayChanged = dailyCalories !== initDay.calories_consumed;
         const isMealListChanged = mealList.length;
+        
+        if (isMealListChanged){ // writes to meals table
+            console.log(`WRITE MEAL DATA: `, mealList);
+            await saveAllMeals(day, mealList);
+            setSaveReady(false);
+        }
 
         if (isDayChanged){
             const existingDay = 'id' in day; // id is generated in DB
@@ -98,11 +110,7 @@ const DayForm = async ({initDay}) => {
             } else {
                 await writeDayData(newDayData, 'POST');
             } 
-        }
-        
-        if (isMealListChanged){ // writes to meals table
-            console.log(`WRITE MEAL DATA: `, mealList);
-            await saveAllMeals(day, mealList); 
+            setSaveReady(false);
         }
 
         if(!isDayChanged && !isMealListChanged){
@@ -110,25 +118,43 @@ const DayForm = async ({initDay}) => {
         }
     }
 
+const sortMeals = (list: Meal[]) => {
+        const sortedMeals = ['Breakfast', 'Brunch', 'Lunch', 'Supper', 'Dinner', 'Midnight Snack', 'Other'];
+
+        const newList = [...list];
+        newList.sort((prev, curr) => {
+            const prevIdx = sortedMeals.indexOf(prev.meal_type);
+            const currIdx = sortedMeals.indexOf(curr.meal_type);
+            if(prevIdx > currIdx){
+                return 1
+            } else {
+                return -1
+            }
+        });
+        return newList;
+    }
+
     if(!loading){
         return ( 
             <div>
                 <DayDisplayInfo day={day}/>
                 <div className='mx-auto mt-20 items-center flex flex-col text-xl'>
-                    <MealContext.Provider value={{mealList, setMealList}}>
-                        {mealList && mealList.map((meal) => (
-                            <MealDisplayInfo meal={meal}/>
-                        ))}
+                    <MealContext.Provider value={{mealList, setMealList, setSaveReady}}>
+                        <Grid templateColumns='repeat(3, 1fr)' gap={4}>
+                            {sortMeals(mealList).map((meal) => (
+                                <MealDisplayInfo meal={meal}/>
+                            ))}
+                        </Grid>
                         <MealInputForm />
                     </MealContext.Provider>
-                    <button onClick={submitHandler}>Save</button>
+                    {saveReady && (<button className='fixed bottom-40 right-24 bg-teal-700 hover:bg-teal-600  text-white py-4 p-6 mt-2 rounded' onClick={submitHandler}>Save</button>)}
                 </div>
             </div>
         );
     }
 }
 
-export const MealContext = createContext<{mealList: any, setMealList: any}>({mealList: null, setMealList: null});
+export const MealContext = createContext<{mealList: any, setMealList: any, setSaveReady: any}>({mealList: null, setMealList: null, setSaveReady: null});
 export default DayForm;
 
 

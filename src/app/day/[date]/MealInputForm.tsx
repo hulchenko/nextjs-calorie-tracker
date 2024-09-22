@@ -1,62 +1,56 @@
+import { Meal } from '@/types/Meal';
 import {
-  Modal,
-  ModalOverlay,
-  ModalContent,
-  ModalHeader,
-  ModalFooter,
-  ModalBody,
-  ModalCloseButton,
-  Button,
-  FormControl,
-  FormLabel,
-  Input,
-  useDisclosure,
-  useToast,
-  InputRightElement,
-  InputGroup,
-  FormErrorMessage,
-  Select,
-  Text,
-  Stack
+    Button,
+    FormControl,
+    FormLabel,
+    Input,
+    InputGroup,
+    Modal,
+    ModalBody,
+    ModalCloseButton,
+    ModalContent,
+    ModalFooter,
+    ModalHeader,
+    ModalOverlay,
+    Select,
+    Spinner,
+    Stack,
+    Text,
+    useDisclosure
 } from '@chakra-ui/react';
-import { MealContext } from './DayForm';
+import { faPlus, faUtensils } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useContext, useEffect, useState } from 'react';
 import { v4 as uuidv4 } from 'uuid';
-import { faUtensils } from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { Meal } from '@/types/Meal';
+import { MealContext } from './DayForm';
 
 const MealInputForm = () => {
-    const {mealList, setMealList} = useContext(MealContext);
+    const {mealList, setMealList, setSaveReady} = useContext(MealContext);
 
     const [query, setQuery] = useState('');
     const [delayedFetch, setDelayedFetch] = useState(query)
     const [meal, setMeal] = useState(newMealObj());
+    const [loading, setLoading] = useState(false);
 
     const { isOpen, onOpen, onClose } = useDisclosure(); // modal props
-    console.log(`MEAL LIST: `, mealList);
-
-    // const handleMealList = () => {
-    //     setMealList(prev => [...prev, meal]);
-    //     console.log(`MEAL INPUT MEAL LIST: `, mealList);
-    // }
 
     useEffect(() => {
         // search and get nutritions
         if(query.length >= 3 && delayedFetch){
+            setLoading(true)
             const getFoodData = async () => {
                 const response = await fetch(`/api/other/food?query=${query}`);
                 const data = await response.json();
                 const calories = sumMealCalories(data);
-                console.log(`FETCHED FOOD DATA: `, data)
                 setMeal((prevState) => ({...prevState, items: data.items, calories}));
+                setLoading(false);
             };
             getFoodData();
         }
     }, [delayedFetch])
 
     useEffect(() => {
-        const delayHandler = setTimeout(() => setDelayedFetch(query), 2000); // delay fetch by 2 seconds after the user interracted with the input field
+        const delayHandler = setTimeout(() => setDelayedFetch(query), 1500); // delay fetch by 1.5 seconds after the user interracted with the input field
         return () => clearTimeout(delayHandler); // reset if the user starts typing again
     }, [query]);
 
@@ -68,32 +62,33 @@ const MealInputForm = () => {
     
     return (
         <>
-            {mealList?.length ? (
-                <div  className='absolute bottom-40 right-32'>
-                    <button className='bg-teal-700 hover:bg-teal-600  text-white py-4 p-6 mt-2 rounded' onClick={onOpen}><FontAwesomeIcon icon={faUtensils} /></button>
-                </div>
-            ) : (
+        {mealList.length === 0 && (
                 <div  className='flex flex-col items-center'>
                     <h1 className='text-4xl'>No meals</h1>
                     <p className='text-base text-gray-500 py-4'>Looks like you haven't added any meals yet.</p>
-                    <button className='bg-teal-700 hover:bg-teal-600  text-white py-2 px-4 mt-2 rounded' onClick={onOpen}>Add Meal<FontAwesomeIcon className='ml-2' icon={faUtensils} /></button> 
+                    <button className='bg-teal-700 hover:bg-teal-600  text-white py-4 p-6 mt-2 rounded' onClick={onOpen}>Add Meal<FontAwesomeIcon className='ml-2' icon={faUtensils} /></button> 
                 </div>
-            )}
-
-            <Modal isOpen={isOpen} onClose={onClose} scrollBehavior='outside'>
+        )}
+        {mealList.length > 0 && mealList.length < 9 && (
+                <button className='fixed bottom-40 right-52 bg-teal-700 hover:bg-teal-600 text-white py-4 p-6 mt-2 rounded' onClick={onOpen}><FontAwesomeIcon icon={faPlus} /></button>
+        )}
+            <Modal isOpen={isOpen} onClose={onClose} scrollBehavior='outside' isCentered>
                 <ModalOverlay />
                     <ModalContent>
-                        <form action={() => setMealList(prev => [...prev, meal])}>
+                        <form action={() => {setMealList(prev => [...prev, meal]), setSaveReady(true)}}>
                             <ModalHeader className='text-teal-700'>Add a New Meal</ModalHeader>
-                            <ModalCloseButton />
+                            <ModalCloseButton size='lg'/>
                             <ModalBody pb={6}>
                                 <FormControl>
                                     <FormLabel>Type</FormLabel>
                                     <InputGroup size='lg'>
                                         <Select placeholder='Please Select' onChange={(e) => setMeal({...meal, meal_type: e.target.value})}>
                                             <option value='Breakfast'>Breakfast</option>
+                                            <option value='Brunch'>Brunch</option>
                                             <option value='Lunch'>Lunch</option>
+                                            <option value='Supper'>Supper</option>
                                             <option value='Dinner'>Dinner</option>
+                                            <option value='Midnight Snack'>Midnight Snack</option>
                                             <option value='Other'>Other</option>
                                         </Select>
                                     </InputGroup>
@@ -102,14 +97,13 @@ const MealInputForm = () => {
                                 <FormControl mt={4}>
                                     <FormLabel>Description</FormLabel>
                                     <InputGroup size='lg'>
-                                        <Input placeholder='e.g. 2 eggs and a toast' onChange={(e) => {
-                                            setQuery(e.target.value)
-                                            setMeal({...meal, meal_description: e.target.value})}}/>
+                                        <Input placeholder='e.g. 2 eggs and a toast' onChange={(e) => {setQuery(e.target.value), setMeal({...meal, meal_description: e.target.value})}}/>
                                     </InputGroup>
                                 </FormControl>
 
                                 <FormControl mt={4}>
                                     <FormLabel>Nutrition List</FormLabel>
+                                    {loading ? (<span className='w-full flex text-center justify-center'><Spinner/></span>) : (
                                             <Stack>
                                                 {meal?.items.map(i => (
                                                     <div className='ml-2 border border-teal-600 rounded p-4'>
@@ -128,6 +122,7 @@ const MealInputForm = () => {
                                                     </div>
                                                 ))}
                                             </Stack>
+                                    )}
                                 </FormControl>
 
                                 <FormControl mt={4}>

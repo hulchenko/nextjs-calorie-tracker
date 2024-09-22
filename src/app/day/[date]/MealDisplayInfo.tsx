@@ -1,60 +1,80 @@
-import { Accordion, AccordionButton, AccordionIcon, AccordionItem, AccordionPanel, Box, Card, CardBody, CardHeader, Heading, Modal, ModalContent, ModalHeader, ModalOverlay, Stack, Text,
-  ModalFooter,
-  ModalBody,
-  ModalCloseButton,
-  Button,
-  FormControl,
-  FormLabel,
-  Input,
-  useDisclosure,
-  useToast,
-  InputRightElement,
-  InputGroup,
-  FormErrorMessage,
-  Select,
-  Grid,
-  GridItem
- } from '@chakra-ui/react';
+import {
+    Button,
+    Card, CardBody, CardHeader,
+    Modal,
+    ModalBody,
+    ModalCloseButton,
+    ModalContent,
+    ModalFooter,
+    ModalOverlay,
+    Text,
+    useDisclosure,
+    useToast
+} from '@chakra-ui/react';
+import { useContext } from 'react';
+import { MealContext } from './DayForm';
 
 const MealDisplayInfo = ({meal}) => {
-    console.log(`DISPLAY MEAL: `, meal);
     const { isOpen, onOpen, onClose } = useDisclosure();
+    const { mealList, setMealList } = useContext(MealContext)
+    const toast = useToast();
+
+    async function purgeMeal(meal){
+        const existingMeal = 'id' in meal;
+
+        if(existingMeal){
+            try {
+                const response = await fetch('/api/db/meal', { 
+                    method: 'DELETE',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify(meal)
+                });
+                if(response.ok){
+                    filterMeals()
+                }
+            } catch (error) {
+                toast({ title: `${error}`, status: 'error'});
+            }
+        } else {
+            filterMeals()
+        }
+    }
+    
+    function filterMeals() {
+        setTimeout(()=> {
+            // workaround for the re-opening modal bug
+            const filteredMeals = mealList.filter(m => m.meal_id !== meal.meal_id);
+            setMealList(filteredMeals);
+            toast({ title: 'Meal removed', status: 'info'});
+        });
+    }
+
+
 
     return (
         <>
-            <Grid templateColumns='repeat(5, 1fr)' gap={4}>
-                <GridItem colSpan={4}>
-                        <Card key={meal.meal_id} variant='elevated' onClick={onOpen} className='cursor-pointer hover:shadow-lg w-80 m-5'>
-                            <CardHeader>
-                                <Heading><span className='text-teal-600'>{meal.meal_type}</span></Heading>
-                            </CardHeader>
-                            <CardBody>
-                                <Text>Description: {meal.meal_description}</Text>
-                                <Text>Total Calories: <b className='text-teal-600'>{meal.calories}</b></Text>
-                            </CardBody>
-                        </Card>
-                    </GridItem>
-            </Grid>
-            <MealCard props={{meal, isOpen, onClose, onOpen}}/>
-        </>
-     );
-}
- 
-export default MealDisplayInfo;
+            <Card key={meal.meal_id} variant='elevated' className='cursor-default hover:shadow-teal-700 hover:shadow-md w-80 m-5'>
+                <CardHeader>
+                    <Text><span className='text-teal-600 text-3xl font-bold'>{meal.meal_type}</span></Text>
+                </CardHeader>
+                <CardBody>
+                    <Text>Description: {meal.meal_description}</Text>
+                    <Text>Total Calories: <b className='text-teal-600'>{meal.calories}</b></Text>
+                </CardBody>
+                <Button onClick={onOpen}>Click for details</Button>
+            </Card>
 
-const MealCard = ({props}) => {
-    const {meal, isOpen, onClose, onOpen} = props;
+            {/* Modal for Meal Card */}
 
-    return(
-            <Modal isOpen={isOpen} onClose={onClose} scrollBehavior='outside'>
+            <Modal isOpen={isOpen} onClose={onClose} scrollBehavior='outside' isCentered>
                 <ModalOverlay />
                     <ModalContent>
                         <form>
-                            <ModalCloseButton />
+                            <ModalCloseButton size='lg'/>
                             <ModalBody className='mt-10'>
                                 <Card key={meal.meal_id} variant='elevated'>
                                     <CardHeader>
-                                        <Heading><span className='text-teal-600'>{meal.meal_type}</span></Heading>
+                                        <Text><span className='text-teal-600 text-3xl font-bold'>{meal.meal_type}</span></Text>
                                     </CardHeader>
                                     <CardBody>
                                         <Text>Description: {meal.meal_description}</Text>
@@ -79,15 +99,20 @@ const MealCard = ({props}) => {
                                     </CardBody>
                                 </Card>
                             </ModalBody>
-                            
 
                             <ModalFooter>
-                                <Button colorScheme='red' mr={3} type='submit' isDisabled={meal.items.length === 0 || meal.meal_type === ''} onClick={onClose}>
+                                <Button colorScheme='red' size='md' m={3} onClick={() => {purgeMeal(meal), onClose()}}>
                                     Remove
+                                </Button>
+                                <Button colorScheme='teal' size='md' onClick={onClose}>
+                                    Cancel
                                 </Button>
                             </ModalFooter>
                         </form>
                     </ModalContent>
              </Modal>
-    )
+        </>
+     );
 }
+ 
+export default MealDisplayInfo;
