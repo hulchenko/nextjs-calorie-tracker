@@ -1,12 +1,12 @@
-import { Nunito } from 'next/font/google';
-import type { Metadata } from "next";
-import "./globals.css";
-import { ChakraProvider } from '@chakra-ui/react';
-import Navigation from '@/components/Navigation';
-import Footer from '@/components/Footer';
 import ActivityListener from '@/components/ActivityListener';
-import { SessionProvider } from './context/SessionProvider';
+import Footer from '@/components/Footer';
+import Navigation from '@/components/Navigation';
 import { verifySession } from '@/lib/session';
+import { ChakraProvider } from '@chakra-ui/react';
+import type { Metadata } from "next";
+import { Nunito } from 'next/font/google';
+import { SessionProvider } from './context/SessionProvider';
+import "./globals.css";
 
 export const metadata: Metadata = {
   title: "Calorie Tracker App",

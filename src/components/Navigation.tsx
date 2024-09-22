@@ -1,11 +1,11 @@
 'use client';
 
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faWeightScale } from '@fortawesome/free-solid-svg-icons';
-import { useRouter } from 'next/navigation';
-import { useToast } from '@chakra-ui/react';
-import Link from 'next/link';
 import { useSession } from '@/app/context/SessionProvider';
+import { useToast } from '@chakra-ui/react';
+import { faWeightScale } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 
 const Navigation = () => {
   const toast = useToast();

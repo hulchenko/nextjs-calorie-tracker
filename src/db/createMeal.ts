@@ -6,6 +6,6 @@ export const createMeal = async (meal) => {
         await sql `INSERT INTO meals(meal_id, day_id, user_id, meal_type, meal_description, items, calories) VALUES(${meal_id}, ${day_id}, ${user_id}, ${meal_type}, ${meal_description}, ${JSON.stringify(items)}, ${calories})`;
         return meal;
     } catch (error) {
-        throw new Error('Error creating new meal', error);
+        throw new Error('Error creating new meal in database', error);
     }
 }

@@ -1,6 +1,6 @@
-import 'server-only';
-import {SignJWT, jwtVerify, JWTPayload} from 'jose';
+import { JWTPayload, SignJWT, jwtVerify } from 'jose';
 import { cookies } from 'next/headers';
+import 'server-only';
 
 const secretKey = process.env.SESSION_SECRET;
 const encodedKey = new TextEncoder().encode(secretKey); // secretKey in bytes

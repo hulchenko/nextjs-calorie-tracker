@@ -1,6 +1,6 @@
-import DashboardWeek from './DashboardWeek';
 import { verifySession } from '@/lib/session';
 import { generateGreeting } from '@/lib/utils';
+import DashboardWeek from './DashboardWeek';
 
 const DashboardPage = async () => {
     

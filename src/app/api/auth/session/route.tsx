@@ -1,5 +1,5 @@
+import { deleteSession, updateSession, verifySession } from '@/lib/session';
 import { NextResponse } from 'next/server';
-import { verifySession, updateSession, deleteSession } from '@/lib/session';
 
 export async function POST() { // refresh session
     const session = await verifySession();

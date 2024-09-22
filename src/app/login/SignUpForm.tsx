@@ -2,25 +2,25 @@
 
 import { encryptPassword, passwordValidator } from '@/lib/utils';
 import {
-  Modal,
-  ModalOverlay,
-  ModalContent,
-  ModalHeader,
-  ModalFooter,
-  ModalBody,
-  ModalCloseButton,
   Button,
   FormControl,
+  FormErrorMessage,
   FormLabel,
   Input,
-  useDisclosure,
-  useToast,
-  InputRightElement,
   InputGroup,
-  FormErrorMessage
+  InputRightElement,
+  Modal,
+  ModalBody,
+  ModalCloseButton,
+  ModalContent,
+  ModalFooter,
+  ModalHeader,
+  ModalOverlay,
+  useDisclosure,
+  useToast
 } from '@chakra-ui/react';
-import { useState } from 'react';
 import { useRouter } from 'next/navigation';
+import { useState } from 'react';
 import { useSession } from '../context/SessionProvider';
 
 const SignUpForm = () => {
@@ -80,12 +80,12 @@ const SignUpForm = () => {
 
 
       {/* Sign Up modal using Chakra UI */}  
-      <Modal isOpen={isOpen} onClose={onClose}>
+      <Modal isOpen={isOpen} onClose={onClose} isCentered>
         <ModalOverlay />
         <ModalContent>
           <form action={submitHandler}>
             <ModalHeader className='text-teal-700'>Sign Up</ModalHeader>
-            <ModalCloseButton />
+            <ModalCloseButton size='lg'/>
             <ModalBody pb={6}>
               <FormControl isRequired>
                 <FormLabel>Name</FormLabel>

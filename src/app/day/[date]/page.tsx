@@ -1,8 +1,8 @@
 import { getDay } from '@/db/getDay';
-import DayForm from './DayForm';
 import { Day } from '@/types/Day';
 import { revalidatePath } from 'next/cache';
-import {v4 as uuidv4} from 'uuid';
+import { v4 as uuidv4 } from 'uuid';
+import DayForm from './DayForm';
 
 const DayPage = async (context) => {
     revalidatePath('/'); // somehow without this getDay() returns undefined

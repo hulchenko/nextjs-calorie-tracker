@@ -2,9 +2,9 @@
 
 'use client';
 
-import { createContext, useContext, useState, useEffect, useRef } from 'react';
 import { Session } from '@/types/Session';
 import { useRouter } from 'next/navigation';
+import { createContext, useContext, useEffect, useRef, useState } from 'react';
 
 const SessionContext = createContext<{session: Session | null, setSession: (session: Session | null) => void}>({
     session: null,

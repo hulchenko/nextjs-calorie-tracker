@@ -14,6 +14,6 @@ export const getUser = async (prop, queryById): Promise<UserDB[] | any> => {
             return response[0];
         }
     } catch (error) {
-        throw new Error('Error getting user', error);
+        throw new Error('Error getting user from database', error);
     }    
 }

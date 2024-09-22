@@ -5,6 +5,6 @@ export const getMeals = async (day_id, user_id) => {
         const response = await sql `SELECT * FROM meals WHERE day_id=${day_id}`;
         return response;
     } catch (error) {
-        throw new Error('Error getting meals', error);
+        throw new Error('Error getting meals from database', error);
     }
 }

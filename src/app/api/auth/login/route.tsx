@@ -1,7 +1,7 @@
-import { NextRequest, NextResponse } from 'next/server';
 import { getUser } from '@/db/getUser';
-import { validateHashedPassword } from '@/lib/utils';
 import { createSession } from '@/lib/session';
+import { validateHashedPassword } from '@/lib/utils';
+import { NextRequest, NextResponse } from 'next/server';
 
 export async function POST(request: NextRequest) {
 

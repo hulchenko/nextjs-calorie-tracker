@@ -1,8 +1,8 @@
 'use client';
 
-import { FormEvent, useState } from 'react';
-import { useRouter } from 'next/navigation';
 import { useToast } from '@chakra-ui/react';
+import { useRouter } from 'next/navigation';
+import { FormEvent, useState } from 'react';
 import { useSession } from '../context/SessionProvider';
 
 const SignInForm = () => {

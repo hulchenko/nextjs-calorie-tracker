@@ -1,7 +1,7 @@
-import { faSquareXmark, faSquareCheck } from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { getWeek } from '@/db/getWeek';
 import { generateWeek } from '@/lib/utils';
+import { faSquareCheck, faSquareXmark } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import DashboardDay from './DashboardDay';
 
 

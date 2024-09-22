@@ -19,6 +19,6 @@ export const createUser = async (user): Promise<UserDB[] | any> => {
         revalidatePath('/');
         return userData;
     } catch (error) {
-        throw new Error('Error creating a user', error);
+        throw new Error('Error creating a user in database', error);
     }
 }

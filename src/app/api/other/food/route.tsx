@@ -1,5 +1,5 @@
-import { NextRequest, NextResponse } from 'next/server';
 import { getFood } from '@/db/getFood';
+import { NextRequest, NextResponse } from 'next/server';
 
 export async function GET(request: NextRequest){
     const query = request.nextUrl.searchParams.get('query');

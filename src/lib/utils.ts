@@ -1,5 +1,6 @@
 "use server"; // all of the functions implicitly turn to async
 
+import { Meal } from '@/types/Meal';
 import bcrypt from 'bcrypt';
 import moment from 'moment';
 
@@ -54,6 +55,6 @@ export const generateGreeting = () => {
     return 'Hello';
 }
 
-export const sumCalories = (meals) => {
-    return meals.reduce((total, curr) => total + (curr.calories || 0), 0) || 0;
+export const sumCalories = (list: Meal[]) => {
+    return list.reduce((total, curr) => total + (curr.calories || 0), 0) || 0;
 }

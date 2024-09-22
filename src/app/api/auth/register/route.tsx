@@ -1,6 +1,6 @@
 import { verifyUserDB } from '@/db/verifyUser';
-import { NextRequest, NextResponse } from 'next/server';
 import { createSession } from '@/lib/session';
+import { NextRequest, NextResponse } from 'next/server';
 
 export async function POST(request: NextRequest) {
     try {
