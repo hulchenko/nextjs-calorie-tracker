@@ -1,4 +1,4 @@
-import { getDay } from '@/db/getDay';
+import { getDay } from '@/db/dayActions';
 import { Day } from '@/types/Day';
 import { revalidatePath } from 'next/cache';
 import { v4 as uuidv4 } from 'uuid';

@@ -1,12 +1,12 @@
 'use client';
 
+import { getMeals, saveAllMeals, writeDayData, sortMeals } from '@/lib/dayUtils';
 import { sumCalories } from '@/lib/utils';
-import { Meal } from '@/types/Meal';
 import { Grid, useToast } from '@chakra-ui/react';
 import { createContext, useEffect, useState } from 'react';
+import DayDisplayInfo from './DayDisplayInfo';
 import MealDisplayInfo from './MealDisplayInfo';
 import MealInputForm from './MealInputForm';
-import DayDisplayInfo from './DayDisplayInfo';
 
 const DayForm = async ({initDay}) => {
     const toast = useToast();
@@ -20,77 +20,11 @@ const DayForm = async ({initDay}) => {
         // get meals from DB
         const {day_id, user_id} = day;
         if (day_id && user_id){
-            const getMeals = async () => {
-                try {
-                    const response = await fetch(`/api/db/meal?day_id=${day_id}&user=${user_id}`);
-                    if (!response.ok){
-                        const {error} = await response.json();
-                        throw error;
-                    }
-                    const meals = await response.json();
-                    setMealList(meals);
-                    setLoading(false);
-                } catch (error) {
-                    toast({title: `${error}`, status: 'error'});
-                    setMealList([]);
-                    setLoading(false);
-                }
-            };
-            getMeals();
+            getMeals(day_id, user_id, setMealList, setLoading, toast);
         } else {
             setLoading(false);
         }
     }, [])
-
-    const writeDayData = async (obj, methodType) => {
-        try {
-            const response = await fetch('/api/db/day', {
-                method: methodType,
-                headers: {'Content-Type': 'application/json'},
-                body: JSON.stringify(obj)
-            })
-            if (!response.ok){
-                const {error} = await response.json();
-                throw error;
-            }
-        } catch (error) {
-            toast({ title: `${error}`, status: 'error' });
-        }
-    }
-
-    const writeMealData = async (day, meal, methodType) => {
-        try {
-            meal.day_id = day.day_id; // append day id for reference
-            meal.user_id = day.user_id;
-            const response = await fetch('/api/db/meal', {
-                method: methodType,
-                headers: {'Content-Type': 'application/json'},
-                body: JSON.stringify(meal)
-            })
-            if (!response.ok){
-                const {error} = await response.json();
-                throw error;
-            }
-            return response;
-        } catch (error) {
-            throw error;
-        }
-    }
-
-    const saveAllMeals = async (day, mealList) => {
-        try {
-            const mealPromises = mealList.map(meal => {
-                const existingMeal = 'id' in meal;
-                if(!existingMeal){
-                    return writeMealData(day, meal, 'POST')
-                }   
-            });
-            await Promise.all(mealPromises);
-            toast({ title: 'All meals saved successfully', status: 'success' });
-        } catch (error) {
-            toast({ title: `${error}`, status: 'error' });
-        }
-    }
 
     const submitHandler = async () => {
         const dailyCalories = await sumCalories(mealList);
@@ -98,7 +32,7 @@ const DayForm = async ({initDay}) => {
         const isMealListChanged = mealList.length;
         
         if (isMealListChanged){ // writes to meals table
-            await saveAllMeals(day, mealList);
+            await saveAllMeals(day, mealList, toast);
             setSaveReady(false);
         }
 
@@ -113,9 +47,9 @@ const DayForm = async ({initDay}) => {
             setDay(newDayData);
 
             if (existingDay){ // writes to days table
-                await writeDayData(newDayData, 'PUT');
+                await writeDayData(newDayData, 'PUT', toast);
             } else {
-                await writeDayData(newDayData, 'POST');
+                await writeDayData(newDayData, 'POST', toast);
             } 
             setSaveReady(false);
         }
@@ -123,22 +57,6 @@ const DayForm = async ({initDay}) => {
         if(!isDayChanged && !isMealListChanged){
             toast({ title: 'Nothing to update', status: 'info' });
         }
-    }
-
-const sortMeals = (list: Meal[]) => {
-        const sortedMeals = ['Breakfast', 'Brunch', 'Lunch', 'Supper', 'Dinner', 'Midnight Snack', 'Other'];
-
-        const newList = [...list];
-        newList.sort((prev, curr) => {
-            const prevIdx = sortedMeals.indexOf(prev.meal_type);
-            const currIdx = sortedMeals.indexOf(curr.meal_type);
-            if(prevIdx > currIdx){
-                return 1
-            } else {
-                return -1
-            }
-        });
-        return newList;
     }
 
     if(!loading){
