@@ -1,4 +1,4 @@
-import { Meal } from '@/types/Meal';
+import { getFoodData, newMealObj } from '@/lib/mealUtils';
 import {
     Button,
     FormControl,
@@ -22,7 +22,6 @@ import {
 import { faPlus, faUtensils } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useContext, useEffect, useState } from 'react';
-import { v4 as uuidv4 } from 'uuid';
 import { MealContext } from './DayForm';
 
 const MealInputForm = () => {
@@ -39,24 +38,7 @@ const MealInputForm = () => {
     useEffect(() => {
         // search and get nutritions
         if(query.length >= 3 && delayedFetch){
-            setLoading(true)
-            const getFoodData = async () => {
-                try {
-                    const response = await fetch(`/api/other/food?query=${query}`);
-                    if (!response.ok){
-                        const {error} = await response.json();
-                        throw error;
-                    }
-                    const data = await response.json();
-                    const calories = sumMealCalories(data);
-                    setMeal((prevState) => ({...prevState, items: data.items, calories}));
-                    setLoading(false);
-                } catch (error) {
-                    toast({title: `${error}`, status: 'error'});
-                    setLoading(false);
-                }
-            };
-            getFoodData();
+            getFoodData(query, setMeal, setLoading, toast);
         }
     }, [delayedFetch])
 
@@ -157,19 +139,3 @@ const MealInputForm = () => {
 }
 
 export default MealInputForm;
-
-const sumMealCalories = (data) => {
-    const sum = data.items.map(i => i.calories).reduce((a, b) => (a + b), 0); // will return 0 if empty
-    return Math.round(sum);
-}
-
-const newMealObj = () : Meal => {
-        return {
-            day_id: '',
-            meal_id: uuidv4(),
-            meal_type: '',
-            meal_description: '',
-            items: [],
-            calories: 0
-    }
-}

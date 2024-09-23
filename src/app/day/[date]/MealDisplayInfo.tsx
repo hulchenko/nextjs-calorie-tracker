@@ -13,45 +13,12 @@ import {
 } from '@chakra-ui/react';
 import { useContext } from 'react';
 import { MealContext } from './DayForm';
+import { purgeMeal  } from '@/lib/mealUtils';
 
 const MealDisplayInfo = ({meal}) => {
     const { isOpen, onOpen, onClose } = useDisclosure();
     const { mealList, setMealList } = useContext(MealContext)
     const toast = useToast();
-
-    async function purgeMeal(meal){
-        const existingMeal = 'id' in meal;
-
-        if(existingMeal){
-            try {
-                const response = await fetch('/api/db/meal', { 
-                    method: 'DELETE',
-                    headers: {'Content-Type': 'application/json'},
-                    body: JSON.stringify(meal)
-                });
-                if (!response.ok){
-                    const {error} = await response.json();
-                    throw error;
-                }
-                filterMeals()
-            } catch (error) {
-                toast({ title: `${error}`, status: 'error' });
-            }
-        } else {
-            filterMeals()
-        }
-    }
-    
-    function filterMeals() {
-        setTimeout(()=> {
-            // workaround for the re-opening modal bug
-            const filteredMeals = mealList.filter(m => m.meal_id !== meal.meal_id);
-            setMealList(filteredMeals);
-            toast({ title: 'Meal removed', status: 'info'});
-        });
-    }
-
-
 
     return (
         <>
@@ -103,7 +70,7 @@ const MealDisplayInfo = ({meal}) => {
                             </ModalBody>
 
                             <ModalFooter>
-                                <Button colorScheme='red' size='md' m={3} onClick={() => {purgeMeal(meal), onClose()}}>
+                                <Button colorScheme='red' size='md' m={3} onClick={() => {purgeMeal(meal, mealList, setMealList, toast), onClose()}}>
                                     Remove
                                 </Button>
                                 <Button colorScheme='teal' size='md' onClick={onClose}>
