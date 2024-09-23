@@ -2,13 +2,7 @@ import { Meal } from '@/types/Meal';
 import { Day } from '@/types/Day';
 
 // Fetch meals for the given day
-export const getMeals = async (
-  day_id,
-  user_id,
-  setMealList,
-  setLoading,
-  toast
-) => {
+export const getMeals = async (day_id, user_id, setMealList, setLoading, toast) => {
   try {
     const response = await fetch(`/api/db/meal?day_id=${day_id}&user=${user_id}`);
     if (!response.ok) {
