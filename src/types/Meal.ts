@@ -1,5 +1,6 @@
 export interface Meal {
     id?: number,
+    user_id: string,
     meal_id: string,
     day_id: string,
     meal_type: string,
