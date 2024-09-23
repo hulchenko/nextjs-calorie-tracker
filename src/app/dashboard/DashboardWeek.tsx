@@ -1,4 +1,4 @@
-import { getWeek } from '@/db/getWeek';
+import { getWeek } from '@/db/weekActions';
 import { generateWeek } from '@/lib/utils';
 import { faSquareCheck, faSquareXmark } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';

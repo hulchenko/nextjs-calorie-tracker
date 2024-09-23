@@ -1,12 +1,10 @@
-import { createMeal } from '@/db/createMeal';
-import { getMeals } from '@/db/getMeals';
-import { removeMeal } from '@/db/removeMeal';
+import { createMeal, getMeals, removeMeal } from '@/db/mealActions';
 import { NextRequest, NextResponse } from 'next/server';
 
 export async function POST(request: NextRequest) {
     try {
         const data = await request.json();
-        const response = await createMeal(data);
+        const response = await createMeal(data); // TODO this to replace
         return NextResponse.json(response);
     } catch (error) {
         return NextResponse.json({error: `${error}`}, { status: 500 });

@@ -1,4 +1,4 @@
-import { getUser } from '@/db/getUser';
+import { getUser } from '@/db/userActions';
 import { createSession } from '@/lib/session';
 import { validateHashedPassword } from '@/lib/utils';
 import { NextRequest, NextResponse } from 'next/server';

@@ -1,5 +1,4 @@
-import { createDay } from '@/db/createDay';
-import { updateDay } from '@/db/updateDay';
+import { createDay, updateDay } from '@/db/dayActions';
 import { NextRequest, NextResponse } from 'next/server';
 
 export async function POST(request: NextRequest) {
