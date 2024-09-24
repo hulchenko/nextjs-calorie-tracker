@@ -6,7 +6,7 @@ CREATE TABLE days (id SERIAL PRIMARY KEY, day_id UUID NOT NULL UNIQUE, user_id U
 ALTER TABLE days ADD CONSTRAINT unique_user_date UNIQUE (user_id, date); -- allow only 1 user and 1 day combination
 
 -- Weekly Summary
-CREATE TABLE weeks (id SERIAL PRIMARY KEY, week_id UUID NOT NULL UNIQUE, user_id UUID REFERENCES users(user_id) ON DELETE CASCADE, start_date DATE NOT NULL, end_date DATE NOT NULL, days_met INT DEFAULT 0);
+CREATE TABLE weeks (id SERIAL PRIMARY KEY, week_id UUID NOT NULL UNIQUE, user_id UUID REFERENCES users(user_id) ON DELETE CASCADE, start_date DATE NOT NULL, end_date DATE NOT NULL, daily_goals_met INT DEFAULT 0);
 
 -- Meals
 CREATE TABLE meals (id SERIAL PRIMARY KEY, meal_id UUID NOT NULL UNIQUE, day_id UUID NOT NULL, meal_type VARCHAR(100) NOT NULL, meal_description VARCHAR(255) NOT NULL, calories NUMERIC NOT NULL, items JSONB);

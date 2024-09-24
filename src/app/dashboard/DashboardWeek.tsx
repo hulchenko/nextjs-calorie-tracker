@@ -1,21 +1,36 @@
+'use client';
+
 import { getWeek } from '@/db/weekActions';
-import { generateWeek } from '@/lib/utils';
+import { generateWeek, defaultWeek } from '@/lib/weekUtils';
 import { faSquareCheck, faSquareXmark } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import DashboardDay from './DashboardDay';
+import { useEffect, useState } from 'react';
 
 
-const DashboardWeek = async ({userId}) => {
-    const { generatedWeek, firstWeekDay } = await generateWeek();
-    const weekDB = await getWeek(userId, firstWeekDay);
-    const goal = weekDB?.daily_goals_met || 0;
+const DashboardWeek = ({userId}) => {
+    const [week, setWeek] = useState(defaultWeek(userId));
+    const [goal, setGoal] = useState(0);
+    const { generatedWeek, firstWeekDay } = generateWeek();
+
+    useEffect(() => {
+        const getWeekDB = async () => {
+            const weekDB = await getWeek(userId, firstWeekDay);
+            if(weekDB){
+                setWeek(weekDB);
+                setGoal(weekDB.daily_goals_met)
+            }
+        };
+        getWeekDB();
+    },[]);
+
     return ( 
         <>
             <WeeklyGoal goal={goal} />
             <ul>
                 {generatedWeek
                 .map((day) => (
-                    <DashboardDay key={day.date} data={{day, userId}}/>
+                    <DashboardDay key={day.date} data={{userId, day, week}}/>
                 ))}
             </ul>
         </>
