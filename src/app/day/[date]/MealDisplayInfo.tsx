@@ -26,7 +26,18 @@ const MealDisplayInfo = ({data}) => {
     const [week, setWeek] = useState(initWeek);
 
     const { isOpen, onOpen, onClose } = useDisclosure();
-    const { mealList, setMealList } = useContext(MealContext)
+    const { mealList, setMealList } = useContext(MealContext);
+
+    const mealRemoveHandler = (event) => {
+        event?.preventDefault();
+        
+        purgeMeal(meal, day, week, mealList, setMealList, toast)
+        data.setDay({
+            ...day,
+            calories_consumed: day.calories_consumed -= meal.calories,
+            goal_met: day.calorie_target >= day.calories_consumed
+        });
+    };
 
     return (
         <>
@@ -46,7 +57,7 @@ const MealDisplayInfo = ({data}) => {
             <Modal isOpen={isOpen} onClose={onClose} scrollBehavior='outside' isCentered>
                 <ModalOverlay />
                     <ModalContent>
-                        <form>
+                        <form onSubmit={mealRemoveHandler}>
                             <ModalCloseButton size='lg'/>
                             <ModalBody className='mt-10'>
                                 <Card key={meal.meal_id} variant='elevated'>
@@ -78,7 +89,7 @@ const MealDisplayInfo = ({data}) => {
                             </ModalBody>
 
                             <ModalFooter>
-                                <Button colorScheme='red' size='md' m={3} onClick={() => {purgeMeal(meal, day, week, mealList, setMealList, toast), onClose()}}>
+                                <Button colorScheme='red' size='md' type='submit' m={3} onClick={onClose}>
                                     Remove
                                 </Button>
                                 <Button colorScheme='teal' size='md' onClick={onClose}>
