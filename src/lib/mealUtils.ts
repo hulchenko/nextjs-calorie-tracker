@@ -1,6 +1,18 @@
 import { Meal } from '@/types/Meal';
 import { v4 as uuidv4 } from 'uuid';
 
+export const defaultMeal = (): Meal => {
+        return {
+            user_id: '',
+            day_id: '',
+            meal_id: uuidv4(),
+            meal_type: '',
+            meal_description: '',
+            items: [],
+            calories: 0
+    }
+}
+
 export const purgeMeal = async (meal: Meal, mealList: Meal[], setMealList, toast) => {
     const existingMeal = 'id' in meal;
 
@@ -55,16 +67,4 @@ export const getFoodData = async (query, setMeal, setLoading, toast) => {
 const sumMealCalories = (data) => {
     const sum = data.items.map(i => i.calories).reduce((a, b) => (a + b), 0); // will return 0 if empty
     return Math.round(sum);
-}
-
-export const newMealObj = () : Meal => {
-        return {
-            user_id: '',
-            day_id: '',
-            meal_id: uuidv4(),
-            meal_type: '',
-            meal_description: '',
-            items: [],
-            calories: 0
-    }
 }
