@@ -1,6 +1,6 @@
 'use client';
 
-import { getMeals, saveAllMeals, writeDayData, sortMeals } from '@/lib/dayUtils';
+import { getMeals, saveAllMeals, sortMeals } from '@/lib/dayUtils';
 import { sumCalories } from '@/lib/utils';
 import { Grid, useToast } from '@chakra-ui/react';
 import { createContext, useEffect, useState } from 'react';
@@ -8,9 +8,13 @@ import DayDisplayInfo from './DayDisplayInfo';
 import MealDisplayInfo from './MealDisplayInfo';
 import MealInputForm from './MealInputForm';
 
-const DayForm = async ({initDay}) => {
+const DayForm = async ({data}) => {
     const toast = useToast();
+    const initDay = data.day;
+    const initWeek = JSON.parse(data.week);
+
     const [day, setDay] = useState(initDay);
+    const [week, setWeek] = useState(initWeek);
     const [mealList, setMealList] = useState([]);
     const [loading, setLoading] = useState(true);
     const [saveReady, setSaveReady] = useState(false);
@@ -32,27 +36,10 @@ const DayForm = async ({initDay}) => {
         const isMealListChanged = mealList.length;
         
         if (isMealListChanged){ // writes to meals table
-            await saveAllMeals(day, mealList, toast);
+            await saveAllMeals(day, mealList, week, toast);
             setSaveReady(false);
         }
 
-        if (isDayChanged){
-            const existingDay = 'id' in day; // id is generated in DB
-
-            const newDayData = {
-                ...day,
-                calories_consumed: dailyCalories,
-                goal_met: dailyCalories >= day.calorie_target
-            };
-            setDay(newDayData);
-
-            if (existingDay){ // writes to days table
-                await writeDayData(newDayData, 'PUT', toast);
-            } else {
-                await writeDayData(newDayData, 'POST', toast);
-            } 
-            setSaveReady(false);
-        }
 
         if(!isDayChanged && !isMealListChanged){
             toast({ title: 'Nothing to update', status: 'info' });

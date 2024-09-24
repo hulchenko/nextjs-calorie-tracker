@@ -22,22 +22,6 @@ export const validateHashedPassword = async (password: string, hashedPassword: s
     return false;
 }
 
-export const generateWeek = () => {
-    const firstWeekDay = moment().startOf('isoWeek'); // '2024-09-09'
-    const lastWeekDay = moment().endOf('isoWeek'); // '2024-09-15'
-    const generatedWeek: Array<any> = [];
-    let dayOfWeek = firstWeekDay.clone(); // initialize first week day from the given week
-
-    while (dayOfWeek.isSameOrBefore(lastWeekDay)){
-        const date = dayOfWeek.seconds(0).milliseconds(0).toISOString();
-        const weekDay = dayOfWeek.format('dddd');
-        generatedWeek.push({weekDay, date});
-        dayOfWeek.add(1, 'day');
-    }
-    
-    return {generatedWeek, firstWeekDay};
-}
-
 export const generateGreeting = () => {
     const currentHour = new Date(Date.now()).getHours();
     const morning = currentHour >= 3 && currentHour < 12;

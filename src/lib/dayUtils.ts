@@ -1,5 +1,18 @@
 import { Meal } from '@/types/Meal';
 import { Day } from '@/types/Day';
+import { v4 as uuidv4 } from 'uuid';
+import { Week } from '@/types/Week';
+
+export const defaultDay = (userId: string, date: string): Day => {
+    return {
+            day_id: uuidv4(),
+            user_id: userId,
+            date,
+            calorie_target: 2400, // to pull from settings later
+            calories_consumed: 0,
+            goal_met: false
+        };
+}
 
 // Fetch meals for the given day
 export const getMeals = async (day_id, user_id, setMealList, setLoading, toast) => {
@@ -20,12 +33,12 @@ export const getMeals = async (day_id, user_id, setMealList, setLoading, toast) 
 };
 
 // Save all meals
-export const saveAllMeals = async (day: Day, mealList: Meal[], toast) => {
+export const saveAllMeals = async (day: Day, mealList: Meal[], week: Week, toast) => {
   try {
     const mealPromises = mealList.map((meal) => {
       const existingMeal = 'id' in meal;
       if (!existingMeal) {
-        return writeMealData(day, meal, 'POST');
+        return writeMealData(day, meal, week, 'POST');
       }
     });
     await Promise.all(mealPromises);
@@ -36,14 +49,14 @@ export const saveAllMeals = async (day: Day, mealList: Meal[], toast) => {
 };
 
 // Write meal data (POST or PUT), invoked from saveAllMeals
-const writeMealData = async (day: Day, meal: Meal, methodType) => {
+const writeMealData = async (day: Day, meal: Meal, week: Week, methodType) => {
   try {
     meal.day_id = day.day_id; // append day ID for reference
     meal.user_id = day.user_id;
     const response = await fetch('/api/db/meal', {
       method: methodType,
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(meal),
+      body: JSON.stringify({meal, day, week}),
     });
     if (!response.ok) {
       const { error } = await response.json();
@@ -55,22 +68,6 @@ const writeMealData = async (day: Day, meal: Meal, methodType) => {
   }
 };
 
-// Write day data (POST or PUT)
-export const writeDayData = async (newDayData: Day, methodType: string, toast) => {
-  try {
-    const response = await fetch('/api/db/day', {
-      method: methodType,
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(newDayData),
-    });
-    if (!response.ok) {
-      const { error } = await response.json();
-      throw new Error(error);
-    }
-  } catch (error) {
-    toast({ title: `${error}`, status: 'error' });
-  }
-};
 
 export const sortMeals = (list: Meal[]) => {
         const sortedMeals = ['Breakfast', 'Brunch', 'Lunch', 'Supper', 'Dinner', 'Midnight Snack', 'Other'];
