@@ -7,10 +7,9 @@ import { Week } from '@/types/Week';
 import moment from 'moment';
 
 export const setMealRecord = async (meal: Meal, day: Day, week: Week) => {
+    const { user_id, date } = day;
+    const firstWeekDay = moment().startOf('isoWeek').seconds(0).milliseconds(0).toISOString();
     try {
-        const { user_id, date } = day;
-        const firstWeekDay = moment().startOf('isoWeek').seconds(0).milliseconds(0).toISOString();
-
         // create meal
         console.log(`CREATING MEAL`);
         await createMeal(meal);

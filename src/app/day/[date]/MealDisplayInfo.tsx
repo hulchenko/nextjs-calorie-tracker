@@ -11,14 +11,22 @@ import {
     useDisclosure,
     useToast
 } from '@chakra-ui/react';
-import { useContext } from 'react';
+import { useContext, useState } from 'react';
 import { MealContext } from './DayForm';
 import { purgeMeal  } from '@/lib/mealUtils';
 
-const MealDisplayInfo = ({meal}) => {
+const MealDisplayInfo = ({data}) => {
+    const toast = useToast();
+    const initMeal = data.meal;
+    const initDay = data.day;
+    const initWeek = data.week;
+
+    const [meal, setMeal] = useState(initMeal);
+    const [day, setDay] = useState(initDay);
+    const [week, setWeek] = useState(initWeek);
+
     const { isOpen, onOpen, onClose } = useDisclosure();
     const { mealList, setMealList } = useContext(MealContext)
-    const toast = useToast();
 
     return (
         <>
@@ -70,7 +78,7 @@ const MealDisplayInfo = ({meal}) => {
                             </ModalBody>
 
                             <ModalFooter>
-                                <Button colorScheme='red' size='md' m={3} onClick={() => {purgeMeal(meal, mealList, setMealList, toast), onClose()}}>
+                                <Button colorScheme='red' size='md' m={3} onClick={() => {purgeMeal(meal, day, week, mealList, setMealList, toast), onClose()}}>
                                     Remove
                                 </Button>
                                 <Button colorScheme='teal' size='md' onClick={onClose}>

@@ -1,4 +1,6 @@
+import { Day } from '@/types/Day';
 import { Meal } from '@/types/Meal';
+import { Week } from '@/types/Week';
 import { v4 as uuidv4 } from 'uuid';
 
 export const defaultMeal = (): Meal => {
@@ -13,7 +15,7 @@ export const defaultMeal = (): Meal => {
     }
 }
 
-export const purgeMeal = async (meal: Meal, mealList: Meal[], setMealList, toast) => {
+export const purgeMeal = async (meal: Meal, day: Day, week: Week, mealList: Meal[], setMealList, toast) => {
     const existingMeal = 'id' in meal;
 
     if(existingMeal){
@@ -21,7 +23,7 @@ export const purgeMeal = async (meal: Meal, mealList: Meal[], setMealList, toast
             const response = await fetch('/api/db/meal', { 
                 method: 'DELETE',
                 headers: {'Content-Type': 'application/json'},
-                body: JSON.stringify(meal)
+                body: JSON.stringify({meal, day, week})
             });
             if (!response.ok){
                 const {error} = await response.json();

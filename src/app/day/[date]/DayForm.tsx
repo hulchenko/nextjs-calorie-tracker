@@ -54,7 +54,7 @@ const DayForm = async ({data}) => {
                     <MealContext.Provider value={{mealList, setMealList, setSaveReady}}>
                         <Grid templateColumns='repeat(3, 1fr)' gap={4}>
                             {sortMeals(mealList).map((meal) => (
-                                <MealDisplayInfo meal={meal}/>
+                                <MealDisplayInfo data={{meal, day, week}}/>
                             ))}
                         </Grid>
                         <MealInputForm />
