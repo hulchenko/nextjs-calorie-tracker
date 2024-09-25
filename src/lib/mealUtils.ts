@@ -15,36 +15,31 @@ export const defaultMeal = (): Meal => {
     }
 }
 
-export const purgeMeal = async (meal: Meal, day: Day, week: Week, mealList: Meal[], setMealList, toast) => {
-    const existingMeal = 'id' in meal;
-
-    if(existingMeal){
-        try {
-            const response = await fetch('/api/db/meal', { 
-                method: 'DELETE',
-                headers: {'Content-Type': 'application/json'},
-                body: JSON.stringify({meal, day, week})
-            });
-            if (!response.ok){
-                const {error} = await response.json();
-                throw error;
-            }
-            filterMeals(meal, mealList, setMealList, toast)
-        } catch (error) {
-            toast({ title: `${error}`, status: 'error' });
+export const removeMeal = async (meal: Meal, day: Day, week: Week, mealList: Meal[], toast): Promise<Meal[] | any> => {
+    try {
+        const response = await fetch('/api/db/meal', { 
+            method: 'DELETE',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({meal, day, week})
+        });
+        if (!response.ok){
+            const { error } = await response.json();
+            throw error;
         }
-    } else {
-        filterMeals(meal, mealList, setMealList, toast)
+        const { message } = await response.json();
+        const isLocal = message.includes('local');
+
+        toast({ title: 'Meal removed', status: 'info'});
+        
+        return { filtered: filterMeals(meal, mealList), isLocal };
+    } catch (error) {
+        toast({ title: `${error}`, status: 'error' });
     }
 }
     
-const filterMeals = (meal: Meal, mealList: Meal[], setMealList, toast) =>  {
-    setTimeout(()=> {
-        // workaround for the re-opening modal bug
-        const filteredMeals = mealList.filter(m => m.meal_id !== meal.meal_id);
-        setMealList(filteredMeals);
-        toast({ title: 'Meal removed', status: 'info'});
-    });
+const filterMeals = (meal: Meal, mealList: Meal[]):Meal[] =>  {
+    const list = [...mealList];
+    return list.filter(m => m.meal_id !== meal.meal_id);
 }
 
 export const getFoodData = async (query, setMeal, setLoading, toast) => {

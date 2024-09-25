@@ -60,7 +60,7 @@ const DayForm = async ({data}) => {
                 <div className='mx-auto mt-20 items-center flex flex-col text-xl'>
                     <MealContext.Provider value={{mealList, setMealList, setSaveReady}}>
                         <Grid templateColumns='repeat(3, 1fr)' gap={4}>
-                            {mealList?.map((meal) => (
+                            {sortMeals(mealList)?.map((meal) => (
                                 <MealDisplayInfo key={meal.meal_id} data={{meal, day, week, setDay}}/>
                             ))}
                         </Grid>

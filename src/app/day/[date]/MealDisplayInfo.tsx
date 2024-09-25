@@ -11,32 +11,27 @@ import {
     useDisclosure,
     useToast
 } from '@chakra-ui/react';
-import { useContext, useState } from 'react';
+import { useContext } from 'react';
 import { MealContext } from './DayForm';
-import { purgeMeal  } from '@/lib/mealUtils';
+import { removeMeal  } from '@/lib/mealUtils';
 
 const MealDisplayInfo = ({data}) => {
     const toast = useToast();
-    const initMeal = data.meal;
-    const initDay = data.day;
-    const initWeek = data.week;
-
-    const [meal, setMeal] = useState(initMeal);
-    const [day, setDay] = useState(initDay);
-    const [week, setWeek] = useState(initWeek);
-
+    const { meal, day, week } = data;
     const { isOpen, onOpen, onClose } = useDisclosure();
     const { mealList, setMealList } = useContext(MealContext);
 
-    const mealRemoveHandler = (event) => {
+    const mealRemoveHandler = async (event) => {
         event?.preventDefault();
-        
-        purgeMeal(meal, day, week, mealList, setMealList, toast)
-        data.setDay({
-            ...day,
-            calories_consumed: day.calories_consumed -= meal.calories,
-            goal_met: day.calorie_target >= day.calories_consumed
-        });
+        const { filtered, isLocal } = await removeMeal(meal, day, week, mealList, toast);
+        if(!isLocal){ // ensure DOM is updated only if written to DB
+            data.setDay({
+                ...day,
+                calories_consumed: day.calories_consumed - meal.calories,
+                goal_met: day.calories_consumed >= day.calorie_target
+            });
+        }
+        setMealList(filtered)
     };
 
     return (
