@@ -8,7 +8,7 @@ export async function POST() { // refresh session
         return NextResponse.json({message: 'Session updated'}, {status: 200});
     } else {
         deleteSession();
-        return NextResponse.json({message: 'Unauthorized'}, {status: 401});
+        return NextResponse.json({message: 'No session present. Skipping..'}, {status: 303});
     }
 }
 
