@@ -52,23 +52,30 @@ const MealInputForm = () => {
             setMeal(defaultMeal()) // clean up modal if it wasn't submitted
         }
     }, [isOpen])
+
+    const mealAddHandler = (event) => {
+        event?.preventDefault();
+
+        setMealList(prev => [...prev, meal])
+        setSaveReady(true)
+    }
     
     return (
         <>
-        {mealList.length === 0 && (
+        {mealList?.length === 0 && (
                 <div  className='flex flex-col items-center'>
                     <h1 className='text-4xl'>No meals</h1>
                     <p className='text-base text-gray-500 py-4'>Looks like you haven't added any meals yet.</p>
                     <button className='bg-teal-700 hover:bg-teal-600  text-white py-4 p-6 mt-2 rounded' onClick={onOpen}>Add Meal<FontAwesomeIcon className='ml-2' icon={faUtensils} /></button> 
                 </div>
         )}
-        {mealList.length > 0 && mealList.length < 9 && (
+        {mealList?.length > 0 && mealList?.length < 9 && (
                 <button className='fixed bottom-40 right-52 bg-teal-700 hover:bg-teal-600 text-white py-4 p-6 mt-2 rounded' onClick={onOpen}><FontAwesomeIcon icon={faPlus} /></button>
         )}
             <Modal isOpen={isOpen} onClose={onClose} scrollBehavior='outside' isCentered>
                 <ModalOverlay />
                     <ModalContent>
-                        <form action={() => {setMealList(prev => [...prev, meal]), setSaveReady(true)}}>
+                        <form onSubmit={mealAddHandler}>
                             <ModalHeader className='text-teal-700'>Add a New Meal</ModalHeader>
                             <ModalCloseButton size='lg'/>
                             <ModalBody pb={6}>
@@ -121,7 +128,6 @@ const MealInputForm = () => {
                                 <FormControl mt={4}>
                                     <FormLabel>Total Calories: <b className='text-teal-600'>{meal?.calories || 0}</b></FormLabel>
                                 </FormControl>
-
                             </ModalBody>
                             
 

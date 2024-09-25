@@ -7,15 +7,18 @@ import { createContext, useEffect, useState } from 'react';
 import DayDisplayInfo from './DayDisplayInfo';
 import MealDisplayInfo from './MealDisplayInfo';
 import MealInputForm from './MealInputForm';
+import { Day } from '@/types/Day';
+import { Meal } from '@/types/Meal';
+import { Week } from '@/types/Week';
 
 const DayForm = async ({data}) => {
     const toast = useToast();
-    const initDay = data.day;
-    const initWeek = JSON.parse(data.week);
+    const initDay: Day = data.day;
+    const initWeek: Week = JSON.parse(data.week);
 
-    const [day, setDay] = useState(initDay);
-    const [week, setWeek] = useState(initWeek);
-    const [mealList, setMealList] = useState([]);
+    const [day, setDay] = useState<Day>(initDay);
+    const [week, setWeek] = useState<Week>(initWeek);
+    const [mealList, setMealList] = useState<Meal[]>([]);
     const [loading, setLoading] = useState(true);
     const [saveReady, setSaveReady] = useState(false);
 
@@ -28,7 +31,7 @@ const DayForm = async ({data}) => {
         } else {
             setLoading(false);
         }
-    }, [])
+    }, []);
 
     const submitHandler = async () => {
         const dailyCalories = await sumCalories(mealList);
@@ -38,8 +41,12 @@ const DayForm = async ({data}) => {
         if (isMealListChanged){ // writes to meals table
             await saveAllMeals(day, mealList, week, toast);
             setSaveReady(false);
+            setDay({
+                ...day,
+                calories_consumed: dailyCalories,
+                goal_met: dailyCalories >= day.calorie_target
+            });
         }
-
 
         if(!isDayChanged && !isMealListChanged){
             toast({ title: 'Nothing to update', status: 'info' });
@@ -53,8 +60,8 @@ const DayForm = async ({data}) => {
                 <div className='mx-auto mt-20 items-center flex flex-col text-xl'>
                     <MealContext.Provider value={{mealList, setMealList, setSaveReady}}>
                         <Grid templateColumns='repeat(3, 1fr)' gap={4}>
-                            {sortMeals(mealList).map((meal) => (
-                                <MealDisplayInfo data={{meal, day, week}}/>
+                            {mealList?.map((meal) => (
+                                <MealDisplayInfo key={meal.meal_id} data={{meal, day, week, setDay}}/>
                             ))}
                         </Grid>
                         <MealInputForm />

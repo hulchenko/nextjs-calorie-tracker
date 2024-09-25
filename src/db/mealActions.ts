@@ -23,8 +23,7 @@ export const getMeals = async (day_id, user_id) => {
 export const getMeal = async (day_id, user_id, meal_id) => {
     try {
         const response = await sql `SELECT * FROM meals WHERE day_id=${day_id} AND user_id=${user_id} AND meal_id=${meal_id}`;
-        console.log(`RESPONSE: `, response);
-        return response[0];
+        return response[0] as Meal;
     } catch (error) {
         throw Error('Error getting meals');
     }

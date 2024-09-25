@@ -1,4 +1,4 @@
-import { getMeals, removeMeal } from '@/db/mealActions';
+import { getMeals } from '@/db/mealActions';
 import { setMealRecord } from '@/db/setMealRecord';
 import { NextRequest, NextResponse } from 'next/server';
 import { removeMealRecord } from '@/db/removeMealRecord';

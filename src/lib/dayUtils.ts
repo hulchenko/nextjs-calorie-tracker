@@ -36,7 +36,7 @@ export const getMeals = async (day_id, user_id, setMealList, setLoading, toast) 
 export const saveAllMeals = async (day: Day, mealList: Meal[], week: Week, toast) => {
   try {
     const mealPromises = mealList.map((meal) => {
-      const existingMeal = 'id' in meal;
+      const existingMeal = 'id' in meal; // works only on simultaneously added meals, does not work on add -> save -> add basis. This is intercepted in the removeMealRecord.ts
       if (!existingMeal) {
         return writeMealData(day, meal, week, 'POST');
       }
