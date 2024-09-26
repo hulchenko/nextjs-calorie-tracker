@@ -14,24 +14,43 @@ import {
 import { useContext } from 'react';
 import { MealContext } from './DayForm';
 import { removeMeal  } from '@/lib/mealUtils';
+import { WeekContext } from '@/app/context/WeekContext';
+import { getDayIdx } from '@/lib/dayUtils';
 
 const MealDisplayInfo = ({data}) => {
     const toast = useToast();
-    const { meal, day, week } = data;
+    const { meal, day, setDay } = data;
     const { isOpen, onOpen, onClose } = useDisclosure();
     const { mealList, setMealList } = useContext(MealContext);
+    const { week, setWeek } = useContext(WeekContext);
+
+    const dayIdx = getDayIdx(day);
 
     const mealRemoveHandler = async (event) => {
         event?.preventDefault();
-        const { filtered, isLocal } = await removeMeal(meal, day, week, mealList, toast);
-        if(!isLocal){ // ensure DOM is updated only if written to DB
-            data.setDay({
-                ...day,
-                calories_consumed: day.calories_consumed - meal.calories,
-                goal_met: day.calories_consumed >= day.calorie_target
-            });
+
+        const filteredMealList = mealList.filter(m => m.meal_id !== meal.meal_id);
+        const dailyCalories = filteredMealList.reduce((total, meal) => total + meal.calories, 0);
+        const updatedDay = {
+            ...day,
+            calories_consumed: day.calories_consumed - meal.calories,
+            goal_met: (day.calories_consumed - meal.calories) >= day.calorie_target
+        };
+
+        const updatedWeek = {
+            ...week,
+            daily_goals_met: {
+                ...week.daily_goals_met,
+                [dayIdx]: dailyCalories >= day.calorie_target
+            }
         }
-        setMealList(filtered)
+        const isLocalUpdate = await removeMeal(meal, updatedDay, updatedWeek, mealList, toast);
+
+        if(!isLocalUpdate){ // ensure DOM is updated only if written to DB
+            setDay(updatedDay);
+            setWeek(updatedWeek);
+        }
+        setMealList(filteredMealList)
     };
 
     return (

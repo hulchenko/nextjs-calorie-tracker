@@ -24,12 +24,10 @@ export const setMealRecord = async (meal: Meal, day: Day, week: Week) => {
             // if day exists, then update, otherwise create day
             if(fetchedDay) {
                 console.log(`UPDATING DAY`);
-                const updated = updateDayStats(fetchedDay, meal);
-                fetchedDay = await updateDay(updated)
+                await updateDay(day);
             } else {
                 console.log(`CREATING DAY`);
-                const updated = updateDayStats(day, meal);
-                fetchedDay = await createDay(updated)
+                await createDay(day);
             }
 
             // get week by user_id, weekdays (Mon - Sunday)
@@ -39,12 +37,10 @@ export const setMealRecord = async (meal: Meal, day: Day, week: Week) => {
             // if week exists, then update, otherwise create week
             if(fetchedWeek){
                 console.log(`UPDATING WEEK`);
-                const updated = updateWeekStats(fetchedWeek, fetchedDay);
-                await updateWeek(updated);
+                await updateWeek(week);
             } else {
                 console.log(`CREATING WEEK`);
-                const updated = updateWeekStats(week, fetchedDay);
-                await createWeek(updated);
+                await createWeek(week);
             }
         }
         
@@ -52,19 +48,4 @@ export const setMealRecord = async (meal: Meal, day: Day, week: Week) => {
     } catch (error) {
         throw Error('Error handling meal creation', error);
     }
-}
-
-const updateDayStats = (day: Day, meal: Meal) => {
-    const updatedDay = {...day};
-    updatedDay.calories_consumed += meal.calories;
-    updatedDay.goal_met = updatedDay.calories_consumed >= updatedDay.calorie_target;
-    return updatedDay;
-}
-
-const updateWeekStats = (week: Week, day: Day) => {
-    const updatedWeek = {...week};
-    if(day.goal_met){
-        updatedWeek.daily_goals_met++;
-    }
-    return updatedWeek;
 }
