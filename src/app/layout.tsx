@@ -6,6 +6,7 @@ import { ChakraProvider } from '@chakra-ui/react';
 import type { Metadata } from "next";
 import { Nunito } from 'next/font/google';
 import { SessionProvider } from './context/SessionProvider';
+import WeekProvider from './context/WeekContext';
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -33,7 +34,9 @@ export default async function RootLayout({
           <SessionProvider initialSession={session}>
             <ActivityListener />
             <Navigation/>
-            <ChakraProvider>{children}</ChakraProvider>
+            <WeekProvider session={session}>
+              <ChakraProvider>{children}</ChakraProvider>
+            </WeekProvider>
             <Footer />
           </SessionProvider>
         </body>

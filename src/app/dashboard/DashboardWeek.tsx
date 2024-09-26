@@ -1,32 +1,41 @@
 'use client';
 
-import { getWeek } from '@/db/weekActions';
-import { generateWeek, defaultWeek } from '@/lib/weekUtils';
+import { generateWeek } from '@/lib/weekUtils';
 import { faSquareCheck, faSquareXmark } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { useContext, useEffect, useState } from 'react';
+import { WeekContext } from '../context/WeekContext';
 import DashboardDay from './DashboardDay';
-import { useEffect, useState } from 'react';
 
 
 const DashboardWeek = ({userId}) => {
-    const [week, setWeek] = useState(defaultWeek(userId));
-    const [goal, setGoal] = useState(0);
-    const { generatedWeek, firstWeekDay } = generateWeek();
+    const { week, setWeek } = useContext(WeekContext);
+    const [goalCount, setGoalCount] = useState(goalReduce(week.daily_goals_met));
+    const generatedWeek = generateWeek();
 
-    useEffect(() => {
-        const getWeekDB = async () => {
-            const weekDB = await getWeek(userId, firstWeekDay);
-            if(weekDB){
-                setWeek(weekDB);
-                setGoal(weekDB.daily_goals_met)
+
+    function goalReduce(weeklyGoal):number{
+        const result = Object.values(weeklyGoal).reduce((goals: any, goalMet: boolean) => {
+            if(goalMet){
+                goals++;
             }
-        };
-        getWeekDB();
-    },[]);
+            return goals;
+        }, 0);
+        return result as number;
+    }
+
 
     return ( 
         <>
-            <WeeklyGoal goal={goal} />
+            <div className='flex'>
+                <div>
+                    Weekly Goal {goalCount}/7 
+                </div>
+                <div className='text-orange-600'>{ goalCount === 7 ? 
+                    (<FontAwesomeIcon icon={faSquareCheck} />) :
+                    (<FontAwesomeIcon icon={faSquareXmark}/>)}
+                </div>
+            </div>
             <ul>
                 {generatedWeek
                 .map((day) => (
@@ -36,19 +45,4 @@ const DashboardWeek = ({userId}) => {
         </>
      );
 }
-
-const WeeklyGoal = async ({goal}) => {
-    return (
-        <div className='flex'>
-            <div>
-                Weekly Goal {goal}/7 
-            </div>
-            <div className='text-orange-600'>{ goal === 7 ? 
-                  (<FontAwesomeIcon icon={faSquareCheck} />) :
-                  (<FontAwesomeIcon icon={faSquareXmark}/>)}
-            </div>
-        </div>
-    )
-}
- 
 export default DashboardWeek;
