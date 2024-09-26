@@ -2,6 +2,7 @@ import { Meal } from '@/types/Meal';
 import { Day } from '@/types/Day';
 import { v4 as uuidv4 } from 'uuid';
 import { Week } from '@/types/Week';
+import moment from 'moment';
 
 export const defaultDay = (userId: string, date: string): Day => {
     return {
@@ -12,6 +13,11 @@ export const defaultDay = (userId: string, date: string): Day => {
             calories_consumed: 0,
             goal_met: false
         };
+}
+
+export const getDayIdx = (day: Day): number => {
+  const index = moment(day?.date).isoWeekday() - 1; // by default isoWeekday() returns 1 - 7
+  return index
 }
 
 // Fetch meals for the given day

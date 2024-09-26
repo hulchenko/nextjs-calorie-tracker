@@ -1,27 +1,27 @@
 'use client';
 
-import { getMeals, saveAllMeals, sortMeals } from '@/lib/dayUtils';
-import { sumCalories } from '@/lib/utils';
+import { getDayIdx, getMeals, saveAllMeals, sortMeals } from '@/lib/dayUtils';
 import { Grid, useToast } from '@chakra-ui/react';
-import { createContext, useEffect, useState } from 'react';
+import { createContext, useContext, useEffect, useState } from 'react';
 import DayDisplayInfo from './DayDisplayInfo';
 import MealDisplayInfo from './MealDisplayInfo';
 import MealInputForm from './MealInputForm';
 import { Day } from '@/types/Day';
 import { Meal } from '@/types/Meal';
 import { Week } from '@/types/Week';
+import { WeekContext } from '@/app/context/WeekContext';
 
-const DayForm = async ({data}) => {
+const DayForm = ({data}) => {
     const toast = useToast();
     const initDay: Day = data.day;
-    const initWeek: Week = JSON.parse(data.week);
+    const { week, setWeek } = useContext(WeekContext);
 
     const [day, setDay] = useState<Day>(initDay);
-    const [week, setWeek] = useState<Week>(initWeek);
     const [mealList, setMealList] = useState<Meal[]>([]);
     const [loading, setLoading] = useState(true);
     const [saveReady, setSaveReady] = useState(false);
 
+    const dayIdx = getDayIdx(day);
 
     useEffect(() => {
         // get meals from DB
@@ -34,18 +34,30 @@ const DayForm = async ({data}) => {
     }, []);
 
     const submitHandler = async () => {
-        const dailyCalories = await sumCalories(mealList);
+        const dailyCalories = mealList.reduce((total, meal) => total + meal.calories, 0) || 0;
         const isDayChanged = dailyCalories !== initDay.calories_consumed;
         const isMealListChanged = mealList.length;
         
         if (isMealListChanged){ // writes to meals table
-            await saveAllMeals(day, mealList, week, toast);
-            setSaveReady(false);
-            setDay({
+
+            const updatedDay = {
                 ...day,
                 calories_consumed: dailyCalories,
                 goal_met: dailyCalories >= day.calorie_target
-            });
+            }
+
+            const updatedWeek = {
+                ...week,
+                daily_goals_met: {
+                    ...week.daily_goals_met,
+                    [dayIdx]: dailyCalories >= day.calorie_target
+                }
+            }
+            
+            setSaveReady(false);
+            setDay(updatedDay);
+            setWeek(updatedWeek);
+            await saveAllMeals(updatedDay, mealList, updatedWeek, toast);
         }
 
         if(!isDayChanged && !isMealListChanged){
@@ -61,7 +73,7 @@ const DayForm = async ({data}) => {
                     <MealContext.Provider value={{mealList, setMealList, setSaveReady}}>
                         <Grid templateColumns='repeat(3, 1fr)' gap={4}>
                             {sortMeals(mealList)?.map((meal) => (
-                                <MealDisplayInfo key={meal.meal_id} data={{meal, day, week, setDay}}/>
+                                <MealDisplayInfo key={meal.meal_id} data={{ meal, day,setDay }}/>
                             ))}
                         </Grid>
                         <MealInputForm />
@@ -75,5 +87,3 @@ const DayForm = async ({data}) => {
 
 export const MealContext = createContext<{mealList: any, setMealList: any, setSaveReady: any}>({mealList: null, setMealList: null, setSaveReady: null});
 export default DayForm;
-
-
