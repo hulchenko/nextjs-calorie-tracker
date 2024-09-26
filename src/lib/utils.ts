@@ -1,8 +1,6 @@
 "use server"; // all of the functions implicitly turn to async
 
-import { Meal } from '@/types/Meal';
 import bcrypt from 'bcrypt';
-import moment from 'moment';
 
 export const passwordValidator = async (password: string): Promise<boolean> => {
     const regex = new RegExp(/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{6,}$/gm);
@@ -37,8 +35,4 @@ export const generateGreeting = () => {
         return 'Good Evening 🌚';
     }
     return 'Hello';
-}
-
-export const sumCalories = (list: Meal[]) => {
-    return list.reduce((total, curr) => total + (curr.calories || 0), 0) || 0;
 }

@@ -12,7 +12,6 @@ export const getWeek = async (userId: string, firstWeekDay: string | any): Promi
 
 export const createWeek = async (week) => {
     const {week_id, user_id, start_date, end_date, daily_goals_met} = week;
-
     try {
         await sql `INSERT INTO weeks(week_id, user_id, start_date, end_date, daily_goals_met) VALUES(${week_id},${user_id},${start_date},${end_date},${daily_goals_met})`;
         return week;

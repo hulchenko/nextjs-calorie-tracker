@@ -27,20 +27,16 @@ export const removeMeal = async (meal: Meal, day: Day, week: Week, mealList: Mea
             throw error;
         }
         const { message } = await response.json();
-        const isLocal = message.includes('local');
+        const isLocalUpdate = message.includes('local');
 
         toast({ title: 'Meal removed', status: 'info'});
         
-        return { filtered: filterMeals(meal, mealList), isLocal };
+        return isLocalUpdate;
     } catch (error) {
         toast({ title: `${error}`, status: 'error' });
     }
 }
-    
-const filterMeals = (meal: Meal, mealList: Meal[]):Meal[] =>  {
-    const list = [...mealList];
-    return list.filter(m => m.meal_id !== meal.meal_id);
-}
+
 
 export const getFoodData = async (query, setMeal, setLoading, toast) => {
     setLoading(true)
