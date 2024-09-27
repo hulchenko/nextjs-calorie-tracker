@@ -1,7 +1,7 @@
 'use client';
 
 import { generateWeek } from '@/lib/weekUtils';
-import { CircularProgress, CircularProgressLabel, Text } from '@chakra-ui/react';
+import { CircularProgress, CircularProgressLabel, Divider, Stack, Text } from '@chakra-ui/react';
 import { useContext, useEffect, useState } from 'react';
 import { WeekContext } from '../context/WeekContext';
 import DashboardDayCard from './DashboardDayCard';
@@ -51,7 +51,8 @@ const DashboardWeek = ({user, greeting}) => {
                 </div>
             </div>
             <div className='flex border rounded p-6 border-gray-200 shadow-md mt-6'>
-                <Text className='text-3xl text-gray-600 pr-6'>Current week</Text>
+                <Text className='text-3xl text-gray-600 pr-6'>Calendar</Text>
+                    <Stack className='text-gray-200'><Divider orientation='vertical' /></Stack>
                 <ul>
                     {generatedWeek
                     .map((day, index) => (
