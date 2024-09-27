@@ -29,6 +29,7 @@ const MealInputForm = () => {
     const {mealList, setMealList, setSaveReady} = useContext(MealContext);
 
     const [query, setQuery] = useState('');
+    const [searched, setSearched] = useState(false);
     const [delayedFetch, setDelayedFetch] = useState(query)
     const [meal, setMeal] = useState(defaultMeal());
     const [loading, setLoading] = useState(false);
@@ -38,11 +39,16 @@ const MealInputForm = () => {
     useEffect(() => {
         // search and get nutritions
         if(query.length >= 3 && delayedFetch){
-            getFoodData(query, setMeal, setLoading, toast);
+            const getFood = async () => {
+                await getFoodData(query, setMeal, setLoading, toast);
+                setSearched(true);
+            };
+            getFood();
         }
     }, [delayedFetch])
 
     useEffect(() => {
+        setSearched(false);
         const delayHandler = setTimeout(() => setDelayedFetch(query), 1500); // delay fetch by 1.5 seconds after the user interracted with the input field
         return () => clearTimeout(delayHandler); // reset if the user starts typing again
     }, [query]);
@@ -57,7 +63,8 @@ const MealInputForm = () => {
         event?.preventDefault();
 
         setMealList(prev => [...prev, meal])
-        setSaveReady(true)
+        setSaveReady(true);
+        setSearched(false);
     }
     
     return (
@@ -103,10 +110,10 @@ const MealInputForm = () => {
 
                                 <FormControl mt={4}>
                                     <FormLabel>Nutrition List</FormLabel>
-                                    {loading ? (<span className='w-full flex text-center justify-center'><Spinner/></span>) : (
-                                            <Stack>
-                                                {meal?.items.map(i => (
-                                                    <div className='ml-2 border border-teal-600 rounded p-4'>
+                                    <Stack className={`border rounded p-4 ${meal.items.length ? 'border-teal-600' : 'border-gray-200'}`}>
+                                        {loading && <span className='w-full flex text-center justify-center text-teal-600'><Spinner/></span>}
+                                        {meal.items.length && meal.items.map(i => (
+                                                    <>
                                                         <Text>Ingridient(s): <b>{i?.name}</b></Text>
                                                         <Text>Calories: {i?.calories}</Text>
                                                         <Text>Carbohydrates: {i?.carbohydrates_total_g} g</Text>
@@ -119,10 +126,10 @@ const MealInputForm = () => {
                                                         <Text>Serving Size: {i?.serving_size_g} g</Text>
                                                         <Text>Sodium: {i?.sodium_mg} mg</Text>
                                                         <Text>Sugar: {i?.sugar_g} g</Text>
-                                                    </div>
+                                                    </>
                                                 ))}
-                                            </Stack>
-                                    )}
+                                        {!meal.items.length && searched && <Text className='text-orange-500'>Nothing is found. Update description and try again.</Text>}
+                                    </Stack>
                                 </FormControl>
 
                                 <FormControl mt={4}>

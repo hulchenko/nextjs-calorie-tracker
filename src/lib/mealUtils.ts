@@ -39,7 +39,7 @@ export const removeMeal = async (meal: Meal, day: Day, week: Week, mealList: Mea
 
 
 export const getFoodData = async (query, setMeal, setLoading, toast) => {
-    setLoading(true)
+    setLoading(true);
     try {
         const response = await fetch(`/api/other/food?query=${query}`);
         if (!response.ok){
@@ -48,7 +48,7 @@ export const getFoodData = async (query, setMeal, setLoading, toast) => {
         }
         const data = await response.json();
         const calories = sumMealCalories(data);
-        setMeal((prevState) => ({...prevState, items: data.items, calories}));
+        setMeal(prevState => ({...prevState, items: data.items, calories}));
         setLoading(false);
     } catch (error) {
         toast({title: `${error}`, status: 'error'});
