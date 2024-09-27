@@ -1,18 +1,25 @@
 'use client';
 
 import { generateWeek } from '@/lib/weekUtils';
-import { faSquareCheck, faSquareXmark } from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { CircularProgress, CircularProgressLabel, Text } from '@chakra-ui/react';
 import { useContext, useEffect, useState } from 'react';
 import { WeekContext } from '../context/WeekContext';
-import DashboardDay from './DashboardDay';
+import DashboardDayCard from './DashboardDayCard';
 
 
-const DashboardWeek = ({userId}) => {
-    const { week, setWeek } = useContext(WeekContext);
-    const [goalCount, setGoalCount] = useState(goalReduce(week.daily_goals_met));
+const DashboardWeek = ({user, greeting}) => {
     const generatedWeek = generateWeek();
+    const { user_id, name } = user;
+    const { week, setWeek } = useContext(WeekContext);
+    const [ weeklyGoal, setWeeklyGoal ] = useState(0);
+    const [ progress, setProgress ] = useState(0);
 
+    useEffect(() => {
+        const goals = goalReduce(week.daily_goals_met);
+        const progressPercent = getProgress(goals);
+        setWeeklyGoal(goals);
+        setProgress(progressPercent);
+    }, [week])
 
     function goalReduce(weeklyGoal):number{
         const result = Object.values(weeklyGoal).reduce((goals: any, goalMet: boolean) => {
@@ -22,27 +29,37 @@ const DashboardWeek = ({userId}) => {
             return goals;
         }, 0);
         return result as number;
+    };
+
+    function getProgress(currGoal: number){
+        const max = 7;
+        return Math.floor(currGoal * 100 / max);
     }
 
 
     return ( 
-        <>
-            <div className='flex'>
-                <div>
-                    Weekly Goal {goalCount}/7 
+        <div className='mx-auto grid grid-flow-col items-start justify-center w-full'>
+            <div className='flex flex-col mr-20'>
+                <div className='p-6 text-5xl mb-52 mt-20'>
+                    <h1><b className='text-teal-700'>{name}</b>, {greeting}</h1>
                 </div>
-                <div className='text-orange-600'>{ goalCount === 7 ? 
-                    (<FontAwesomeIcon icon={faSquareCheck} />) :
-                    (<FontAwesomeIcon icon={faSquareXmark}/>)}
+                <div className='flex border rounded p-6 border-gray-200 shadow-md'>
+                <Text className='text-3xl text-gray-600'>Weekly Goals Progress</Text>
+                <CircularProgress value={progress} color='teal.600' size='240px' thickness='16px'>
+                    <CircularProgressLabel className='text-gray-600'>{weeklyGoal}/7 </CircularProgressLabel>
+                </CircularProgress>
                 </div>
             </div>
-            <ul>
-                {generatedWeek
-                .map((day) => (
-                    <DashboardDay key={day.date} data={{userId, day, week}}/>
-                ))}
-            </ul>
-        </>
+            <div className='flex border rounded p-6 border-gray-200 shadow-md mt-6'>
+                <Text className='text-3xl text-gray-600 pr-6'>Current week</Text>
+                <ul>
+                    {generatedWeek
+                    .map((day, index) => (
+                        <DashboardDayCard key={day.date} data={{user_id, day, week, index}}/>
+                    ))}
+                </ul>
+            </div>
+        </div> 
      );
 }
 export default DashboardWeek;

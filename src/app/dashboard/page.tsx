@@ -8,12 +8,7 @@ const DashboardPage = async () => {
     const { user_id, name } = session.user;
     const greeting = generateGreeting();
 
-    return ( 
-        <div className='mx-auto pt-60 items-center flex flex-col text-xl'>
-            <h1><b>{name}</b>, {greeting}</h1>
-            <DashboardWeek userId={user_id}/>
-        </div> 
-     );
+    return <DashboardWeek user={{user_id, name}} greeting={greeting}/>
 }
  
 export default DashboardPage;

@@ -57,7 +57,7 @@ const MealDisplayInfo = ({data}) => {
         <>
             <Card key={meal.meal_id} variant='elevated' className='cursor-default hover:shadow-teal-700 hover:shadow-md w-80 m-5'>
                 <CardHeader>
-                    <Text><span className='text-teal-600 text-3xl font-bold'>{meal.meal_type}</span></Text>
+                    <Text className='text-teal-600 text-3xl font-bold'>{meal.meal_type}</Text>
                 </CardHeader>
                 <CardBody>
                     <Text>Description: {meal.meal_description}</Text>
@@ -76,7 +76,7 @@ const MealDisplayInfo = ({data}) => {
                             <ModalBody className='mt-10'>
                                 <Card key={meal.meal_id} variant='elevated'>
                                     <CardHeader>
-                                        <Text><span className='text-teal-600 text-3xl font-bold'>{meal.meal_type}</span></Text>
+                                        <Text className='text-teal-600 text-3xl font-bold'>{meal.meal_type}</Text>
                                     </CardHeader>
                                     <CardBody>
                                         <Text>Description: {meal.meal_description}</Text>

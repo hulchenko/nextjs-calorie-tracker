@@ -7,7 +7,7 @@ import DayForm from './DayForm';
 const DayPage = async (context) => {
     revalidatePath('/'); // somehow without this getDay() returns undefined
     const date = decodeURIComponent(context.params.date);
-    const userId = context.searchParams.userId;
+    const userId = context.searchParams.user_id;
     const week = context.searchParams.week;
     
     const day: Day = await getDay(userId, date) || defaultDay(userId, date);
