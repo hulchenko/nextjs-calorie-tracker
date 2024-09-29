@@ -34,7 +34,7 @@ export default async function RootLayout({
           <SessionProvider initialSession={session}>
             <ActivityListener />
             <Navigation/>
-            <WeekProvider session={session}>
+            <WeekProvider>
               <ChakraProvider>{children}</ChakraProvider>
             </WeekProvider>
             <Footer />

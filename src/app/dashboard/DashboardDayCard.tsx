@@ -12,7 +12,7 @@ const DashboardDayCard = ({data}) => {
     const displayDate = moment(date).format('MMM Do');
 
     useEffect(() => {
-        const goal = week.daily_goals_met[index];
+        const goal = week?.daily_goals_met[index] || false;
         setIsGoalMet(goal);
     }, [week]);
     

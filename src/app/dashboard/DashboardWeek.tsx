@@ -15,20 +15,23 @@ const DashboardWeek = ({user, greeting}) => {
     const [ progress, setProgress ] = useState(0);
 
     useEffect(() => {
-        const goals = goalReduce(week.daily_goals_met);
+        const goals = goalReduce(week?.daily_goals_met);
         const progressPercent = getProgress(goals);
         setWeeklyGoal(goals);
         setProgress(progressPercent);
     }, [week])
 
-    function goalReduce(weeklyGoal):number{
-        const result = Object.values(weeklyGoal).reduce((goals: any, goalMet: boolean) => {
-            if(goalMet){
-                goals++;
-            }
-            return goals;
-        }, 0);
-        return result as number;
+    function goalReduce(weeklyGoal):number {
+        if(weeklyGoal){
+            const result = Object.values(weeklyGoal).reduce((goals: any, goalMet: boolean) => {
+                if(goalMet){
+                    goals++;
+                }
+                return goals;
+            }, 0);
+            return result as number;
+        }
+        return 0;
     };
 
     function getProgress(currGoal: number){

@@ -4,26 +4,27 @@ import { getWeek } from '@/db/weekActions';
 import { defaultWeek, firstWeekDay } from '@/lib/weekUtils';
 import { Week } from '@/types/Week';
 import { createContext, useEffect, useState } from 'react';
+import { useSession } from './SessionProvider';
 
-const WeekProvider = ({children, session}) => {
-    const userId = session?.user?.user_id || '';
+const WeekProvider = ({children}) => {
+    const { session } = useSession();
+    const userId = session?.user_id as string;
     const initWeek = defaultWeek(userId);
 
-    const [week, setWeek] = useState<Week | any>(initWeek);
+    const [week, setWeek] = useState<Week | null>(initWeek);
     
 
-    useEffect(() => {
-        if(session){
+    useEffect(() => {      
+        if(session && userId){
             const fetchWeek = async () => {
                 const weekDB = await getWeek(userId, firstWeekDay);
-                console.log(`FETCHING WEEK IN CONTEXT: `, weekDB);
                 if(weekDB){
                     setWeek(weekDB);
                 }
             }
             fetchWeek();
         }
-    }, []);
+    }, [session, userId]);
 
     useEffect(() => {
         console.log(`GLOBAL WEEK: `, week);
