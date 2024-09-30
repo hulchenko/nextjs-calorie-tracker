@@ -1,15 +1,17 @@
 'use client';
 
 import { useSession } from '@/app/context/SessionProvider';
-import { useToast } from '@chakra-ui/react';
+import { useToast, Text } from '@chakra-ui/react';
 import { faWeightScale } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
+import { useRouter, usePathname } from 'next/navigation';
+import React from 'react';
 
 const Navigation = () => {
   const toast = useToast();
   const router = useRouter();
+  const currentPath = usePathname();
   const { session, setSession } = useSession();
 
     const authStateHandler = async () => {
@@ -36,7 +38,7 @@ const Navigation = () => {
     return ( 
         <>
             <div className="flex justify-between items-center bg-teal-800 p-4 text-white px-24">
-                <Link href={'/'} className='flex items-center cursor-pointer text-2xl'>
+                <Link href={'/'} className='flex items-center cursor-pointer text-2xl hover:text-teal-200'>
                   <FontAwesomeIcon className='h-10 pr-4' icon={faWeightScale} />
                   <h3>Calorie Tracker</h3>
                 </Link>
@@ -44,15 +46,21 @@ const Navigation = () => {
                 {session && (
                   <>
                     <li className='hover:text-teal-200'>
-                      <Link href={'/dashboard'}>Dashboard</Link>
+                      <Link href={'/dashboard'}>
+                        <Text className={currentPath === '/dashboard' ? 'text-teal-200' : ''}>Dashboard</Text>
+                      </Link>
                     </li>
                     <li className='hover:text-teal-200'>
-                      <Link href={'/profile'}>Profile</Link>
+                      <Link href={'/profile'}>
+                        <Text className={currentPath === '/profile' ? 'text-teal-200' : ''}>Profile</Text>
+                      </Link>
                     </li>
                   </>
                 )}
                 <li className='hover:text-teal-200'>
-                  <Link href={'/about'}>About</Link>
+                  <Link href={'/about'}>
+                    <Text className={currentPath === '/about' ? 'text-teal-200' : ''}>About</Text>
+                  </Link>
                 </li>
                 <li className='hover:text-teal-200'>
                   <button onClick={authStateHandler}>{session ? 'Sign Out' : 'Sign In'}</button>
