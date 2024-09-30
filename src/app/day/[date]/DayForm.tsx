@@ -1,15 +1,14 @@
 'use client';
 
+import { WeekContext } from '@/app/context/WeekContext';
 import { getDayIdx, getMeals, saveAllMeals, sortMeals } from '@/lib/dayUtils';
+import { Day } from '@/types/Day';
+import { Meal } from '@/types/Meal';
 import { Grid, useToast } from '@chakra-ui/react';
 import { createContext, useContext, useEffect, useState } from 'react';
 import DayDisplayInfo from './DayDisplayInfo';
 import MealDisplayInfo from './MealDisplayInfo';
 import MealInputForm from './MealInputForm';
-import { Day } from '@/types/Day';
-import { Meal } from '@/types/Meal';
-import { Week } from '@/types/Week';
-import { WeekContext } from '@/app/context/WeekContext';
 
 const DayForm = ({data}) => {
     const toast = useToast();

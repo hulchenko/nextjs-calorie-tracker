@@ -22,6 +22,7 @@ import {
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { useSession } from '../context/SessionProvider';
+import React from 'react';
 
 const SignUpForm = () => {
     const toast = useToast();

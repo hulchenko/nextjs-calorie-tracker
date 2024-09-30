@@ -16,6 +16,7 @@ import { MealContext } from './DayForm';
 import { removeMeal  } from '@/lib/mealUtils';
 import { WeekContext } from '@/app/context/WeekContext';
 import { getDayIdx } from '@/lib/dayUtils';
+import React from 'react';
 
 const MealDisplayInfo = ({data}) => {
     const toast = useToast();

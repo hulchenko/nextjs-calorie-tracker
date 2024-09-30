@@ -23,6 +23,7 @@ import { faPlus, faUtensils } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useContext, useEffect, useState } from 'react';
 import { MealContext } from './DayForm';
+import React from 'react';
 
 const MealInputForm = () => {
     const toast = useToast();
