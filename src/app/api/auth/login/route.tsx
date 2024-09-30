@@ -18,8 +18,8 @@ export async function POST(request: NextRequest) {
     const isPasswordCorrect = await validateHashedPassword(password, user?.password);
 
     if (isPasswordCorrect) {
-      await createSession(user)
-      return NextResponse.json(user);
+      const sessionData = await createSession(user);
+      return NextResponse.json(sessionData);
     } else {
       return NextResponse.json({ error: 'Invalid credentials.' }, { status: 401 });
     }

@@ -1,6 +1,14 @@
 export interface Session {
-    userId: string,
+    user: SessionUser,
+    user_id: string,
     expiresAt: string,
     iat: number,
     exp: number,
+};
+
+
+interface SessionUser {
+    user_id: string,
+    name: string,
+    email: string
 }

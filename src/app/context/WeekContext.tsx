@@ -8,7 +8,7 @@ import { useSession } from './SessionProvider';
 
 const WeekProvider = ({children}) => {
     const { session } = useSession();
-    const userId = session?.user_id as string;
+    const userId = session?.user?.user_id as string;
     const initWeek = defaultWeek(userId);
 
     const [week, setWeek] = useState<Week | null>(initWeek);

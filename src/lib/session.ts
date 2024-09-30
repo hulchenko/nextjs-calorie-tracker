@@ -41,6 +41,8 @@ export const createSession = async (user) => {
         sameSite: 'lax',
         path: '/'
     })
+
+    return await decrypt(session)
 }
 
 export const updateSession = async () => {
