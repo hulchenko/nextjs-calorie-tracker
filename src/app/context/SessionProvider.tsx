@@ -19,7 +19,8 @@ export const SessionProvider = ({children, initialSession}) => {
 
     const handleAuthenticated = () => {
         if(authenticated.current){ // kick out authenticated user to /login on expired session
-            router.push('/login')
+            router.push('/login');
+            authenticated.current = false;
         }
     }
 
@@ -44,8 +45,12 @@ export const SessionProvider = ({children, initialSession}) => {
 
         getSession();
 
-        // set periodic interval to sync session state
-        const sessionCheck = setInterval(() => getSession(), 5 * 60 * 1000); // every 5 minutes
+        // set periodic interval to sync session state only if authenticated
+        const sessionCheck = setInterval(() => {
+            if(authenticated.current){
+                getSession()
+            }
+        }, 5 * 60 * 1000); // every 5 minutes
         return () => clearInterval(sessionCheck); // clean up interval
     }, []);
 
