@@ -34,12 +34,14 @@ const DayDisplayInfo = ({day}) => {
 
     return(
         <div>
-            <div className='flex flex-col ml-32 mt-16'>
+            <div className='flex flex-col ml-32 mt-14'>
                 <p className='text-3xl text-gray-600 font-bold'>{displayDate}</p>
             </div>
             <div className='mt-20 flex flex-col items-center'>
                 <p className='text-xl text-gray-600 font-bold'>Daily Target <span className={danger ? 'text-red-400' : warning ? 'text-orange-400' : ''}>{calories_consumed}</span> / <span className='text-teal-600'>{calorie_target}</span></p>
-                <Progress value={target} className='w-3/6' size='lg' colorScheme='teal'/>
+                <div className='border rounded w-3/6 p-2 mt-4'>
+                    <Progress value={target} size='lg' colorScheme='teal'/>
+                </div>
             </div>
         </div>
     )
