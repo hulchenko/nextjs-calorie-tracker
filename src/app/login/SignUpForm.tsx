@@ -16,6 +16,8 @@ import {
   ModalFooter,
   ModalHeader,
   ModalOverlay,
+  NumberInput,
+  NumberInputField,
   useDisclosure,
   useToast
 } from '@chakra-ui/react';
@@ -42,7 +44,8 @@ const SignUpForm = () => {
       const newUser = {
         name: formData.get('name'),
         email: formData.get('email'),
-        password: hashedPassword
+        password: hashedPassword,
+        target: formData.get('target')
       };
 
       const isPasswordValid = await passwordValidator(password as string);
@@ -120,6 +123,13 @@ const SignUpForm = () => {
                           Password must have at least 6 characters. A combination of uppercase and lowercase letters, numbers. Can contain special characters.
                         </FormErrorMessage>
                       )}
+              </FormControl>
+
+              <FormControl mt={4} isRequired>
+                <FormLabel>Calorie Target</FormLabel>
+                  <NumberInput size='lg' focusBorderColor='teal.600' name='target' defaultValue={2400} min={1000} max={9999}>
+                    <NumberInputField />
+                  </NumberInput>
               </FormControl>
             </ModalBody>
 

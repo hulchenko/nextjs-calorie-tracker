@@ -22,8 +22,18 @@ export const createUser = async (user: User): Promise<User | any> => {
     }
 }
 
+export const updateUser = async (user: User) => {
+    try {
+        const {user_id, name, email, target} = user;
+        await sql `UPDATE users SET name = ${name}, email = ${email}, target = ${target} WHERE user_id = ${user_id}`;
+        return user;
+    } catch (error) {
+        throw Error('Updating user failed');
+    }
+}
+
 export const verifyUserDB = async (user: User, queryById=true) => {
-    const prop = queryById ? user.id : user.email;
+    const prop = queryById ? user.user_id : user.email;
     let userData = await getUser(prop as string | number, queryById);
     if (!queryById && userData){
         throw Error('User already exists!')
