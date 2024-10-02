@@ -1,5 +1,9 @@
+import ProfileForm from './ProfileForm';
+
 const ProfilePage = () => {
-    return ( <div>This is a profile page.</div> );
+    return ( 
+        <ProfileForm />
+     );
 }
  
 export default ProfilePage;
