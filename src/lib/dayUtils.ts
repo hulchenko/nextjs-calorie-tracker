@@ -9,8 +9,7 @@ export const getDefaultDay = (userId: string, date: string): Day => {
             day_id: uuidv4(),
             user_id: userId,
             date,
-            calories_consumed: 0,
-            goal_met: false
+            calories_consumed: 0
         };
 }
 

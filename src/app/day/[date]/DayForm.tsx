@@ -61,8 +61,7 @@ const DayForm = ({date}) => {
 
             const updatedDay = {
                 ...day,
-                calories_consumed: dailyCalories,
-                goal_met: dailyCalories >= dailyTarget
+                calories_consumed: dailyCalories
             } as Day;
 
             const updatedWeek = {

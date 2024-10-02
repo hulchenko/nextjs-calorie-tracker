@@ -39,8 +39,7 @@ const MealDisplayInfo = ({data}) => {
         const dailyCalories = filteredMealList.reduce((total, meal) => total + meal.calories, 0);
         const updatedDay = {
             ...day,
-            calories_consumed: day.calories_consumed - meal.calories,
-            goal_met: (day.calories_consumed - meal.calories) >= dailyTarget
+            calories_consumed: day.calories_consumed - meal.calories
         };
 
         const updatedWeek = {
