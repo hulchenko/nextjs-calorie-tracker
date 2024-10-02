@@ -4,7 +4,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { Week } from '@/types/Week';
 import moment from 'moment';
 
-export const defaultDay = (userId: string, date: string): Day => {
+export const getDefaultDay = (userId: string, date: string): Day => {
     return {
             day_id: uuidv4(),
             user_id: userId,
@@ -14,8 +14,8 @@ export const defaultDay = (userId: string, date: string): Day => {
         };
 }
 
-export const getDayIdx = (day: Day): number => {
-  const index = moment(day?.date).isoWeekday() - 1; // by default isoWeekday() returns 1 - 7
+export const getDayIdx = (date): number => {
+  const index = moment(date).isoWeekday() - 1; // by default isoWeekday() returns 1 - 7
   return index
 }
 
@@ -30,12 +30,14 @@ export const getMeals = async (day, setMealList, setLoading, toast) => {
     }
     const meals = await response.json();
     setMealList(meals);
-    setLoading(false);
   } catch (error) {
     toast({ title: `${error}`, status: 'error' });
     setMealList([]);
-    setLoading(false);
   }
+  setLoading(prev => ({
+    ...prev,
+    mealList: false
+  }));
 };
 
 // Save all meals
@@ -75,7 +77,9 @@ const writeMealData = async (day: Day, meal: Meal, week: Week, methodType) => {
 };
 
 
-export const sortMeals = (list: Meal[]) => {
+export const sortMeals = (list: Meal[] | null) => {
+        if(!list) return [];
+
         const sortedMeals = ['Breakfast', 'Brunch', 'Lunch', 'Supper', 'Dinner', 'Midnight Snack', 'Other'];
 
         const newList = [...list];

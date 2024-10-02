@@ -64,7 +64,7 @@ const SignUpForm = () => {
         }
         const sessionData = await response.json();
         setSession(sessionData);
-        toast({title: `Welcome, ${sessionData.name}!`, status: 'success'});
+        toast({title: `Welcome, ${sessionData.user.name}!`, status: 'success'});
         router.push('/dashboard');
         } catch (error) {
           toast({title: `${error}`, status: 'error'});

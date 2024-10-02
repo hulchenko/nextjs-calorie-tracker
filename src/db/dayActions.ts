@@ -11,10 +11,13 @@ export const createDay = async (day: Day) => {
     }
 }
 
-export const getDay = async (userId: string, date: string): Promise<Day> => {
+export const getDay = async (userId: string, date: string): Promise<Day | null> => {
     try {
         const response = await sql `SELECT * FROM days where user_id = ${userId} and date = ${date}`;
-        return response[0] as Day;
+        if(response?.length > 0){
+            return response[0] as Day; 
+        }
+        return null;
     } catch (error) {
         throw Error('Getting user failed');
     }
