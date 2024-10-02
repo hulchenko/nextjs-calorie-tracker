@@ -6,29 +6,31 @@ import { User } from '@/types/User';
 
 export const UserProvider = ({children}) => {
     const { session } = useSession();
-    const initUser = session?.user;
 
     const [user, setUser] = useState<User | null>(null);
 
     useEffect(() => {
+        const sessionUser = session?.user;
         const getUser = async () => {
-            const response = await fetch(`/api/db/user?email=${initUser?.email}`);
+            const response = await fetch(`/api/db/user?email=${sessionUser?.email}`);
             const data = await response.json();
             setUser(data);
         }
 
-        if(initUser){
+        if(session && sessionUser){
             getUser()
         };        
-    }, [initUser]);
+    }, [session]);
+
+    useEffect(() => console.log(`User got updated: `, user), [user]);
 
     return (
-        <UserContext.Provider value={{user}}>
+        <UserContext.Provider value={{user, setUser}}>
             {children}
         </UserContext.Provider>
     )
 };
 
-const UserContext = createContext<{user: User | null}>({user: null}); // define passing value
+const UserContext = createContext<{user: User | null, setUser: (user: User | null) => void}>({user: null, setUser: () => {}}); // define passing value
 
 export const useUser = () => useContext(UserContext);
