@@ -6,8 +6,9 @@ import { ChakraProvider } from '@chakra-ui/react';
 import type { Metadata } from "next";
 import { Nunito } from 'next/font/google';
 import { SessionProvider } from './context/SessionProvider';
-import WeekProvider from './context/WeekContext';
+import { WeekProvider } from './context/WeekContext';
 import "./globals.css";
+import { UserProvider } from './context/UserContext';
 
 export const metadata: Metadata = {
   title: "Calorie Tracker App",
@@ -34,9 +35,11 @@ export default async function RootLayout({
           <SessionProvider initialSession={session}>
             <ActivityListener />
             <Navigation/>
-            <WeekProvider>
-              <ChakraProvider>{children}</ChakraProvider>
-            </WeekProvider>
+            <UserProvider>
+              <WeekProvider>
+                <ChakraProvider>{children}</ChakraProvider>
+              </WeekProvider>
+            </UserProvider>
             <Footer />
           </SessionProvider>
         </body>
