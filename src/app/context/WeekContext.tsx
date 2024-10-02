@@ -8,23 +8,23 @@ import { useSession } from './SessionProvider';
 
 export const WeekProvider = ({children}) => {
     const { session } = useSession();
-    const userId = session?.user?.user_id as string;
-    const initWeek = defaultWeek(userId);
+    const [week, setWeek] = useState<Week | null>(null);    
 
-    const [week, setWeek] = useState<Week | null>(initWeek);
-    
-
-    useEffect(() => {      
+    useEffect(() => {
+        const userId = session?.user?.user_id as string;
         const fetchWeek = async () => {
             const weekDB = await getWeek(userId, firstWeekDay);
             if(weekDB){
                 setWeek(weekDB);
+            } else {
+                const initWeek = defaultWeek(userId);
+                setWeek(initWeek)
             }
-        }
+        };
         if(userId){
             fetchWeek()
         };
-    }, [userId]);
+    }, [session]);
 
     return(
         <WeekContext.Provider value={{week, setWeek}}>

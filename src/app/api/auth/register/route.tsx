@@ -6,8 +6,8 @@ export async function POST(request: NextRequest) {
     try {
         const { newUser } = await request.json();
         const dbUser = await verifyUserDB(newUser, false);
-        await createSession(dbUser)
-        return NextResponse.json(dbUser);
+        const sessionData = await createSession(dbUser)
+        return NextResponse.json(sessionData);
     } catch (error) {
         return NextResponse.json({error: `${error}`}, { status: 500 })
     }
