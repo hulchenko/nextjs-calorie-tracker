@@ -21,8 +21,9 @@ export const getDayIdx = (day: Day): number => {
 }
 
 // Fetch meals for the given day
-export const getMeals = async (day_id, user_id, setMealList, setLoading, toast) => {
+export const getMeals = async (day, setMealList, setLoading, toast) => {
   try {
+    const {day_id, user_id} = day;
     const response = await fetch(`/api/db/meal?day_id=${day_id}&user=${user_id}`);
     if (!response.ok) {
       const { error } = await response.json();

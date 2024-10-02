@@ -2,15 +2,15 @@
 
 import { generateWeek } from '@/lib/weekUtils';
 import { CircularProgress, CircularProgressLabel, Divider, Stack, Text } from '@chakra-ui/react';
-import { useContext, useEffect, useState } from 'react';
-import { WeekContext } from '../context/WeekContext';
+import { useEffect, useState } from 'react';
+import { useWeek } from '../context/WeekContext';
 import DashboardDayCard from './DashboardDayCard';
 
 
 const DashboardWeek = ({user, greeting}) => {
     const generatedWeek = generateWeek();
     const { user_id, name } = user;
-    const { week, setWeek } = useContext(WeekContext);
+    const { week } = useWeek();
     const [ weeklyGoal, setWeeklyGoal ] = useState(0);
     const [ progress, setProgress ] = useState(0);
 

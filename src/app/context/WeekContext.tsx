@@ -3,10 +3,10 @@
 import { getWeek } from '@/db/weekActions';
 import { defaultWeek, firstWeekDay } from '@/lib/weekUtils';
 import { Week } from '@/types/Week';
-import { createContext, useEffect, useState } from 'react';
+import { createContext, useContext, useEffect, useState } from 'react';
 import { useSession } from './SessionProvider';
 
-const WeekProvider = ({children}) => {
+export const WeekProvider = ({children}) => {
     const { session } = useSession();
     const userId = session?.user?.user_id as string;
     const initWeek = defaultWeek(userId);
@@ -15,20 +15,16 @@ const WeekProvider = ({children}) => {
     
 
     useEffect(() => {      
-        if(session && userId){
-            const fetchWeek = async () => {
-                const weekDB = await getWeek(userId, firstWeekDay);
-                if(weekDB){
-                    setWeek(weekDB);
-                }
+        const fetchWeek = async () => {
+            const weekDB = await getWeek(userId, firstWeekDay);
+            if(weekDB){
+                setWeek(weekDB);
             }
-            fetchWeek();
         }
-    }, [session, userId]);
-
-    useEffect(() => {
-        console.log(`GLOBAL WEEK: `, week);
-    }, [week]);
+        if(userId){
+            fetchWeek()
+        };
+    }, [userId]);
 
     return(
         <WeekContext.Provider value={{week, setWeek}}>
@@ -37,6 +33,9 @@ const WeekProvider = ({children}) => {
     )
 }
 
-export const WeekContext = createContext<{week, setWeek}>({week: null, setWeek: null});
+const WeekContext = createContext<{week: Week | null, setWeek: (week: Week | null) => void}>({
+    week: null,
+    setWeek: () => {}
+}); // define passing value
 
-export default WeekProvider;
+export const useWeek = () => useContext(WeekContext);

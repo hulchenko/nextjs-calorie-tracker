@@ -1,3 +1,6 @@
+import { useWeek } from '@/app/context/WeekContext';
+import { getDayIdx } from '@/lib/dayUtils';
+import { removeMeal } from '@/lib/mealUtils';
 import {
     Button,
     Card, CardBody, CardHeader,
@@ -13,9 +16,7 @@ import {
 } from '@chakra-ui/react';
 import { useContext } from 'react';
 import { MealContext } from './DayForm';
-import { removeMeal  } from '@/lib/mealUtils';
-import { WeekContext } from '@/app/context/WeekContext';
-import { getDayIdx } from '@/lib/dayUtils';
+import { Week } from '@/types/Week';
 import React from 'react';
 
 const MealDisplayInfo = ({data}) => {
@@ -23,7 +24,7 @@ const MealDisplayInfo = ({data}) => {
     const { meal, day, setDay } = data;
     const { isOpen, onOpen, onClose } = useDisclosure();
     const { mealList, setMealList } = useContext(MealContext);
-    const { week, setWeek } = useContext(WeekContext);
+    const { week, setWeek } = useWeek();
 
     const dayIdx = getDayIdx(day);
 
@@ -41,10 +42,10 @@ const MealDisplayInfo = ({data}) => {
         const updatedWeek = {
             ...week,
             daily_goals_met: {
-                ...week.daily_goals_met,
+                ...week?.daily_goals_met,
                 [dayIdx]: dailyCalories >= day.calorie_target
             }
-        }
+        } as Week;
         const isLocalUpdate = await removeMeal(meal, updatedDay, updatedWeek, mealList, toast);
 
         if(!isLocalUpdate){ // ensure DOM is updated only if written to DB

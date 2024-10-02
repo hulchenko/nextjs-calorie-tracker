@@ -30,6 +30,7 @@ export const decrypt = async (session) => {
 
 export const createSession = async (user) => {
     delete user.password;
+    delete user.target;
     
     const expiresAt = new Date(Date.now() + 60 * 60 * 1000); // 1 hour
 

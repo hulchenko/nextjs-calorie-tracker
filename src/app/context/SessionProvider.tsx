@@ -6,11 +6,6 @@ import { Session } from '@/types/Session';
 import { useRouter } from 'next/navigation';
 import { createContext, useContext, useEffect, useRef, useState } from 'react';
 
-const SessionContext = createContext<{session: Session | null, setSession: (session: Session | null) => void}>({
-    session: null,
-    setSession: () => {}
-}); // define passing value
-
 export const SessionProvider = ({children, initialSession}) => {
     const [session, setSession] = useState<Session | null>(initialSession);
 
@@ -61,5 +56,9 @@ export const SessionProvider = ({children, initialSession}) => {
      );
 }
  
+const SessionContext = createContext<{session: Session | null, setSession: (session: Session | null) => void}>({
+    session: null,
+    setSession: () => {}
+}); // define passing value
 
 export const useSession = () => useContext(SessionContext); // expose passing value
