@@ -18,15 +18,19 @@ import { useContext } from 'react';
 import { MealContext } from './DayForm';
 import { Week } from '@/types/Week';
 import React from 'react';
+import { useUser } from '@/app/context/UserContext';
 
 const MealDisplayInfo = ({data}) => {
     const toast = useToast();
     const { meal, day, setDay } = data;
     const { isOpen, onOpen, onClose } = useDisclosure();
     const { mealList, setMealList } = useContext(MealContext);
+
     const { week, setWeek } = useWeek();
+    const { user } = useUser();
 
     const dayIdx = getDayIdx(day);
+    const dailyTarget = parseInt(user?.target as string);
 
     const mealRemoveHandler = async (event) => {
         event?.preventDefault();
@@ -36,14 +40,14 @@ const MealDisplayInfo = ({data}) => {
         const updatedDay = {
             ...day,
             calories_consumed: day.calories_consumed - meal.calories,
-            goal_met: (day.calories_consumed - meal.calories) >= day.calorie_target
+            goal_met: (day.calories_consumed - meal.calories) >= dailyTarget
         };
 
         const updatedWeek = {
             ...week,
             daily_goals_met: {
                 ...week?.daily_goals_met,
-                [dayIdx]: dailyCalories >= day.calorie_target
+                [dayIdx]: dailyCalories >= dailyTarget
             }
         } as Week;
         const isLocalUpdate = await removeMeal(meal, updatedDay, updatedWeek, mealList, toast);

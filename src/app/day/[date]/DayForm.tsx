@@ -1,5 +1,6 @@
 'use client';
 
+import { useUser } from '@/app/context/UserContext';
 import { useWeek } from '@/app/context/WeekContext';
 import { getDayIdx, getMeals, saveAllMeals, sortMeals } from '@/lib/dayUtils';
 import { Day } from '@/types/Day';
@@ -11,10 +12,10 @@ import DayDisplayInfo from './DayDisplayInfo';
 import MealDisplayInfo from './MealDisplayInfo';
 import MealInputForm from './MealInputForm';
 
-const DayForm = ({data}) => {
+const DayForm = ({initDay}) => {
     const toast = useToast();
-    const initDay: Day = data.day;
     const { week, setWeek } = useWeek();
+    const { user } = useUser();
 
     const [day, setDay] = useState<Day>(initDay);
     const [mealList, setMealList] = useState<Meal[]>([]);
@@ -22,6 +23,7 @@ const DayForm = ({data}) => {
     const [saveReady, setSaveReady] = useState(false);
 
     const dayIdx = getDayIdx(day);
+    const dailyTarget = parseInt(user?.target as string);
 
     useEffect(() => {
         getMeals(day, setMealList, setLoading, toast);
@@ -37,14 +39,14 @@ const DayForm = ({data}) => {
             const updatedDay = {
                 ...day,
                 calories_consumed: dailyCalories,
-                goal_met: dailyCalories >= day.calorie_target
+                goal_met: dailyCalories >= dailyTarget
             } as Day;
 
             const updatedWeek = {
                 ...week,
                 daily_goals_met: {
                     ...week?.daily_goals_met,
-                    [dayIdx]: dailyCalories >= day.calorie_target
+                    [dayIdx]: dailyCalories >= dailyTarget
                 }
             } as Week;
             
@@ -70,12 +72,12 @@ const DayForm = ({data}) => {
     
     return ( 
         <div>
-            <DayDisplayInfo day={day}/>
+            <DayDisplayInfo day={day} dailyTarget={dailyTarget}/>
             <div className='mx-auto mt-20 items-center flex flex-col text-xl'>
                 <MealContext.Provider value={{mealList, setMealList, setSaveReady}}>
                     <Grid templateColumns='repeat(3, 1fr)' gap={4}>
                         {sortMeals(mealList)?.map((meal) => (
-                            <MealDisplayInfo key={meal.meal_id} data={{ meal, day,setDay }}/>
+                            <MealDisplayInfo key={meal.meal_id} data={{ meal, day, setDay }}/>
                         ))}
                     </Grid>
                     <MealInputForm />

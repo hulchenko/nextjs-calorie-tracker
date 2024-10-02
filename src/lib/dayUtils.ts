@@ -9,7 +9,6 @@ export const defaultDay = (userId: string, date: string): Day => {
             day_id: uuidv4(),
             user_id: userId,
             date,
-            calorie_target: 2400, // to pull from settings later
             calories_consumed: 0,
             goal_met: false
         };
