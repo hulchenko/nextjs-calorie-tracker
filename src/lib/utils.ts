@@ -24,22 +24,3 @@ export const validateHashedPassword = async (
   }
   return false;
 };
-
-export const generateGreeting = (name: string) => {
-  const currentHour = new Date(Date.now()).getHours();
-  const morning = currentHour >= 3 && currentHour < 12;
-  const afternoon = currentHour >= 12 && currentHour < 17;
-  const evening =
-    (currentHour >= 17 && currentHour <= 23) ||
-    (currentHour >= 0 && currentHour < 3);
-  if (morning && name) {
-    return `Good Morning, ${name} 🌅`;
-  }
-  if (afternoon && name) {
-    return `Good Afternoon, ${name} 🌞`;
-  }
-  if (evening && name) {
-    return `Good Evening, ${name} 🌚`;
-  }
-  return "Hello";
-};

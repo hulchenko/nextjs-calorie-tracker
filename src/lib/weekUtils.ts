@@ -72,3 +72,43 @@ const generateWeeklyTargets = () => {
   }
   return targetMap;
 };
+
+export const goalReduce = (weeklyGoal): number => {
+  if (weeklyGoal) {
+    const result = Object.values(weeklyGoal).reduce(
+      (goals: any, goalMet: boolean) => {
+        if (goalMet) {
+          goals++;
+        }
+        return goals;
+      },
+      0
+    );
+    return result as number;
+  }
+  return 0;
+};
+
+export const getProgressPercent = (currGoal: number) => {
+  const max = 7;
+  return Math.floor((currGoal * 100) / max);
+};
+
+export const generateGreeting = (name = "User") => {
+  const currentHour = new Date(Date.now()).getHours();
+  const morning = currentHour >= 3 && currentHour < 12;
+  const afternoon = currentHour >= 12 && currentHour < 17;
+  const evening =
+    (currentHour >= 17 && currentHour <= 23) ||
+    (currentHour >= 0 && currentHour < 3);
+  if (morning && name) {
+    return `Good Morning, ${name} 🌅`;
+  }
+  if (afternoon && name) {
+    return `Good Afternoon, ${name} 🌞`;
+  }
+  if (evening && name) {
+    return `Good Evening, ${name} 🌚`;
+  }
+  return "Hello";
+};

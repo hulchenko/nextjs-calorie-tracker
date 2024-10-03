@@ -5,45 +5,63 @@ import {
   CircularProgress,
   CircularProgressLabel,
   Divider,
+  Spinner,
   Stack,
   Text,
 } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import { useWeek } from "../context/WeekContext";
-import DashboardDayCard from "./DashboardDayCard";
+import DayCard from "./DayCard";
+import {
+  getProgressPercent,
+  goalReduce,
+  generateGreeting,
+} from "@/lib/weekUtils";
+import { useUser } from "../context/UserContext";
 
-const DashboardWeek = ({ user_id, greeting }) => {
-  const generatedWeek = generateWeek();
+const Dashboard = () => {
   const { week } = useWeek();
+  const { user } = useUser();
+
   const [weeklyGoal, setWeeklyGoal] = useState(0);
   const [progress, setProgress] = useState(0);
+  const [greeting, setGreeting] = useState("");
+  const [loading, setLoading] = useState({ user: true, week: true });
+
+  const generatedWeek = generateWeek();
 
   useEffect(() => {
-    const goals = goalReduce(week?.daily_goals_met);
-    const progressPercent = getProgress(goals);
-    setWeeklyGoal(goals);
-    setProgress(progressPercent);
+    const name = user?.name;
+    if (name) {
+      const greeting = generateGreeting(name);
+      setGreeting(greeting);
+    }
+    setLoading((prev) => ({
+      ...prev,
+      user: false,
+    }));
+  }, [user]);
+
+  useEffect(() => {
+    const dailyGoals = week?.daily_goals_met;
+    if (dailyGoals) {
+      const goals = goalReduce(dailyGoals);
+      const percent = getProgressPercent(goals);
+      setWeeklyGoal(goals);
+      setProgress(percent);
+    }
+    setLoading((prev) => ({
+      ...prev,
+      week: false,
+    }));
   }, [week]);
 
-  function goalReduce(weeklyGoal): number {
-    if (weeklyGoal) {
-      const result = Object.values(weeklyGoal).reduce(
-        (goals: any, goalMet: boolean) => {
-          if (goalMet) {
-            goals++;
-          }
-          return goals;
-        },
-        0
-      );
-      return result as number;
-    }
-    return 0;
-  }
-
-  function getProgress(currGoal: number) {
-    const max = 7;
-    return Math.floor((currGoal * 100) / max);
+  if (loading.user || loading.week) {
+    return (
+      <div className="flex justify-center mt-96">
+        <Spinner thickness="4px" speed="1s" color="teal.600" size="xl" />
+      </div>
+    );
   }
 
   return (
@@ -71,14 +89,11 @@ const DashboardWeek = ({ user_id, greeting }) => {
         </Stack>
         <ul>
           {generatedWeek.map((day, index) => (
-            <DashboardDayCard
-              key={day.date}
-              data={{ user_id, day, week, index }}
-            />
+            <DayCard key={day.date} data={{ day, week, index }} />
           ))}
         </ul>
       </div>
     </div>
   );
 };
-export default DashboardWeek;
+export default Dashboard;
