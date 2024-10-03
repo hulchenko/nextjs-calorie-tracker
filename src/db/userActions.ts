@@ -6,6 +6,10 @@ import { revalidatePath } from "next/cache"; // purges cached data
 export const createUser = async (user: User): Promise<User | any> => {
   try {
     const { name, email, password, target } = user;
+
+    const userDB = await getUserByEmail(email);
+    if (userDB) throw Error("User already exists!");
+
     const id = uuidv4();
     await sql`INSERT INTO users (user_id, name, email, password, target) VALUES (${id}, ${name}, ${email}, ${password}, ${target})`;
     const userData = {
@@ -19,7 +23,10 @@ export const createUser = async (user: User): Promise<User | any> => {
     return userData;
   } catch (error) {
     console.error(error);
-    throw Error("Creating user failed");
+    if (error.name === "NeonDbError") {
+      throw Error("Creating user failed");
+    }
+    throw error; // "User already exists!"
   }
 };
 
@@ -34,33 +41,20 @@ export const updateUser = async (user: User) => {
   }
 };
 
-export const verifyUserDB = async (user: User, queryById = true) => {
-  const prop = queryById ? user.user_id : user.email;
-  let userData = await getUser(prop as string | number, queryById);
-  if (!queryById && userData) {
-    throw Error("User already exists!");
+export const getUserByEmail = async (email: string): Promise<User[] | any> => {
+  try {
+    const response = await sql`SELECT * FROM users WHERE email = ${email}`;
+    return response[0];
+  } catch (error) {
+    console.error(error);
+    throw Error("Error getting user");
   }
-
-  if (!userData) {
-    userData = await createUser(user);
-  }
-
-  return userData;
 };
 
-export const getUser = async (
-  prop: string | number,
-  queryById: boolean
-): Promise<User[] | any> => {
-  // query builder does not support variable interpolation correctly (e.g. dynamically swapping between the user_id/email properties)
+export const getUserById = async (id: string): Promise<User[] | any> => {
   try {
-    if (queryById) {
-      const response = await sql`SELECT * FROM users WHERE user_id = ${prop}`;
-      return response[0];
-    } else {
-      const response = await sql`SELECT * FROM users WHERE email = ${prop}`;
-      return response[0];
-    }
+    const response = await sql`SELECT * FROM users WHERE user_id = ${id}`;
+    return response[0];
   } catch (error) {
     console.error(error);
     throw Error("Error getting user");

@@ -11,8 +11,10 @@ export const UserProvider = ({ children }) => {
 
   useEffect(() => {
     const sessionUser = session?.user;
+
     const getUser = async () => {
-      const response = await fetch(`/api/db/user?email=${sessionUser?.email}`);
+      const userId = sessionUser?.user_id;
+      const response = await fetch(`/api/db/user?id=${userId}`);
       const data = await response.json();
       setUser(data);
     };

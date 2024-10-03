@@ -74,12 +74,11 @@ const ProfileForm = () => {
 
   const changeHandler = (e) => {
     const { name, value } = e.target;
-    console.log(`PROP: ${name}, VAL: ${value}`);
     setUserForm({ ...userForm, [name]: value });
     setInteracted(true);
   };
 
-  const submitHandler = async (e) => {
+  const submitHandler = async () => {
     event?.preventDefault();
 
     const user_id = user?.user_id || "";

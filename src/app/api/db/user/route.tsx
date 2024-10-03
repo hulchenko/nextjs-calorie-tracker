@@ -1,4 +1,4 @@
-import { getUser, updateUser } from "@/db/userActions";
+import { getUserById, updateUser } from "@/db/userActions";
 import { updateWeekTargets } from "@/lib/weekUtils";
 import { NextRequest, NextResponse } from "next/server";
 
@@ -15,10 +15,10 @@ export async function POST(request: NextRequest) {
 }
 
 export async function GET(request: NextRequest) {
-  const email = request.nextUrl.searchParams.get("email");
+  const userId = request.nextUrl.searchParams.get("id") || "";
 
   try {
-    const response = await getUser(email as string, false);
+    const response = await getUserById(userId);
     return NextResponse.json(response);
   } catch (error) {
     return NextResponse.json({ error: `${error}` }, { status: 500 });
