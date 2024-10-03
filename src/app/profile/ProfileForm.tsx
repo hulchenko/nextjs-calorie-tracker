@@ -8,6 +8,7 @@ import {
   CardFooter,
   CardHeader,
   FormControl,
+  FormHelperText,
   FormLabel,
   Input,
   InputGroup,
@@ -16,26 +17,43 @@ import {
   Spinner,
   useToast,
 } from "@chakra-ui/react";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useUser } from "../context/UserContext";
 import { useWeek } from "../context/WeekContext";
+import { Week } from "@/types/Week";
+
+interface UserForm {
+  name: string;
+  email: string;
+  target: string | number;
+}
 
 const ProfileForm = () => {
   const toast = useToast();
   const { user, setUser } = useUser();
   const { week, setWeek } = useWeek();
 
+  const initUser = useRef<User | null>(null);
+  const [userForm, setUserForm] = useState<UserForm>({
+    name: "",
+    email: "",
+    target: 0,
+  });
   const [loading, setLoading] = useState(true);
+  const [interacted, setInteracted] = useState(false);
 
   useEffect(() => {
     const target = user?.target;
+    if (target) {
+      const { name, email } = user;
 
-    if (user && target) {
+      initUser.current = user;
+      setUserForm({ ...userForm, name, email, target });
       setLoading(false);
     }
   }, [user]);
 
-  const updateUser = async (user: User) => {
+  const updateUserDB = async (user: User) => {
     try {
       const response = await fetch("/api/db/user", {
         method: "POST",
@@ -46,29 +64,51 @@ const ProfileForm = () => {
         const { error } = await response.json();
         throw error;
       }
-      setUser({
-        ...user,
-        email: user.email,
-        name: user.name,
-        target: user.target,
-      });
       const { updatedUser, updatedWeekTargets } = await response.json();
-      setWeek(updatedWeekTargets);
       toast({ title: "User updated", status: "info" });
+      return { updatedUser, updatedWeekTargets };
     } catch (error) {
       toast({ title: `${error}`, status: "error" });
     }
   };
 
-  const submitHandler = async (formData: FormData) => {
-    const updatedUser = {
-      user_id: user?.user_id,
-      name: formData.get("name"),
-      email: formData.get("email"),
-      target: formData.get("target"),
-    };
+  const changeHandler = (e) => {
+    const { name, value } = e.target;
+    console.log(`PROP: ${name}, VAL: ${value}`);
+    setUserForm({ ...userForm, [name]: value });
+    setInteracted(true);
+  };
 
-    await updateUser(updatedUser as User);
+  const submitHandler = async (e) => {
+    event?.preventDefault();
+
+    const user_id = user?.user_id || "";
+    const userProps = { user_id, ...userForm };
+
+    const response = await updateUserDB(userProps);
+
+    setWeek(response?.updatedWeekTargets as Week);
+    setUser({
+      ...user,
+      email: response?.updatedUser.email,
+      name: response?.updatedUser.name,
+      target: response?.updatedUser.target,
+    });
+    setInteracted(false);
+  };
+
+  const cancelHandler = (e) => {
+    console.log(initUser.current);
+    const init = initUser.current;
+    if (!init) return;
+
+    setUserForm({
+      ...userForm,
+      email: init.email,
+      name: init.name,
+      target: init.target,
+    });
+    setInteracted(false);
   };
 
   if (loading) {
@@ -80,7 +120,7 @@ const ProfileForm = () => {
   }
 
   return (
-    <form action={submitHandler}>
+    <form onSubmit={submitHandler}>
       <Card className="w-96 mx-auto mt-52">
         <CardHeader className="text-teal-700 text-3xl font-bold">
           My Profile
@@ -94,7 +134,8 @@ const ProfileForm = () => {
                 placeholder="Your name"
                 type="text"
                 name="name"
-                defaultValue={user?.name}
+                value={userForm?.name}
+                onChange={changeHandler}
               />
             </InputGroup>
             <FormLabel className="pt-4">Email Address</FormLabel>
@@ -104,27 +145,43 @@ const ProfileForm = () => {
                 placeholder="email@example.com"
                 type="email"
                 name="email"
-                defaultValue={user?.email}
+                value={userForm?.email}
+                onChange={changeHandler}
               />
             </InputGroup>
             <FormLabel className="pt-4">Calorie Target</FormLabel>
             <NumberInput
               size="lg"
               focusBorderColor="teal.600"
-              name="target"
-              defaultValue={user?.target}
+              value={userForm?.target}
+              onChange={
+                (value) => changeHandler({ target: { name: "target", value } }) // workaround, since NumberInput does not return event.target props
+              }
               min={1000}
               max={9999}
             >
               <NumberInputField />
             </NumberInput>
+            <FormHelperText fontSize={12} ml={2}>
+              min: 1000, max: 9999
+            </FormHelperText>
           </FormControl>
         </CardBody>
         <CardFooter className="justify-end">
-          <Button colorScheme="teal" mr={3} type="submit" disabled={false}>
+          <Button
+            colorScheme="teal"
+            mr={3}
+            type="submit"
+            isDisabled={!interacted}
+          >
             Update
           </Button>
-          <Button colorScheme="gray" mr={3}>
+          <Button
+            colorScheme="gray"
+            mr={3}
+            onClick={(e) => cancelHandler(e)}
+            isDisabled={!interacted}
+          >
             Cancel
           </Button>
         </CardFooter>
