@@ -35,19 +35,29 @@ const SignUpForm = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [showPassword, setShowPassword] = useState(false);
   const [isFormValid, setIsFormValid] = useState(true);
+  const [userForm, setUserForm] = useState({
+    name: "",
+    email: "",
+    password: "",
+    target: "",
+  });
 
-  const submitHandler = async (formData: FormData) => {
+  const changeHandler = async (event) => {
+    console.log(event);
+    const { name, value } = event.target;
+    setUserForm((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+  };
+
+  const submitHandler = async (event) => {
     event?.preventDefault(); // prevent modal from closing until successful promise result
 
-    const password = formData.get("password");
+    const { password } = userForm;
     const hashedPassword = await encryptPassword(password as string);
 
-    const newUser = {
-      name: formData.get("name"),
-      email: formData.get("email"),
-      password: hashedPassword,
-      target: formData.get("target"),
-    };
+    const newUser = { ...userForm, password: hashedPassword };
 
     const isPasswordValid = await passwordValidator(password as string);
     setIsFormValid(isPasswordValid);
@@ -92,7 +102,7 @@ const SignUpForm = () => {
       <Modal isOpen={isOpen} onClose={onClose} isCentered>
         <ModalOverlay />
         <ModalContent>
-          <form action={submitHandler}>
+          <form onSubmit={submitHandler}>
             <ModalHeader className="text-teal-700">Sign Up</ModalHeader>
             <ModalCloseButton size="lg" />
             <ModalBody pb={6}>
@@ -104,6 +114,7 @@ const SignUpForm = () => {
                     name="name"
                     placeholder="Your name"
                     type="text"
+                    onChange={changeHandler}
                   />
                 </InputGroup>
               </FormControl>
@@ -116,6 +127,7 @@ const SignUpForm = () => {
                     name="email"
                     placeholder="email@example.com"
                     type="email"
+                    onChange={changeHandler}
                   />
                 </InputGroup>
               </FormControl>
@@ -129,6 +141,7 @@ const SignUpForm = () => {
                     name="password"
                     type={showPassword ? "text" : "password"}
                     placeholder="Enter password"
+                    onChange={changeHandler}
                   />
                   <InputRightElement className="mr-2" width="4.5rem">
                     <Button
@@ -158,6 +171,10 @@ const SignUpForm = () => {
                   defaultValue={2400}
                   min={1000}
                   max={9999}
+                  onChange={
+                    (value) =>
+                      changeHandler({ target: { name: "target", value } }) // NumberInput workaround
+                  }
                 >
                   <NumberInputField />
                 </NumberInput>
