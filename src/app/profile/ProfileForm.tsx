@@ -1,6 +1,7 @@
 "use client";
 
 import { User } from "@/types/User";
+import { Week } from "@/types/Week";
 import {
   Button,
   Card,
@@ -15,12 +16,12 @@ import {
   NumberInput,
   NumberInputField,
   Spinner,
+  useDisclosure,
   useToast,
 } from "@chakra-ui/react";
 import { useEffect, useRef, useState } from "react";
 import { useUser } from "../context/UserContext";
 import { useWeek } from "../context/WeekContext";
-import { Week } from "@/types/Week";
 
 interface UserForm {
   name: string;
@@ -34,13 +35,14 @@ const ProfileForm = () => {
   const { week, setWeek } = useWeek();
 
   const initUser = useRef<User | null>(null);
+
+  const [loading, setLoading] = useState(true);
+  const [interacted, setInteracted] = useState(false);
   const [userForm, setUserForm] = useState<UserForm>({
     name: "",
     email: "",
     target: 0,
   });
-  const [loading, setLoading] = useState(true);
-  const [interacted, setInteracted] = useState(false);
 
   useEffect(() => {
     const target = user?.target;
@@ -72,20 +74,19 @@ const ProfileForm = () => {
     }
   };
 
-  const changeHandler = (e) => {
-    const { name, value } = e.target;
+  const changeHandler = (event) => {
+    const { name, value } = event.target;
     setUserForm({ ...userForm, [name]: value });
     setInteracted(true);
   };
 
-  const submitHandler = async () => {
+  const submitHandler = async (event) => {
     event?.preventDefault();
 
     const user_id = user?.user_id || "";
     const userProps = { user_id, ...userForm };
 
     const response = await updateUserDB(userProps);
-
     setWeek(response?.updatedWeekTargets as Week);
     setUser({
       ...user,
@@ -93,11 +94,30 @@ const ProfileForm = () => {
       name: response?.updatedUser.name,
       target: response?.updatedUser.target,
     });
+
+    updateSessionEmail(userProps.email);
+
     setInteracted(false);
   };
 
-  const cancelHandler = (e) => {
-    console.log(initUser.current);
+  const updateSessionEmail = async (email: string) => {
+    const initEmail = initUser.current?.email;
+    if (email !== initEmail) {
+      try {
+        const response = await fetch("/api/auth/session", {
+          method: "POST",
+          body: JSON.stringify(email),
+        });
+        if (response.ok) {
+          console.log("Updating session's email...");
+        }
+      } catch (error) {
+        console.error("Error updating session's email:", error);
+      }
+    }
+  };
+
+  const cancelHandler = () => {
     const init = initUser.current;
     if (!init) return;
 
@@ -178,7 +198,7 @@ const ProfileForm = () => {
           <Button
             colorScheme="gray"
             mr={3}
-            onClick={(e) => cancelHandler(e)}
+            onClick={cancelHandler}
             isDisabled={!interacted}
           >
             Cancel

@@ -1,3 +1,4 @@
+import { SessionUser } from "@/types/Session";
 import { JWTPayload, SignJWT, jwtVerify } from "jose";
 import { cookies } from "next/headers";
 import "server-only";
@@ -48,14 +49,16 @@ export const createSession = async (user) => {
   return await decrypt(session);
 };
 
-export const updateSession = async () => {
+export const updateSession = async (email = null) => {
   const oldSession = cookies().get("session")?.value;
   if (!oldSession) return null;
 
   const payload = await decrypt(oldSession);
   if (!payload) return null;
 
-  const user = payload.user;
+  const user = payload.user as SessionUser;
+  if (email) user.email = email;
+
   const expiresAt = new Date(Date.now() + 60 * 60 * 1000); // extend by an hour
   const newSession = await encrypt({ user, expiresAt });
 
