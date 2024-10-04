@@ -1,4 +1,4 @@
-import { getFoodData, defaultMeal } from "@/lib/mealUtils";
+import { getFoodData, getDefaultMeal } from "@/lib/mealUtils";
 import {
   Button,
   FormControl,
@@ -28,11 +28,12 @@ import React from "react";
 const MealInputForm = () => {
   const toast = useToast();
   const { mealList, setMealList, setSaveReady } = useContext(MealContext);
+  const defaultMeal = getDefaultMeal();
 
   const [query, setQuery] = useState("");
   const [searched, setSearched] = useState(false);
   const [delayedFetch, setDelayedFetch] = useState(query);
-  const [meal, setMeal] = useState(defaultMeal());
+  const [meal, setMeal] = useState(defaultMeal);
   const [loading, setLoading] = useState(false);
 
   const { isOpen, onOpen, onClose } = useDisclosure(); // modal props
@@ -56,7 +57,7 @@ const MealInputForm = () => {
 
   useEffect(() => {
     if (!isOpen) {
-      setMeal(defaultMeal()); // clean up modal if it wasn't submitted
+      setMeal(defaultMeal); // clean up modal if it wasn't submitted
     }
   }, [isOpen]);
 

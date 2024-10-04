@@ -3,7 +3,7 @@ import { Meal } from "@/types/Meal";
 import { Week } from "@/types/Week";
 import { v4 as uuidv4 } from "uuid";
 
-export const defaultMeal = (): Meal => {
+export const getDefaultMeal = (): Meal => {
   return {
     user_id: "",
     day_id: "",
