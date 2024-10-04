@@ -33,10 +33,10 @@ const DayDisplayInfo = ({ day, dailyTarget }) => {
   return (
     <div>
       <div className="flex flex-col ml-32 mt-14">
-        <p className="text-3xl text-gray-600 font-bold">{displayDate}</p>
+        <p className="text-3xl  font-bold">{displayDate}</p>
       </div>
       <div className="mt-20 flex flex-col items-center">
-        <p className="text-xl text-gray-600 font-bold">
+        <p className="text-xl font-bold">
           Daily Target{" "}
           <span
             className={

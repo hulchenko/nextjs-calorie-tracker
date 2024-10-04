@@ -61,7 +61,7 @@ const SignInForm = () => {
         <div className="mb-6">
           <input
             onChange={(e) => setEmail(e.target.value)}
-            className="shadow border rounded w-full py-3 px-3 text-gray-600  focus:outline-teal-600"
+            className="shadow border rounded w-full py-3 px-3  focus:outline-teal-600"
             type="email"
             name="email"
             placeholder="Email"
@@ -75,7 +75,7 @@ const SignInForm = () => {
         <div className="mb-6">
           <input
             onChange={(e) => setPassword(e.target.value)}
-            className="shadow border rounded w-full py-3 px-3 text-gray-600  focus:outline-teal-600"
+            className="shadow border rounded w-full py-3 px-3  focus:outline-teal-600"
             type="password"
             name="password"
             placeholder="Password"

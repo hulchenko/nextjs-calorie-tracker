@@ -124,7 +124,7 @@ const ProfileForm = () => {
       ...userForm,
       email: init.email,
       name: init.name,
-      target: init.target,
+      target: init.target || 0,
     });
     setInteracted(false);
   };

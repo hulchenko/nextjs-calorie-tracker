@@ -74,7 +74,7 @@ const MealInputForm = () => {
       {mealList?.length === 0 && (
         <div className="flex flex-col items-center">
           <h1 className="text-4xl">No meals</h1>
-          <p className="text-base text-gray-500 py-4">
+          <p className="text-base py-4">
             Looks like you haven't added any meals yet.
           </p>
           <button

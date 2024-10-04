@@ -30,7 +30,9 @@ export default async function RootLayout({
 
   return (
     <html lang="en">
-      <body className={`${roboto.className} min-h-screen bg-gray-50 min-w-fit`}>
+      <body
+        className={`${roboto.className} min-h-screen bg-gray-100 min-w-fit text-gray-600`}
+      >
         <SessionProvider initialSession={session}>
           <ActivityListener />
           <Navigation />

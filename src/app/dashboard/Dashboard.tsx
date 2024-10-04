@@ -67,23 +67,21 @@ const Dashboard = () => {
   return (
     <div className="mx-auto grid grid-flow-col items-start justify-center w-full">
       <div className="flex flex-col mr-20">
-        <div className="p-6 text-5xl mb-52 mt-20">{greeting}</div>
+        <div className="p-6 text-5xl mb-52 mt-20 font-bold">{greeting}</div>
         <div className="flex border rounded p-6 border-gray-200 shadow-md">
-          <Text className="text-3xl text-gray-600">Weekly Goals Progress</Text>
+          <Text className="text-3xl ">Weekly Goals Progress</Text>
           <CircularProgress
             value={progress}
             color="teal.600"
             size="240px"
             thickness="16px"
           >
-            <CircularProgressLabel className="text-gray-600">
-              {weeklyGoal}/7{" "}
-            </CircularProgressLabel>
+            <CircularProgressLabel>{weeklyGoal}/7 </CircularProgressLabel>
           </CircularProgress>
         </div>
       </div>
       <div className="flex border rounded p-6 border-gray-200 shadow-md mt-6">
-        <Text className="text-3xl text-gray-600 pr-6">Calendar</Text>
+        <Text className="text-3xl pr-6">Calendar</Text>
         <Stack className="text-gray-200">
           <Divider orientation="vertical" />
         </Stack>

@@ -116,7 +116,7 @@ const MealDisplayInfo = ({ data }) => {
                   <Text>Description: {meal.meal_description}</Text>
                   <Text>Ingridients List:</Text>
                   {meal?.items.map((ing) => (
-                    <div className="ml-2 border border-teal-600 rounded p-4 m-2 text-gray-600">
+                    <div className="ml-2 border border-teal-600 rounded p-4 m-2">
                       <Text>
                         Ingridient: <b>{ing?.name}</b>
                       </Text>
