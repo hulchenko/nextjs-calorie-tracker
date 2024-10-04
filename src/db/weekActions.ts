@@ -15,7 +15,7 @@ export const getWeek = async (
   }
 };
 
-export const createWeek = async (week) => {
+export const createWeek = async (week: Week) => {
   const { week_id, user_id, start_date, end_date, daily_goals_met } = week;
   try {
     await sql`INSERT INTO weeks(week_id, user_id, start_date, end_date, daily_goals_met) VALUES(${week_id},${user_id},${start_date},${end_date},${daily_goals_met})`;
@@ -26,7 +26,7 @@ export const createWeek = async (week) => {
   }
 };
 
-export const updateWeek = async (week) => {
+export const updateWeek = async (week: Week) => {
   const { week_id, user_id, daily_goals_met } = week;
   try {
     await sql`UPDATE weeks SET daily_goals_met = ${daily_goals_met} WHERE week_id = ${week_id} AND user_id = ${user_id}`;

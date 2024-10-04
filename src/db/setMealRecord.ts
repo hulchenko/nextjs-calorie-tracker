@@ -22,28 +22,22 @@ export const setMealRecord = async (meal: Meal, day: Day, week: Week) => {
       await createMeal(meal);
 
       // get day by user_id, date
-      console.log(`GETTING DAY`);
       let fetchedDay = await getDay(user_id, date);
 
       // if day exists, then update, otherwise create day
       if (fetchedDay) {
-        console.log(`UPDATING DAY`);
         await updateDay(day);
       } else {
-        console.log(`CREATING DAY`);
         await createDay(day);
       }
 
       // get week by user_id, weekdays (Mon - Sunday)
-      console.log(`GETTING WEEK`);
       const fetchedWeek = await getWeek(user_id, firstWeekDay);
 
       // if week exists, then update, otherwise create week
       if (fetchedWeek) {
-        console.log(`UPDATING WEEK`);
         await updateWeek(week);
       } else {
-        console.log(`CREATING WEEK`);
         await createWeek(week);
       }
     }

@@ -29,7 +29,11 @@ export const getDay = async (
   }
 };
 
-export const getWeekDays = async (userId, start, end) => {
+export const getWeekDays = async (
+  userId: string,
+  start: string,
+  end: string
+) => {
   try {
     const response =
       await sql`SELECT * FROM days where user_id = ${userId} AND date >= ${start} AND date <= ${end}`;

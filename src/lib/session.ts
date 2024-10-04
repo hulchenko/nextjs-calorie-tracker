@@ -1,7 +1,8 @@
+import "server-only"; // prevents functions to be used in client
 import { SessionUser } from "@/types/Session";
 import { JWTPayload, SignJWT, jwtVerify } from "jose";
 import { cookies } from "next/headers";
-import "server-only";
+import { User } from "@/types/User";
 
 const secretKey = process.env.SESSION_SECRET;
 const encodedKey = new TextEncoder().encode(secretKey); // secretKey in bytes
@@ -30,7 +31,7 @@ export const decrypt = async (session) => {
   }
 };
 
-export const createSession = async (user) => {
+export const createSession = async (user: User) => {
   delete user.password;
   delete user.target;
 

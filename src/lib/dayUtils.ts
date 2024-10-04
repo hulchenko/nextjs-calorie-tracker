@@ -1,28 +1,30 @@
-import { Meal } from '@/types/Meal';
-import { Day } from '@/types/Day';
-import { v4 as uuidv4 } from 'uuid';
-import { Week } from '@/types/Week';
-import moment from 'moment';
+import { Meal } from "@/types/Meal";
+import { Day } from "@/types/Day";
+import { v4 as uuidv4 } from "uuid";
+import { Week } from "@/types/Week";
+import moment from "moment";
 
 export const getDefaultDay = (userId: string, date: string): Day => {
-    return {
-            day_id: uuidv4(),
-            user_id: userId,
-            date,
-            calories_consumed: 0
-        };
-}
+  return {
+    day_id: uuidv4(),
+    user_id: userId,
+    date,
+    calories_consumed: 0,
+  };
+};
 
-export const getDayIdx = (date): number => {
+export const getDayIdx = (date: string): number => {
   const index = moment(date).isoWeekday() - 1; // by default isoWeekday() returns 1 - 7
-  return index
-}
+  return index;
+};
 
 // Fetch meals for the given day
-export const getMeals = async (day, setMealList, setLoading, toast) => {
+export const getMeals = async (day: Day, setMealList, setLoading, toast) => {
   try {
-    const {day_id, user_id} = day;
-    const response = await fetch(`/api/db/meal?day_id=${day_id}&user=${user_id}`);
+    const { day_id, user_id } = day;
+    const response = await fetch(
+      `/api/db/meal?day_id=${day_id}&user=${user_id}`
+    );
     if (!response.ok) {
       const { error } = await response.json();
       throw new Error(error);
@@ -30,40 +32,44 @@ export const getMeals = async (day, setMealList, setLoading, toast) => {
     const meals = await response.json();
     setMealList(meals);
   } catch (error) {
-    toast({ title: `${error}`, status: 'error' });
+    toast({ title: `${error}`, status: "error" });
     setMealList([]);
   }
-  setLoading(prev => ({
+  setLoading((prev) => ({
     ...prev,
-    mealList: false
+    mealList: false,
   }));
 };
 
 // Save all meals
-export const saveAllMeals = async (day: Day, mealList: Meal[], week: Week, toast) => {
+export const saveAllMeals = async (
+  day: Day,
+  mealList: Meal[],
+  week: Week,
+  toast
+) => {
   try {
     const mealPromises = mealList.map((meal) => {
-      const existingMeal = 'id' in meal; // works only on simultaneously added meals, does not work on add -> save -> add basis. This is intercepted in the removeMealRecord.ts
+      const existingMeal = "id" in meal; // works only on simultaneously added meals, does not work on add -> save -> add basis. This is intercepted in the removeMealRecord.ts
       if (!existingMeal) {
-        return writeMealData(day, meal, week, 'POST');
+        return writeMealData(day, meal, week);
       }
     });
     await Promise.all(mealPromises);
-    toast({ title: 'Meal(s) saved successfully', status: 'success' });
+    toast({ title: "Meal(s) saved successfully", status: "success" });
   } catch (error) {
-    toast({ title: `${error}`, status: 'error' });
+    toast({ title: `${error}`, status: "error" });
   }
 };
 
-// Write meal data (POST or PUT), invoked from saveAllMeals
-const writeMealData = async (day: Day, meal: Meal, week: Week, methodType) => {
+const writeMealData = async (day: Day, meal: Meal, week: Week) => {
   try {
     meal.day_id = day.day_id; // append day ID for reference
     meal.user_id = day.user_id;
-    const response = await fetch('/api/db/meal', {
-      method: methodType,
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({meal, day, week}),
+    const response = await fetch("/api/db/meal", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ meal, day, week }),
     });
     if (!response.ok) {
       const { error } = await response.json();
@@ -75,21 +81,28 @@ const writeMealData = async (day: Day, meal: Meal, week: Week, methodType) => {
   }
 };
 
-
 export const sortMeals = (list: Meal[] | null) => {
-        if(!list) return [];
+  if (!list) return [];
 
-        const sortedMeals = ['Breakfast', 'Brunch', 'Lunch', 'Supper', 'Dinner', 'Midnight Snack', 'Other'];
+  const sortedMeals = [
+    "Breakfast",
+    "Brunch",
+    "Lunch",
+    "Supper",
+    "Dinner",
+    "Midnight Snack",
+    "Other",
+  ];
 
-        const newList = [...list];
-        newList.sort((prev, curr) => {
-            const prevIdx = sortedMeals.indexOf(prev.meal_type);
-            const currIdx = sortedMeals.indexOf(curr.meal_type);
-            if(prevIdx > currIdx){
-                return 1
-            } else {
-                return -1
-            }
-        });
-        return newList;
+  const newList = [...list];
+  newList.sort((prev, curr) => {
+    const prevIdx = sortedMeals.indexOf(prev.meal_type);
+    const currIdx = sortedMeals.indexOf(curr.meal_type);
+    if (prevIdx > currIdx) {
+      return 1;
+    } else {
+      return -1;
     }
+  });
+  return newList;
+};

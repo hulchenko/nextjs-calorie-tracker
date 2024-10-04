@@ -2,7 +2,6 @@ import { deleteSession, updateSession, verifySession } from "@/lib/session";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(request: NextRequest) {
-  // refresh session
   const session = await verifySession();
   if (session) {
     const reqContent = request.headers.get("content-length") || 0;

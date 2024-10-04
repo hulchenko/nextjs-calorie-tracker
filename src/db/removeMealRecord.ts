@@ -1,5 +1,5 @@
-import { getDay, updateDay } from "@/db/dayActions";
-import { removeMeal, getMeal } from "@/db/mealActions";
+import { updateDay } from "@/db/dayActions";
+import { getMeal, removeMeal } from "@/db/mealActions";
 import { updateWeek } from "@/db/weekActions";
 import { Day } from "@/types/Day";
 import { Meal } from "@/types/Meal";

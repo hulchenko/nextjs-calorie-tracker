@@ -1,9 +1,7 @@
-import ProfileForm from './ProfileForm';
+import ProfileForm from "./ProfileForm";
 
 const ProfilePage = () => {
-    return ( 
-        <ProfileForm />
-     );
-}
- 
+  return <ProfileForm />;
+};
+
 export default ProfilePage;

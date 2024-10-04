@@ -47,7 +47,7 @@ export const generateWeek = () => {
 
 export const updateWeekTargets = async (user: User, week: Week) => {
   try {
-    const { user_id, target } = user;
+    const { user_id = "", target = 0 } = user; // set default values if undefined
     const weekDays = await getWeekDays(user_id, firstWeekDay, lastWeekDay);
 
     const targetMap = generateWeeklyTargets();
@@ -73,7 +73,7 @@ const generateWeeklyTargets = () => {
   return targetMap;
 };
 
-export const goalReduce = (weeklyGoal): number => {
+export const goalReduce = (weeklyGoal: object): number => {
   if (weeklyGoal) {
     const result = Object.values(weeklyGoal).reduce(
       (goals: any, goalMet: boolean) => {

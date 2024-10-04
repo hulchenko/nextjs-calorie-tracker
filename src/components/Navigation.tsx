@@ -1,12 +1,12 @@
-'use client';
+"use client";
 
-import { useSession } from '@/app/context/SessionProvider';
-import { useToast, Text } from '@chakra-ui/react';
-import { faWeightScale } from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import Link from 'next/link';
-import { useRouter, usePathname } from 'next/navigation';
-import React from 'react';
+import Link from "next/link";
+import React from "react";
+import { useSession } from "@/app/context/SessionProvider";
+import { useToast, Text } from "@chakra-ui/react";
+import { faWeightScale } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { useRouter, usePathname } from "next/navigation";
 
 const Navigation = () => {
   const toast = useToast();
@@ -14,61 +14,80 @@ const Navigation = () => {
   const currentPath = usePathname();
   const { session, setSession } = useSession();
 
-    const authStateHandler = async () => {
-      if (session){
-        try {
-          const response = await fetch('/api/auth/logout', {
-            method: 'POST'
-          });
-        if (!response.ok){
-            const {error} = await response.json();
-            throw error;
+  const authStateHandler = async () => {
+    if (session) {
+      try {
+        const response = await fetch("/api/auth/logout", {
+          method: "POST",
+        });
+        if (!response.ok) {
+          const { error } = await response.json();
+          throw error;
         }
         setSession(null);
-        router.push('/login');
-        toast({title: 'Sign out', status: 'info'});
-        } catch (error) {
-          toast({title: `${error}`, status: 'error'});
-        }
-      } else {
-        router.push('/login');
+        router.push("/login");
+        toast({ title: "Sign out", status: "info" });
+      } catch (error) {
+        toast({ title: `${error}`, status: "error" });
       }
+    } else {
+      router.push("/login");
     }
+  };
 
-    return ( 
-        <>
-            <div className="flex justify-between items-center bg-teal-800 p-4 text-white px-24">
-                <Link href={'/'} className='flex items-center cursor-pointer text-2xl hover:text-teal-200'>
-                  <FontAwesomeIcon className='h-10 pr-4' icon={faWeightScale} />
-                  <h3>Calorie Tracker</h3>
+  return (
+    <>
+      <div className="flex justify-between items-center bg-teal-800 p-4 text-white px-24">
+        <Link
+          href={"/"}
+          className="flex items-center cursor-pointer text-2xl hover:text-teal-200"
+        >
+          <FontAwesomeIcon className="h-10 pr-4" icon={faWeightScale} />
+          <h3>Calorie Tracker</h3>
+        </Link>
+        <ul className="flex justify-end w-80 space-x-4 text-lg">
+          {session && (
+            <>
+              <li className="hover:text-teal-200">
+                <Link href={"/dashboard"}>
+                  <Text
+                    className={
+                      currentPath === "/dashboard" ? "text-teal-200" : ""
+                    }
+                  >
+                    Dashboard
+                  </Text>
                 </Link>
-              <ul className='flex justify-end w-80 space-x-4 text-lg'>
-                {session && (
-                  <>
-                    <li className='hover:text-teal-200'>
-                      <Link href={'/dashboard'}>
-                        <Text className={currentPath === '/dashboard' ? 'text-teal-200' : ''}>Dashboard</Text>
-                      </Link>
-                    </li>
-                    <li className='hover:text-teal-200'>
-                      <Link href={'/profile'}>
-                        <Text className={currentPath === '/profile' ? 'text-teal-200' : ''}>Profile</Text>
-                      </Link>
-                    </li>
-                  </>
-                )}
-                <li className='hover:text-teal-200'>
-                  <Link href={'/about'}>
-                    <Text className={currentPath === '/about' ? 'text-teal-200' : ''}>About</Text>
-                  </Link>
-                </li>
-                <li className='hover:text-teal-200'>
-                  <button onClick={authStateHandler}>{session ? 'Sign Out' : 'Sign In'}</button>
-                </li>
-              </ul>
-            </div>
-        </>
-     );
-}
- 
+              </li>
+              <li className="hover:text-teal-200">
+                <Link href={"/profile"}>
+                  <Text
+                    className={
+                      currentPath === "/profile" ? "text-teal-200" : ""
+                    }
+                  >
+                    Profile
+                  </Text>
+                </Link>
+              </li>
+            </>
+          )}
+          <li className="hover:text-teal-200">
+            <Link href={"/about"}>
+              <Text className={currentPath === "/about" ? "text-teal-200" : ""}>
+                About
+              </Text>
+            </Link>
+          </li>
+          <li className="hover:text-teal-200">
+            <button onClick={authStateHandler}>
+              {session ? "Sign Out" : "Sign In"}
+            </button>
+          </li>
+        </ul>
+      </div>
+    </>
+  );
+};
+
 export default Navigation;

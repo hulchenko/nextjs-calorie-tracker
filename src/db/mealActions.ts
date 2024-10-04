@@ -22,7 +22,7 @@ export const createMeal = async (meal: Meal) => {
   }
 };
 
-export const getMeals = async (day_id, user_id) => {
+export const getMeals = async (day_id: string, user_id: string) => {
   try {
     const response =
       await sql`SELECT * FROM meals WHERE day_id=${day_id} AND user_id=${user_id}`;
@@ -33,7 +33,11 @@ export const getMeals = async (day_id, user_id) => {
   }
 };
 
-export const getMeal = async (day_id, user_id, meal_id) => {
+export const getMeal = async (
+  day_id: string,
+  user_id: string,
+  meal_id: string
+) => {
   try {
     const response =
       await sql`SELECT * FROM meals WHERE day_id=${day_id} AND user_id=${user_id} AND meal_id=${meal_id}`;
