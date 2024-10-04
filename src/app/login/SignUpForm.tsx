@@ -43,7 +43,6 @@ const SignUpForm = () => {
   });
 
   const changeHandler = async (event) => {
-    console.log(event);
     const { name, value } = event.target;
     setUserForm((prev) => ({
       ...prev,
