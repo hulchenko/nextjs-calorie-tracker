@@ -103,13 +103,10 @@ const ProfileForm = () => {
     const initEmail = initUser.current?.email;
     if (email !== initEmail) {
       try {
-        const response = await fetch("/api/auth/session", {
+        await fetch("/api/auth/session", {
           method: "POST",
           body: JSON.stringify(email),
         });
-        if (response.ok) {
-          console.log("Updating session's email...");
-        }
       } catch (error) {
         console.error("Error updating session's email:", error);
       }

@@ -32,7 +32,7 @@ const MealDisplayInfo = ({ data }) => {
   const { week, setWeek } = useWeek();
   const { user } = useUser();
 
-  const dayIdx = getDayIdx(day);
+  const dayIdx = getDayIdx(day.date);
   const dailyTarget = parseInt(user?.target as string);
 
   const mealRemoveHandler = async (event) => {
@@ -57,6 +57,7 @@ const MealDisplayInfo = ({ data }) => {
         [dayIdx]: dailyCalories >= dailyTarget,
       },
     } as Week;
+
     const isLocalUpdate = await removeMeal(
       meal,
       updatedDay,

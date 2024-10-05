@@ -39,7 +39,7 @@ const SignUpForm = () => {
     name: "",
     email: "",
     password: "",
-    target: "",
+    target: 2400,
   });
 
   const changeHandler = async (event) => {
@@ -167,7 +167,7 @@ const SignUpForm = () => {
                   size="lg"
                   focusBorderColor="teal.600"
                   name="target"
-                  defaultValue={2400}
+                  value={userForm.target}
                   min={1000}
                   max={9999}
                   onChange={

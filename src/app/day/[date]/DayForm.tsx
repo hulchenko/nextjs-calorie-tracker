@@ -7,7 +7,7 @@ import {
   getDayIdx,
   getDefaultDay,
   getMeals,
-  saveAllMeals,
+  batchWriteMeals,
   sortMeals,
 } from "@/lib/dayUtils";
 import { Day } from "@/types/Day";
@@ -80,7 +80,7 @@ const DayForm = ({ date }) => {
         },
       } as Week;
 
-      await saveAllMeals(updatedDay, mealList, updatedWeek, toast);
+      await batchWriteMeals(updatedDay, mealList, updatedWeek, toast);
       setSaveReady(false);
       setDay(updatedDay);
       setWeek(updatedWeek);
