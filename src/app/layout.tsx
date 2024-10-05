@@ -29,9 +29,9 @@ export default async function RootLayout({
   const session = await verifySession();
 
   return (
-    <html lang="en">
+    <html lang="en" className="h-full box-border">
       <body
-        className={`${roboto.className} min-h-screen bg-gray-100 min-w-fit text-gray-600`}
+        className={`${roboto.className} min-h-full bg-gray-100 text-gray-600 pb-16`} //4 rem padding for footer
       >
         <SessionProvider initialSession={session}>
           <ActivityListener />

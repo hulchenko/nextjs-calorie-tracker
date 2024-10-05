@@ -1,10 +1,10 @@
 const AboutPage = () => {
   return (
-    <div className="container mx-auto px-72">
-      <h1 className="text-4xl mt-16 text-center">
+    <div className="container mx-auto p-6 2xl:px-72">
+      <h1 className="text-3xl lg:text-6xl mt-4 lg:mt-16 text-center">
         About <span className="text-teal-700">Us</span>
       </h1>
-      <div className="text-xl mt-36">
+      <div className="text-xl mt-4 lg:mt-36">
         <p>
           <span className="text-teal-700">Lorem</span> ipsum dolor, sit amet
           consectetur adipisicing elit. Velit explicabo recusandae tempora sit

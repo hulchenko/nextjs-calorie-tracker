@@ -26,7 +26,7 @@ const Navigation = () => {
         }
         setSession(null);
         router.push("/login");
-        toast({ title: "Sign out", status: "info" });
+        toast({ title: "Signed out", status: "info" });
       } catch (error) {
         toast({ title: `${error}`, status: "error" });
       }
@@ -37,7 +37,7 @@ const Navigation = () => {
 
   return (
     <>
-      <div className="flex justify-between items-center bg-teal-800 p-4 text-white px-24">
+      <div className="flex justify-between items-center bg-teal-800 p-4 text-white lg:px-24">
         <Link
           href={"/"}
           className="flex items-center cursor-pointer text-2xl hover:text-teal-200"
@@ -45,7 +45,7 @@ const Navigation = () => {
           <FontAwesomeIcon className="h-10 pr-4" icon={faWeightScale} />
           <h3>Calorie Tracker</h3>
         </Link>
-        <ul className="flex justify-end w-80 space-x-4 text-lg">
+        <ul className="flex justify-end space-x-4 text-lg">
           {session && (
             <>
               <li className="hover:text-teal-200">
