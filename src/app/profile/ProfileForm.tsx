@@ -136,7 +136,7 @@ const ProfileForm = () => {
 
   return (
     <form onSubmit={submitHandler}>
-      <Card className="w-96 mx-auto mt-52">
+      <Card className="w-96 mx-auto mt-32 sm:mt-52">
         <CardHeader className="text-teal-700 text-3xl font-bold">
           My Profile
         </CardHeader>

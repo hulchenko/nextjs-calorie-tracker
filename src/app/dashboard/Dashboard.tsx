@@ -1,23 +1,22 @@
 "use client";
 
-import { generateWeek } from "@/lib/weekUtils";
+import {
+  generateGreeting,
+  generateWeek,
+  getProgressPercent,
+  goalReduce,
+} from "@/lib/weekUtils";
 import {
   CircularProgress,
   CircularProgressLabel,
-  Divider,
   Spinner,
-  Stack,
   Text,
 } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
+import { useUser } from "../context/UserContext";
 import { useWeek } from "../context/WeekContext";
 import DayCard from "./DayCard";
-import {
-  getProgressPercent,
-  goalReduce,
-  generateGreeting,
-} from "@/lib/weekUtils";
-import { useUser } from "../context/UserContext";
+import { Divider } from "@chakra-ui/react";
 
 const Dashboard = () => {
   const { week } = useWeek();
@@ -65,27 +64,30 @@ const Dashboard = () => {
   }
 
   return (
-    <div className="mx-auto grid grid-flow-col items-start justify-center w-full">
-      <div className="flex flex-col mr-20">
-        <div className="p-6 text-5xl mb-52 mt-20 font-bold">{greeting}</div>
-        <div className="flex border rounded p-6 border-gray-200 shadow-md">
-          <Text className="text-3xl ">Weekly Goals Progress</Text>
+    <div className="w-full flex items-center justify-center flex-col h-full">
+      <div className="w-full lg:w-1/2 2xl:w-1/4">
+        <div className="flex justify-center text-2xl font-bold sm:text-4xl py-6 sm:mt-20">
+          {greeting}
+        </div>
+        <div className="flex flex-row border rounded border-gray-200 justify-evenly items-center sm:p-2">
+          <Text className="text-xl font-bold lg:text-3xl">Weekly Goals</Text>
           <CircularProgress
             value={progress}
             color="teal.600"
-            size="240px"
+            size={window.innerWidth <= 640 ? 100 : 150}
             thickness="16px"
+            className="ml-10 sm:ml-0"
           >
             <CircularProgressLabel>{weeklyGoal}/7 </CircularProgressLabel>
           </CircularProgress>
         </div>
       </div>
-      <div className="flex border rounded p-6 border-gray-200 shadow-md mt-6">
-        <Text className="text-3xl pr-6">Calendar</Text>
-        <Stack className="text-gray-200">
-          <Divider orientation="vertical" />
-        </Stack>
-        <ul>
+      <div className="w-full mt-6 flex items-center flex-col rounded border-gray-200 sm:border lg:w-3/4 lg:shadow-md sm:mt-16">
+        <Text className="hidden sm:block text-3xl font-bold py-4">
+          Current Week
+        </Text>
+        <Divider className="hidden sm:block" />
+        <ul className="flex flex-col justify-center flex-wrap sm:py-6 md:flex-row w-full h-full">
           {generatedWeek.map((day, index) => (
             <DayCard key={day.date} data={{ day, week, index }} />
           ))}

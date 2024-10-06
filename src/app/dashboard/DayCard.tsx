@@ -18,20 +18,23 @@ const DayCard = ({ data }) => {
   }, [week]);
 
   return (
-    <Link href={{ pathname: `/day/${date}` }}>
+    <Link href={{ pathname: `/day/${date}` }} className="h-full">
       <Card
-        h={32}
-        className="hover:shadow-teal-700 hover:shadow-md w-80 m-4 h-36"
+        h={window.innerWidth <= 640 ? 16 : 32}
+        className="hover:shadow-teal-700 hover:shadow-md m-2 sm:m-3 w-auto md:w-60 h-96"
         bg={isGoalMet ? "teal.600" : "white"}
       >
         <CardBody
-          className="flex justify-end self-end text-xl"
+          className="flex justify-end self-end sm:text-xl"
           textColor={isGoalMet ? "white" : "gray.500"}
+          p={window.innerWidth <= 640 ? 0 : 5}
+          mr={window.innerWidth <= 640 ? 4 : 0}
+          mt={window.innerWidth <= 640 ? 2 : 0}
         >
           {isToday ? "Today" : ""} {displayDate}
         </CardBody>
         <CardHeader
-          className="flex text-4xl font-bold"
+          className="flex sm:text-4xl font-bold"
           textColor={isGoalMet ? "white" : "teal.600"}
           p={0}
           mb={6}

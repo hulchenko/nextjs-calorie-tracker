@@ -1,12 +1,11 @@
 "use client";
 
-import Link from "next/link";
-import React from "react";
 import { useSession } from "@/app/context/SessionProvider";
-import { useToast, Text } from "@chakra-ui/react";
+import { Text, useToast } from "@chakra-ui/react";
 import { faWeightScale } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { useRouter, usePathname } from "next/navigation";
+import Link from "next/link";
+import { usePathname, useRouter } from "next/navigation";
 
 const Navigation = () => {
   const toast = useToast();
@@ -43,7 +42,7 @@ const Navigation = () => {
           className="flex items-center cursor-pointer text-2xl hover:text-teal-200"
         >
           <FontAwesomeIcon className="h-10 pr-4" icon={faWeightScale} />
-          <h3>Calorie Tracker</h3>
+          <h3 className="hidden sm:block">Calorie Tracker</h3>
         </Link>
         <ul className="flex justify-end space-x-4 text-lg">
           {session && (
