@@ -15,11 +15,11 @@ import { Meal } from "@/types/Meal";
 import { Week } from "@/types/Week";
 import { Grid, Spinner, useToast } from "@chakra-ui/react";
 import { createContext, useEffect, useState } from "react";
-import MealDisplayInfo from "./MealDisplayInfo";
+import MealCard from "./MealCard";
 import MealInputForm from "./MealInputForm";
-import DayDisplayInfo from "./DayDisplayInfo";
+import DayHeader from "./DayHeader";
 
-const DayForm = ({ date }) => {
+const DayPage = ({ date }) => {
   const toast = useToast();
   const { week, setWeek } = useWeek();
   const { user } = useUser();
@@ -100,23 +100,20 @@ const DayForm = ({ date }) => {
   }
 
   return (
-    <div>
-      <DayDisplayInfo day={day} dailyTarget={dailyTarget} />
-      <div className="mx-auto mt-20 items-center flex flex-col text-xl">
+    <div className="w-full">
+      <DayHeader day={day} dailyTarget={dailyTarget} />
+      <div className="mx-auto mt-6 sm:mt-20 items-center flex flex-col text-xl w-full">
         <MealContext.Provider value={{ mealList, setMealList, setSaveReady }}>
-          <Grid templateColumns="repeat(3, 1fr)" gap={4}>
+          <div className="h-full w-full items-center grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 sm:justify-items-center xl:w-3/4">
             {sortMeals(mealList)?.map((meal) => (
-              <MealDisplayInfo
-                key={meal.meal_id}
-                data={{ meal, day, setDay }}
-              />
+              <MealCard key={meal.meal_id} data={{ meal, day, setDay }} />
             ))}
-          </Grid>
+          </div>
           <MealInputForm />
         </MealContext.Provider>
         {saveReady && (
           <button
-            className="fixed bottom-40 right-24 bg-teal-700 hover:bg-teal-600  text-white py-4 p-6 mt-2 rounded"
+            className="fixed bottom-1 left-4 bg-teal-700 hover:bg-teal-600  text-white py-4 p-6 mt-2 rounded lg:bottom-40 lg:left-auto lg:right-24"
             onClick={submitHandler}
           >
             Save
@@ -132,4 +129,4 @@ export const MealContext = createContext<{
   setMealList: any;
   setSaveReady: any;
 }>({ mealList: null, setMealList: null, setSaveReady: null });
-export default DayForm;
+export default DayPage;

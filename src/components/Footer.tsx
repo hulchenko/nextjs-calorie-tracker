@@ -1,7 +1,7 @@
 const Footer = () => {
   const year = new Date().getFullYear();
   return (
-    <p className="absolute bottom-8 w-full text-center">
+    <p className="absolute bottom-6 sm:bottom-8 w-full text-center">
       &copy; {year} by{" "}
       <a
         target="_blank"

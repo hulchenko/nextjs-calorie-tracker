@@ -2,7 +2,7 @@ import { Progress } from "@chakra-ui/react";
 import moment from "moment";
 import { useEffect, useState } from "react";
 
-const DayDisplayInfo = ({ day, dailyTarget }) => {
+const DayHeader = ({ day, dailyTarget }) => {
   const { calories_consumed, date } = day;
 
   const [target, setTarget] = useState(0);
@@ -31,11 +31,11 @@ const DayDisplayInfo = ({ day, dailyTarget }) => {
   }, [day]);
 
   return (
-    <div>
-      <div className="flex flex-col ml-32 mt-14">
-        <p className="text-3xl  font-bold">{displayDate}</p>
-      </div>
-      <div className="mt-20 flex flex-col items-center">
+    <div className="flex flex-col items-center w-full sm:items-start">
+      <p className="text-2xl sm:text-3xl font-bold mt-6 sm:ml-32 sm:mt-14">
+        {displayDate}
+      </p>
+      <div className="mt-6 flex flex-col items-center sm:mt-20 sm:w-full">
         <p className="text-xl font-bold">
           Daily Target{" "}
           <span
@@ -47,7 +47,7 @@ const DayDisplayInfo = ({ day, dailyTarget }) => {
           </span>{" "}
           / <span className="text-teal-600">{dailyTarget}</span>
         </p>
-        <div className="border rounded w-3/6 p-2 mt-4 shadow-md">
+        <div className="border rounded w-96 md:w-3/6 p-2 mt-4 shadow-md">
           <Progress value={target} size="lg" colorScheme="teal" />
         </div>
       </div>
@@ -55,4 +55,4 @@ const DayDisplayInfo = ({ day, dailyTarget }) => {
   );
 };
 
-export default DayDisplayInfo;
+export default DayHeader;

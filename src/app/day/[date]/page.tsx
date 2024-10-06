@@ -1,8 +1,8 @@
-import DayForm from "./DayForm";
+import DayPage from "./DayPage";
 
-const DayPage = async (context) => {
+const Day = async (context) => {
   const date = decodeURIComponent(context.params.date);
-  return <DayForm date={date} />;
+  return <DayPage date={date} />;
 };
 
-export default DayPage;
+export default Day;

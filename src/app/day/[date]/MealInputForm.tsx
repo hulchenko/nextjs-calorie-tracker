@@ -22,7 +22,7 @@ import {
 import { faPlus, faUtensils } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useContext, useEffect, useState } from "react";
-import { MealContext } from "./DayForm";
+import { MealContext } from "./DayPage";
 import React from "react";
 
 const MealInputForm = () => {
@@ -73,12 +73,12 @@ const MealInputForm = () => {
     <>
       {mealList?.length === 0 && (
         <div className="flex flex-col items-center">
-          <h1 className="text-4xl">No meals</h1>
+          <h1 className="text-4xl mt-20 sm:mt-0">No meals</h1>
           <p className="text-base py-4">
             Looks like you haven't added any meals yet.
           </p>
           <button
-            className="bg-teal-700 hover:bg-teal-600  text-white py-4 p-6 mt-2 rounded"
+            className="bg-teal-700 text-white py-4 p-6 mt-2 rounded hover:bg-teal-600"
             onClick={onOpen}
           >
             Add Meal
@@ -88,7 +88,7 @@ const MealInputForm = () => {
       )}
       {mealList?.length > 0 && mealList?.length < 9 && (
         <button
-          className="fixed bottom-40 right-52 bg-teal-700 hover:bg-teal-600 text-white py-4 p-6 mt-2 rounded"
+          className="fixed bottom-1 right-4 bg-teal-700  text-white py-4 p-6 mt-2 rounded lg:bottom-40 lg:right-52 hover:bg-teal-600"
           onClick={onOpen}
         >
           <FontAwesomeIcon icon={faPlus} />

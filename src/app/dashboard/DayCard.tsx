@@ -21,21 +21,18 @@ const DayCard = ({ data }) => {
     <Link href={{ pathname: `/day/${date}` }} className="h-full">
       <Card
         h={window.innerWidth <= 640 ? 16 : 32}
-        className="hover:shadow-teal-700 hover:shadow-md m-2 sm:m-3 w-auto md:w-60 h-96"
+        className="mt-3 mx-4 w-auto h-96 md:w-60 sm:m-3 hover:shadow-teal-700 hover:shadow-md"
         bg={isGoalMet ? "teal.600" : "white"}
       >
         <div className="hidden sm:block">
           <CardBody
-            className="flex items-center self-end sm:text-xl"
+            className="flex items-center self-end text-xl"
             textColor={isGoalMet ? "white" : "gray.500"}
-            p={window.innerWidth <= 640 ? 0 : 5}
-            mr={window.innerWidth <= 640 ? 4 : 0}
-            mt={window.innerWidth <= 640 ? 2 : 0}
           >
             {isToday ? "Today" : ""} {displayDate}
           </CardBody>
           <CardHeader
-            className="flex sm:text-4xl font-bold"
+            className="flex text-4xl font-bold"
             textColor={isGoalMet ? "white" : "teal.600"}
             p={0}
             mb={6}
@@ -45,6 +42,7 @@ const DayCard = ({ data }) => {
           </CardHeader>
         </div>
         <div className="sm:hidden flex justify-between px-8 text-2xl h-full items-center">
+          {/* small screen selector */}
           <p
             className={`${
               isGoalMet ? "text-white" : "text-teal-600"

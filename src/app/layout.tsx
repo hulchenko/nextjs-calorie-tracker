@@ -31,7 +31,7 @@ export default async function RootLayout({
   return (
     <html lang="en" className="h-full box-border">
       <body
-        className={`${roboto.className} min-h-full bg-gray-100 text-gray-600 pb-16`} //4 rem padding for footer
+        className={`${roboto.className} min-h-full bg-gray-100 text-gray-600 pb-16`} // bottom padding for footer or add/save meal buttons in smaller screens
       >
         <SessionProvider initialSession={session}>
           <ActivityListener />

@@ -17,13 +17,13 @@ import {
   useToast,
 } from "@chakra-ui/react";
 import { useContext } from "react";
-import { MealContext } from "./DayForm";
+import { MealContext } from "./DayPage";
 import { Week } from "@/types/Week";
 import React from "react";
 import { useUser } from "@/app/context/UserContext";
 import { Meal } from "@/types/Meal";
 
-const MealDisplayInfo = ({ data }) => {
+const MealCard = ({ data }) => {
   const toast = useToast();
   const { meal, day, setDay } = data;
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -78,17 +78,23 @@ const MealDisplayInfo = ({ data }) => {
       <Card
         key={meal.meal_id}
         variant="elevated"
-        className="cursor-default hover:shadow-teal-700 hover:shadow-md w-80 m-5"
+        className="cursor-default hover:shadow-teal-700 hover:shadow-md w-auto sm:w-96 mx-4 mt-3 sm:m-4"
       >
-        <CardHeader>
-          <Text className="text-teal-600 text-3xl font-bold">
+        <CardHeader py={window.innerWidth <= 640 ? 1 : 4}>
+          <Text className="text-teal-600 text-2xl lg:text-3xl font-bold">
             {meal.meal_type}
           </Text>
         </CardHeader>
-        <CardBody>
-          <Text>Description: {meal.meal_description}</Text>
+        <CardBody
+          py={window.innerWidth <= 640 ? 0 : 4}
+          className="text-gray-600"
+        >
+          <Text className="truncate">
+            <b>Description:</b> {meal.meal_description}
+          </Text>
           <Text>
-            Total Calories: <b className="text-teal-600">{meal.calories}</b>
+            <b>Total Calories:</b>{" "}
+            <b className="text-teal-600">{meal.calories}</b>
           </Text>
         </CardBody>
         <Button onClick={onOpen}>Click for details</Button>
@@ -114,13 +120,13 @@ const MealDisplayInfo = ({ data }) => {
                   </Text>
                 </CardHeader>
                 <CardBody>
-                  <Text>Description: {meal.meal_description}</Text>
-                  <Text>Ingridients List:</Text>
+                  <Text>
+                    <b>Description:</b> {meal.meal_description}
+                  </Text>
+                  <Text className="font-bold">Nutritions:</Text>
                   {meal?.items.map((ing) => (
                     <div className="ml-2 border border-teal-600 rounded p-4 m-2">
-                      <Text>
-                        Ingridient: <b>{ing?.name}</b>
-                      </Text>
+                      <Text>Ingridient: {ing?.name}</Text>
                       <Text>Calories: {ing?.calories}</Text>
                       <Text>Carbohydrates: {ing?.carbohydrates_total_g} g</Text>
                       <Text>Cholesterol: {ing?.cholesterol_mg} mg</Text>
@@ -135,7 +141,7 @@ const MealDisplayInfo = ({ data }) => {
                     </div>
                   ))}
                   <Text>
-                    Total Calories:{" "}
+                    <b>Total Calories:</b>{" "}
                     <b className="text-teal-600">{meal.calories}</b>
                   </Text>
                 </CardBody>
@@ -163,4 +169,4 @@ const MealDisplayInfo = ({ data }) => {
   );
 };
 
-export default MealDisplayInfo;
+export default MealCard;
