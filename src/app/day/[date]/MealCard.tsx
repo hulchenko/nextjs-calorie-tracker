@@ -25,7 +25,7 @@ import { Meal } from "@/types/Meal";
 
 const MealCard = ({ data }) => {
   const toast = useToast();
-  const { meal, day, setDay } = data;
+  const { meal, day, setDay, readOnly } = data;
   const { isOpen, onOpen, onClose } = useDisclosure();
   const { mealList, setMealList } = useContext(MealContext);
 
@@ -162,10 +162,16 @@ const MealCard = ({ data }) => {
                 type="submit"
                 m={3}
                 onClick={onClose}
+                hidden={readOnly}
               >
                 Remove
               </Button>
-              <Button colorScheme="teal" size="md" onClick={onClose}>
+              <Button
+                colorScheme="teal"
+                size="md"
+                onClick={onClose}
+                hidden={readOnly}
+              >
                 Cancel
               </Button>
             </ModalFooter>

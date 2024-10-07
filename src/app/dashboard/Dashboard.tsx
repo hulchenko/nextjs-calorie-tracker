@@ -9,6 +9,7 @@ import {
 import {
   CircularProgress,
   CircularProgressLabel,
+  Divider,
   Spinner,
   Text,
 } from "@chakra-ui/react";
@@ -16,18 +17,18 @@ import { useEffect, useState } from "react";
 import { useUser } from "../context/UserContext";
 import { useWeek } from "../context/WeekContext";
 import DayCard from "./DayCard";
-import { Divider } from "@chakra-ui/react";
 
 const Dashboard = () => {
-  const { week } = useWeek();
+  const { week, prevWeeks } = useWeek();
   const { user } = useUser();
 
   const [weeklyGoal, setWeeklyGoal] = useState(0);
   const [progress, setProgress] = useState(0);
   const [greeting, setGreeting] = useState("");
-  const [loading, setLoading] = useState({ user: true, week: true });
-
-  const generatedWeek = generateWeek();
+  const [loading, setLoading] = useState({
+    user: true,
+    week: true,
+  });
 
   useEffect(() => {
     const name = user?.name;
@@ -87,13 +88,37 @@ const Dashboard = () => {
           Current Week
         </Text>
         <Divider className="hidden lg:block" />
-        <ul className="flex flex-col justify-center flex-wrap sm:py-6 md:flex-row w-full h-full">
-          {generatedWeek.map((day, index) => (
-            <DayCard key={day.date} data={{ day, week, index }} />
+        <DayList curr={week} prev={null} readOnly={false} />
+      </div>
+
+      <div className="w-full flex items-center flex-col rounded border-gray-200 sm:border lg:w-3/4 lg:shadow-md lg:mt-16">
+        <Text className="hidden lg:block text-3xl font-bold py-4">
+          Previous Weeks
+        </Text>
+        <Divider className="hidden lg:block" />
+        {prevWeeks.length > 0 &&
+          prevWeeks.map((prev) => (
+            <>
+              <Divider />
+              <DayList curr={null} prev={prev} readOnly={true} />
+            </>
           ))}
-        </ul>
+        {!prevWeeks.length && (
+          <p className="text-base py-4">Past weeks will be displayed here.</p>
+        )}
       </div>
     </div>
+  );
+};
+
+const DayList = ({ curr, prev, readOnly }) => {
+  const targetWeek = prev ? prev : curr;
+  return (
+    <ul className="flex flex-col justify-center flex-wrap sm:py-6 md:flex-row w-full h-full">
+      {generateWeek(targetWeek).map((day, index) => (
+        <DayCard key={day.date} data={{ day, targetWeek, index, readOnly }} />
+      ))}
+    </ul>
   );
 };
 export default Dashboard;

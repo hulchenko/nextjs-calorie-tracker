@@ -25,7 +25,7 @@ import { useContext, useEffect, useState } from "react";
 import { MealContext } from "./DayPage";
 import React from "react";
 
-const MealInputForm = () => {
+const MealInputForm = ({ readOnly }) => {
   const toast = useToast();
   const { mealList, setMealList, setSaveReady } = useContext(MealContext);
   const defaultMeal = getDefaultMeal();
@@ -75,11 +75,12 @@ const MealInputForm = () => {
         <div className="flex flex-col items-center">
           <h1 className="text-4xl mt-20 sm:mt-0">No meals</h1>
           <p className="text-base py-4">
-            {"Looks like you haven't added any meals yet."}
+            {"Looks like you haven't added any meals."}
           </p>
           <button
             className="bg-teal-700 text-white py-4 p-6 mt-2 rounded hover:bg-teal-600"
             onClick={onOpen}
+            hidden={readOnly}
           >
             Add Meal
             <FontAwesomeIcon className="ml-2" icon={faUtensils} />
@@ -90,6 +91,7 @@ const MealInputForm = () => {
         <button
           className="fixed bottom-1 right-4 bg-teal-700  text-white py-4 p-6 mt-2 rounded lg:bottom-40 lg:right-52 hover:bg-teal-600"
           onClick={onOpen}
+          hidden={readOnly}
         >
           <FontAwesomeIcon icon={faPlus} />
         </button>

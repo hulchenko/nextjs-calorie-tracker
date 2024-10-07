@@ -4,7 +4,7 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 
 const DayCard = ({ data }) => {
-  const { week, index } = data;
+  const { targetWeek, index, readOnly } = data;
   const { date, weekDay } = data.day;
 
   const [isGoalMet, setIsGoalMet] = useState(false);
@@ -13,12 +13,15 @@ const DayCard = ({ data }) => {
   const isToday = moment(date).format("L") === moment(Date.now()).format("L");
 
   useEffect(() => {
-    const goal = week?.daily_goals_met[index] || false;
+    const goal = targetWeek?.daily_goals_met[index] || false;
     setIsGoalMet(goal);
-  }, [week]);
+  }, [targetWeek]);
 
   return (
-    <Link href={{ pathname: `/day/${date}` }} className="h-full">
+    <Link
+      href={{ pathname: `/day/${date}`, query: { readOnly } }}
+      className="h-full"
+    >
       <Card
         h={window.innerWidth <= 640 ? 16 : 32}
         className="mt-3 mx-4 w-auto h-96 md:w-60 sm:m-3 hover:shadow-teal-700 hover:shadow-md"
