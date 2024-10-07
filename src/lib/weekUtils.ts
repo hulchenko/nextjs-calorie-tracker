@@ -32,10 +32,14 @@ export const defaultWeek = (userId: string): Week => {
   };
 };
 
-export const generateWeek = () => {
+export const generateWeek = (week: Week | null = null) => {
   const generatedWeek: Array<any> = [];
-  let dayOfWeek = weekStart.clone(); // initialize first week day from the given week
-  while (dayOfWeek.isSameOrBefore(weekEnd)) {
+  const start = week ? moment(week.start_date).startOf("isoWeek") : weekStart;
+  const end = week ? moment(week.start_date).endOf("isoWeek") : weekEnd;
+
+  let dayOfWeek = start.clone(); // initialize first week day from the given week
+
+  while (dayOfWeek.isSameOrBefore(end)) {
     const date = dayOfWeek.seconds(0).milliseconds(0).toISOString();
     const weekDay = dayOfWeek.format("dddd");
     generatedWeek.push({ weekDay, date });
