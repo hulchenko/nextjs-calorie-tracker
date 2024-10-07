@@ -11,7 +11,17 @@ export const getWeek = async (
     return response[0] as Week;
   } catch (error) {
     console.error(error);
-    throw Error("Error getting week");
+    throw Error("Error getting current week");
+  }
+};
+
+export const getWeeks = async (userId: string): Promise<Week[]> => {
+  try {
+    const response = await sql`SELECT * FROM weeks WHERE user_id = ${userId}`;
+    return response as Week[];
+  } catch (error) {
+    console.error(error);
+    throw Error("Error getting weeks");
   }
 };
 
