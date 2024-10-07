@@ -124,20 +124,27 @@ const MealCard = ({ data }) => {
                     <b>Description:</b> {meal.meal_description}
                   </Text>
                   <Text className="font-bold">Nutritions:</Text>
-                  {meal?.items.map((ing) => (
-                    <div className="ml-2 border border-teal-600 rounded p-4 m-2">
-                      <Text>Ingridient: {ing?.name}</Text>
-                      <Text>Calories: {ing?.calories}</Text>
-                      <Text>Carbohydrates: {ing?.carbohydrates_total_g} g</Text>
-                      <Text>Cholesterol: {ing?.cholesterol_mg} mg</Text>
-                      <Text>Saturated Fat: {ing?.fat_saturated_g} g</Text>
-                      <Text>Total Fat: {ing?.fat_total_g} g</Text>
-                      <Text>Fiber: {ing?.fiber_g} g</Text>
-                      <Text>Potassium: {ing?.potassium_mg} mg</Text>
-                      <Text>Protein: {ing?.protein_g} g</Text>
-                      <Text>Serving Size: {ing?.serving_size_g} g</Text>
-                      <Text>Sodium: {ing?.sodium_mg} mg</Text>
-                      <Text>Sugar: {ing?.sugar_g} g</Text>
+                  {meal?.items.map((ingredient, index) => (
+                    <div
+                      className="ml-2 border border-teal-600 rounded p-4 m-2"
+                      key={index}
+                    >
+                      <Text>Ingridient: {ingredient?.name}</Text>
+                      <Text>Calories: {ingredient?.calories}</Text>
+                      <Text>
+                        Carbohydrates: {ingredient?.carbohydrates_total_g} g
+                      </Text>
+                      <Text>Cholesterol: {ingredient?.cholesterol_mg} mg</Text>
+                      <Text>
+                        Saturated Fat: {ingredient?.fat_saturated_g} g
+                      </Text>
+                      <Text>Total Fat: {ingredient?.fat_total_g} g</Text>
+                      <Text>Fiber: {ingredient?.fiber_g} g</Text>
+                      <Text>Potassium: {ingredient?.potassium_mg} mg</Text>
+                      <Text>Protein: {ingredient?.protein_g} g</Text>
+                      <Text>Serving Size: {ingredient?.serving_size_g} g</Text>
+                      <Text>Sodium: {ingredient?.sodium_mg} mg</Text>
+                      <Text>Sugar: {ingredient?.sugar_g} g</Text>
                     </div>
                   ))}
                   <Text>

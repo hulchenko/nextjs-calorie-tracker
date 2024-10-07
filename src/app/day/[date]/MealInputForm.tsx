@@ -75,7 +75,7 @@ const MealInputForm = () => {
         <div className="flex flex-col items-center">
           <h1 className="text-4xl mt-20 sm:mt-0">No meals</h1>
           <p className="text-base py-4">
-            Looks like you haven't added any meals yet.
+            {"Looks like you haven't added any meals yet."}
           </p>
           <button
             className="bg-teal-700 text-white py-4 p-6 mt-2 rounded hover:bg-teal-600"
@@ -158,8 +158,8 @@ const MealInputForm = () => {
                     </span>
                   )}
                   {meal.items.length &&
-                    meal.items.map((i) => (
-                      <>
+                    meal.items.map((i, index) => (
+                      <div key={index}>
                         <Text>
                           Ingridient(s): <b>{i?.name}</b>
                         </Text>
@@ -174,7 +174,7 @@ const MealInputForm = () => {
                         <Text>Serving Size: {i?.serving_size_g} g</Text>
                         <Text>Sodium: {i?.sodium_mg} mg</Text>
                         <Text>Sugar: {i?.sugar_g} g</Text>
-                      </>
+                      </div>
                     ))}
                   {!meal.items.length && searched && (
                     <Text className="text-orange-500">

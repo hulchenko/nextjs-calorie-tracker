@@ -88,7 +88,7 @@ const SignUpForm = () => {
   return (
     <>
       <div className="flex items-center">
-        <p className="mr-1 py-4">Don't have an account?</p>
+        <p className="mr-1 py-4">{"Don't have an account?"}</p>
         <button
           className="bg-white border outline-teal-700 hover:bg-teal-600 hover:text-white py-2 px-2 rounded size-fit"
           onClick={onOpen}
