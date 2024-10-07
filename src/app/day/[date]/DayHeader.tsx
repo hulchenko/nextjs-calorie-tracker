@@ -32,7 +32,7 @@ const DayHeader = ({ day, dailyTarget }) => {
 
   return (
     <div className="flex flex-col items-center w-full sm:items-start">
-      <p className="text-2xl sm:text-3xl font-bold mt-6 sm:ml-32 sm:mt-14">
+      <p className="text-2xl sm:text-4xl font-bold mt-6 sm:pl-24 sm:mt-14">
         {displayDate}
       </p>
       <div className="mt-6 flex flex-col items-center sm:mt-20 sm:w-full">

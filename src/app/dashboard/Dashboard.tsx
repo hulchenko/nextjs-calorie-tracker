@@ -17,6 +17,7 @@ import { useEffect, useState } from "react";
 import { useUser } from "../context/UserContext";
 import { useWeek } from "../context/WeekContext";
 import DayCard from "./DayCard";
+import moment from "moment";
 
 const Dashboard = () => {
   const { week, prevWeeks } = useWeek();
@@ -65,46 +66,46 @@ const Dashboard = () => {
   }
 
   return (
-    <div className="w-full flex items-center justify-center flex-col h-full">
-      <div className="w-full lg:w-1/2 2xl:w-1/4">
-        <div className="flex justify-center text-2xl font-bold sm:text-4xl py-6 lg:mt-20">
-          {greeting}
-        </div>
-        <div className="flex flex-row border rounded border-gray-200 justify-evenly items-center sm:p-2">
-          <Text className="text-xl font-bold lg:text-3xl">Weekly Goals</Text>
-          <CircularProgress
-            value={progress}
-            color="teal.600"
-            size={window.innerWidth <= 1024 ? 100 : 150}
-            thickness="16px"
-            className="ml-10 sm:ml-0"
-          >
-            <CircularProgressLabel>{weeklyGoal}/7 </CircularProgressLabel>
-          </CircularProgress>
-        </div>
+    <div className="w-full flex items-center flex-col h-full">
+      <div className="w-full flex text-2xl font-bold my-6 sm:pl-24 sm:text-4xl sm:mt-14 justify-center sm:justify-start">
+        {greeting}
       </div>
-      <div className="w-full flex items-center flex-col rounded border-gray-200 sm:border lg:w-3/4 lg:shadow-md lg:mt-16">
-        <Text className="hidden lg:block text-3xl font-bold py-4">
-          Current Week
-        </Text>
-        <Divider className="hidden lg:block" />
+      <div className="flex flex-row w-full border rounded justify-evenly items-center sm:p-2 lg:w-1/2 2xl:w-1/4">
+        <Text className="text-xl font-bold lg:text-3xl">Weekly Goals</Text>
+        <CircularProgress
+          value={progress}
+          color="teal.600"
+          size={window.innerWidth <= 1024 ? 100 : 150}
+          thickness="16px"
+          className="ml-10 sm:ml-0"
+        >
+          <CircularProgressLabel>{weeklyGoal}/7 </CircularProgressLabel>
+        </CircularProgress>
+      </div>
+      <div className="w-full flex items-start sm:items-center flex-col rounded sm:border lg:w-3/4 lg:shadow-md lg:mt-16">
+        <Text className="text-xl font-bold p-4 lg:text-3xl">Current Week</Text>
+        <Divider />
         <DayList curr={week} prev={null} readOnly={false} />
       </div>
 
-      <div className="w-full flex items-center flex-col rounded border-gray-200 sm:border lg:w-3/4 lg:shadow-md lg:mt-16">
-        <Text className="hidden lg:block text-3xl font-bold py-4">
+      <div className="w-full flex items-start sm:items-center flex-col rounded mt-4 sm:border lg:w-3/4 lg:shadow-md lg:mt-16">
+        <Text className="text-xl font-bold p-4 lg:text-3xl">
           Previous Weeks
         </Text>
-        <Divider className="hidden lg:block" />
         {prevWeeks.length > 0 &&
           prevWeeks.map((prev) => (
             <>
               <Divider />
+              <p className="flex items-start justify-start w-full pl-4 pt-4 text-gray-400">
+                Week of {moment(prev.start_date).format("ll")}
+              </p>
               <DayList curr={null} prev={prev} readOnly={true} />
             </>
           ))}
         {!prevWeeks.length && (
-          <p className="text-base py-4">Past weeks will be displayed here.</p>
+          <p className="text-base py-4 flex justify-center w-full">
+            Past weeks will be displayed here.
+          </p>
         )}
       </div>
     </div>
