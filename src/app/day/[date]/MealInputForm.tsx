@@ -1,4 +1,6 @@
-import { getFoodData, getDefaultMeal } from "@/lib/mealUtils";
+import { useMeal } from "@/app/context/MealContext";
+import { getDefaultMeal, getFoodData } from "@/lib/mealUtils";
+import { Meal } from "@/types/Meal";
 import {
   Button,
   FormControl,
@@ -21,22 +23,20 @@ import {
 } from "@chakra-ui/react";
 import { faPlus, faUtensils } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { useContext, useEffect, useState } from "react";
-import { MealContext } from "./DayPage";
-import React from "react";
+import { useEffect, useState } from "react";
 
-const MealInputForm = ({ readOnly }) => {
+const MealInputForm = ({ readOnly, setSaveReady }) => {
   const toast = useToast();
-  const { mealList, setMealList, setSaveReady } = useContext(MealContext);
+  const { isOpen, onOpen, onClose } = useDisclosure(); // modal props
+  const { mealList, setMealList } = useMeal();
+
   const defaultMeal = getDefaultMeal();
 
   const [query, setQuery] = useState("");
   const [searched, setSearched] = useState(false);
   const [delayedFetch, setDelayedFetch] = useState(query);
-  const [meal, setMeal] = useState(defaultMeal);
+  const [meal, setMeal] = useState<Meal>(defaultMeal);
   const [loading, setLoading] = useState(false);
-
-  const { isOpen, onOpen, onClose } = useDisclosure(); // modal props
 
   useEffect(() => {
     // search and get nutritions
@@ -64,7 +64,7 @@ const MealInputForm = ({ readOnly }) => {
   const mealAddHandler = (event) => {
     event?.preventDefault();
 
-    setMealList((prev) => [...prev, meal]);
+    setMealList([...mealList, meal]);
     setSaveReady(true);
     setSearched(false);
   };

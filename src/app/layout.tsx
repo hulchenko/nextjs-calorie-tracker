@@ -9,6 +9,7 @@ import { SessionProvider } from "./context/SessionProvider";
 import { WeekProvider } from "./context/WeekContext";
 import "./globals.css";
 import { UserProvider } from "./context/UserContext";
+import { MealProvider } from "./context/MealContext";
 
 export const metadata: Metadata = {
   title: "Calorie Tracker App",
@@ -38,7 +39,9 @@ export default async function RootLayout({
           <Navigation />
           <UserProvider>
             <WeekProvider>
-              <ChakraProvider>{children}</ChakraProvider>
+              <MealProvider>
+                <ChakraProvider>{children}</ChakraProvider>
+              </MealProvider>
             </WeekProvider>
           </UserProvider>
           <Footer />

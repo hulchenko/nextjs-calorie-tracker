@@ -1,6 +1,10 @@
+import { useMeal } from "@/app/context/MealContext";
+import { useUser } from "@/app/context/UserContext";
 import { useWeek } from "@/app/context/WeekContext";
 import { getDayIdx } from "@/lib/dayUtils";
 import { removeMeal } from "@/lib/mealUtils";
+import { Meal } from "@/types/Meal";
+import { Week } from "@/types/Week";
 import {
   Button,
   Card,
@@ -16,19 +20,13 @@ import {
   useDisclosure,
   useToast,
 } from "@chakra-ui/react";
-import { useContext } from "react";
-import { MealContext } from "./DayPage";
-import { Week } from "@/types/Week";
-import React from "react";
-import { useUser } from "@/app/context/UserContext";
-import { Meal } from "@/types/Meal";
 
 const MealCard = ({ data }) => {
-  const toast = useToast();
   const { meal, day, setDay, readOnly } = data;
-  const { isOpen, onOpen, onClose } = useDisclosure();
-  const { mealList, setMealList } = useContext(MealContext);
 
+  const toast = useToast();
+  const { isOpen, onOpen, onClose } = useDisclosure();
+  const { mealList, setMealList } = useMeal();
   const { week, setWeek } = useWeek();
   const { user } = useUser();
 
