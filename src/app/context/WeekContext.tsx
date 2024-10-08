@@ -19,9 +19,19 @@ export const WeekProvider = ({ children }) => {
       console.log(`WEEKS DB: `, weeksDB);
       if (weeksDB.length > 0) {
         const curr =
-          weeksDB.find(
-            (week) => new Date(week.start_date).toISOString() === firstWeekDay
-          ) || null;
+          weeksDB.find((week) => {
+            console.log(`FIND WEEK: `, week);
+            console.log(`FIRST WEEK DAY: `, firstWeekDay);
+            console.log(
+              `VS START DATE: `,
+              new Date(week.start_date).toISOString()
+            );
+            console.log(
+              `CONDITION TRUE? `,
+              new Date(week.start_date).toISOString() === firstWeekDay
+            );
+            return new Date(week.start_date).toISOString() === firstWeekDay;
+          }) || null;
         const prev = weeksDB.filter(
           (week) => new Date(week.start_date).toISOString() !== firstWeekDay
         );
