@@ -116,3 +116,8 @@ export const generateGreeting = (name = "User") => {
   }
   return "Hello";
 };
+
+export const isCurrentWeek = (date: string) => {
+  const targetDate = moment(date);
+  return targetDate >= weekStart && targetDate <= weekEnd;
+};

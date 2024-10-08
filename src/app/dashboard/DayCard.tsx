@@ -18,10 +18,7 @@ const DayCard = ({ data }) => {
   }, [targetWeek]);
 
   return (
-    <Link
-      href={{ pathname: `/day/${date}`, query: { readOnly } }}
-      className="h-full"
-    >
+    <Link href={{ pathname: `/day/${date}` }} className="h-full">
       <Card
         h={window.innerWidth <= 640 ? 16 : 32}
         className="mt-3 mx-4 w-auto h-96 md:w-60 sm:m-3 hover:shadow-teal-700 hover:shadow-md"
