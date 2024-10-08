@@ -87,7 +87,7 @@ const MealCard = ({ data }) => {
           py={window.innerWidth <= 640 ? 0 : 4}
           className="text-gray-600"
         >
-          <Text className="truncate">
+          <Text className="truncate lg:text-balance">
             <b>Description:</b> {meal.meal_description}
           </Text>
           <Text>
