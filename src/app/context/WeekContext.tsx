@@ -17,18 +17,29 @@ export const WeekProvider = ({ children }) => {
     const userId = session?.user?.user_id as string;
     const fetchWeek = async () => {
       const weeksDB = await getWeeks(userId);
+      console.log(`WEEKS DB: `, weeksDB);
       if (weeksDB.length > 0) {
         const curr =
           weeksDB.find((week) => {
             const incWeekStart = moment(week.start_date).format("L");
             const currWeekStart = moment(firstWeekDay).format("L");
+            console.log(`incWeekStart`, incWeekStart);
+            console.log(`currWeekStart`, currWeekStart);
+            console.log(`COMPARISON: `, incWeekStart === currWeekStart);
             return incWeekStart === currWeekStart;
           }) || null;
+        console.log(`CURRENT: `, curr);
+
+        console.log(`--------------------------------`);
         const prev = weeksDB.filter((week) => {
           const incWeekStart = moment(week.start_date).format("L");
           const currWeekStart = moment(firstWeekDay).format("L");
+          console.log(`incWeekStart`, incWeekStart);
+          console.log(`currWeekStart`, currWeekStart);
+          console.log(`COMPARISON: `, incWeekStart !== currWeekStart);
           return incWeekStart !== currWeekStart;
         });
+        console.log(`PREV: `, prev);
 
         setWeek(curr);
         setPrevWeeks(prev);

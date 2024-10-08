@@ -53,6 +53,7 @@ export const updateWeekTargets = async (user: User, week: Week) => {
   try {
     const { user_id = "", target = 0 } = user; // set default values if undefined
     const weekDays = await getWeekDays(user_id, firstWeekDay, lastWeekDay);
+    console.log(`WEEK DAYS: `, weekDays);
 
     const targetMap = generateWeeklyTargets();
     for (const day of weekDays) {
