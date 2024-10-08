@@ -97,7 +97,7 @@ const Dashboard = () => {
             <>
               <Divider />
               <p className="flex items-start justify-start w-full pl-4 pt-4 text-gray-400">
-                Week of {moment(prev.start_date).format("ll")}
+                Week of {moment.utc(prev.start_date).format("ll")}
               </p>
               <DayList curr={null} prev={prev} readOnly={true} />
             </>

@@ -9,8 +9,9 @@ const DayCard = ({ data }) => {
 
   const [isGoalMet, setIsGoalMet] = useState(false);
 
-  const displayDate = moment(date).format("MMM Do");
-  const isToday = moment(date).format("L") === moment(Date.now()).format("L");
+  const displayDate = moment.utc(date).format("MMM Do");
+  const isToday =
+    moment.utc(date).format("L") === moment.utc(Date.now()).format("L");
 
   useEffect(() => {
     const goal = targetWeek?.daily_goals_met[index] || false;

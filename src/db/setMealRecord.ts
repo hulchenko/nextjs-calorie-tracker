@@ -1,19 +1,14 @@
 import { createDay, getDay, updateDay } from "@/db/dayActions";
 import { createMeal, getMeal } from "@/db/mealActions";
 import { createWeek, getWeek, updateWeek } from "@/db/weekActions";
+import { firstWeekDay } from "@/lib/weekUtils";
 import { Day } from "@/types/Day";
 import { Meal } from "@/types/Meal";
 import { Week } from "@/types/Week";
-import moment from "moment";
 
 export const setMealRecord = async (meal: Meal, day: Day, week: Week) => {
   const { user_id, day_id, date } = day;
   const { meal_id } = meal;
-  const firstWeekDay = moment()
-    .startOf("isoWeek")
-    .seconds(0)
-    .milliseconds(0)
-    .toISOString();
   try {
     // ensures the record is not found before creating one
     const mealExists = await getMeal(day_id, user_id, meal_id);

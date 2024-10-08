@@ -9,7 +9,7 @@ const DayHeader = ({ day, dailyTarget }) => {
   const [warning, setWarning] = useState(false);
   const [danger, setDanger] = useState(false);
 
-  const displayDate = moment(date).format("LL");
+  const displayDate = moment.utc(date).format("LL");
 
   useEffect(() => {
     const getTarget = () => {

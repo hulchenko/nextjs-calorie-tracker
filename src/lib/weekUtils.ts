@@ -6,8 +6,8 @@ import { getWeekDays } from "@/db/dayActions";
 import { getDayIdx } from "./dayUtils";
 import { updateWeek } from "@/db/weekActions";
 
-const weekStart = moment().startOf("isoWeek"); // '2024-09-09'
-const weekEnd = moment().endOf("isoWeek"); // '2024-09-15'
+const weekStart = moment.utc().startOf("isoWeek"); // '2024-09-09'
+const weekEnd = moment.utc().endOf("isoWeek"); // '2024-09-15'
 
 export const firstWeekDay = weekStart
   .clone()
@@ -34,8 +34,10 @@ export const defaultWeek = (userId: string): Week => {
 
 export const generateWeek = (week: Week | null = null) => {
   const generatedWeek: Array<any> = [];
-  const start = week ? moment(week.start_date).startOf("isoWeek") : weekStart;
-  const end = week ? moment(week.start_date).endOf("isoWeek") : weekEnd;
+  const start = week
+    ? moment.utc(week.start_date).startOf("isoWeek")
+    : weekStart;
+  const end = week ? moment.utc(week.start_date).endOf("isoWeek") : weekEnd;
 
   let dayOfWeek = start.clone(); // initialize first week day from the given week
 
@@ -53,7 +55,6 @@ export const updateWeekTargets = async (user: User, week: Week) => {
   try {
     const { user_id = "", target = 0 } = user; // set default values if undefined
     const weekDays = await getWeekDays(user_id, firstWeekDay, lastWeekDay);
-    console.log(`WEEK DAYS: `, weekDays);
 
     const targetMap = generateWeeklyTargets();
     for (const day of weekDays) {
@@ -119,6 +120,6 @@ export const generateGreeting = (name = "User") => {
 };
 
 export const isCurrentWeek = (date: string) => {
-  const targetDate = moment(date);
+  const targetDate = moment.utc(date);
   return targetDate >= weekStart && targetDate <= weekEnd;
 };

@@ -14,7 +14,7 @@ export const getDefaultDay = (userId: string, date: string): Day => {
 };
 
 export const getDayIdx = (date: string): number => {
-  const index = moment(date).isoWeekday() - 1; // by default isoWeekday() returns 1 - 7
+  const index = moment.utc(date).isoWeekday() - 1; // by default isoWeekday() returns 1 - 7
   return index;
 };
 
