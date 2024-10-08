@@ -50,8 +50,6 @@ export const generateWeek = (week: Week | null = null) => {
 };
 
 export const updateWeekTargets = async (user: User, week: Week) => {
-  console.log(`USER: `, user);
-  console.log(`WEEK: `, week);
   try {
     const { user_id = "", target = 0 } = user; // set default values if undefined
     const weekDays = await getWeekDays(user_id, firstWeekDay, lastWeekDay);

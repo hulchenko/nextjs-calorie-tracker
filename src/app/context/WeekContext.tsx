@@ -5,6 +5,7 @@ import { defaultWeek, firstWeekDay } from "@/lib/weekUtils";
 import { Week } from "@/types/Week";
 import { createContext, useContext, useEffect, useState } from "react";
 import { useSession } from "./SessionProvider";
+import moment from "moment";
 
 export const WeekProvider = ({ children }) => {
   const { session } = useSession();
@@ -16,28 +17,20 @@ export const WeekProvider = ({ children }) => {
     const userId = session?.user?.user_id as string;
     const fetchWeek = async () => {
       const weeksDB = await getWeeks(userId);
-      console.log(`WEEKS DB: `, weeksDB);
       if (weeksDB.length > 0) {
         const curr =
           weeksDB.find((week) => {
-            console.log(`FIND WEEK: `, week);
-            console.log(`FIRST WEEK DAY: `, firstWeekDay);
-            console.log(
-              `VS START DATE: `,
-              new Date(week.start_date).toISOString()
-            );
-            console.log(
-              `CONDITION TRUE? `,
-              new Date(week.start_date).toISOString() === firstWeekDay
-            );
-            return new Date(week.start_date).toISOString() === firstWeekDay;
+            const incWeekStart = moment(week.start_date).format("L");
+            const currWeekStart = moment(firstWeekDay).format("L");
+            return incWeekStart === currWeekStart;
           }) || null;
-        const prev = weeksDB.filter(
-          (week) => new Date(week.start_date).toISOString() !== firstWeekDay
-        );
+        const prev = weeksDB.filter((week) => {
+          const incWeekStart = moment(week.start_date).format("L");
+          const currWeekStart = moment(firstWeekDay).format("L");
+          return incWeekStart !== currWeekStart;
+        });
 
         setWeek(curr);
-        console.log(`CURRENT WEEK: `, curr);
         setPrevWeeks(prev);
       } else {
         const initWeek = defaultWeek(userId);

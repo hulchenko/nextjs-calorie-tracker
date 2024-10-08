@@ -13,10 +13,7 @@ const DayCard = ({ data }) => {
   const isToday = moment(date).format("L") === moment(Date.now()).format("L");
 
   useEffect(() => {
-    console.log(`TARGET WEEK: `, targetWeek);
-    console.log(`INDEX: `, index);
     const goal = targetWeek?.daily_goals_met[index] || false;
-    console.log(`DAY CARD GOAL: `, goal);
     setIsGoalMet(goal);
   }, [targetWeek]);
 
