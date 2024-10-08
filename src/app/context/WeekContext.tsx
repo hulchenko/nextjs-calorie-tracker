@@ -16,6 +16,7 @@ export const WeekProvider = ({ children }) => {
     const userId = session?.user?.user_id as string;
     const fetchWeek = async () => {
       const weeksDB = await getWeeks(userId);
+      console.log(`WEEKS DB: `, weeksDB);
       if (weeksDB.length > 0) {
         const curr =
           weeksDB.find(
@@ -26,6 +27,7 @@ export const WeekProvider = ({ children }) => {
         );
 
         setWeek(curr);
+        console.log(`CURRENT WEEK: `, curr);
         setPrevWeeks(prev);
       } else {
         const initWeek = defaultWeek(userId);
