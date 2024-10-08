@@ -30,6 +30,7 @@ export const WeekProvider = ({ children }) => {
       } else {
         const initWeek = defaultWeek(userId);
         setWeek(initWeek);
+        setPrevWeeks([]);
       }
     };
     if (userId) {
@@ -38,7 +39,7 @@ export const WeekProvider = ({ children }) => {
   }, [session]);
 
   return (
-    <WeekContext.Provider value={{ week, prevWeeks, setWeek }}>
+    <WeekContext.Provider value={{ week, prevWeeks, setWeek, setPrevWeeks }}>
       {children}
     </WeekContext.Provider>
   );
@@ -48,10 +49,12 @@ const WeekContext = createContext<{
   week: Week | null;
   prevWeeks: Week[];
   setWeek: (week: Week | null) => void;
+  setPrevWeeks: (prevWeek: Week[]) => void;
 }>({
   week: null,
   prevWeeks: [],
   setWeek: () => {},
+  setPrevWeeks: () => {},
 }); // define passing value
 
 export const useWeek = () => useContext(WeekContext);

@@ -102,7 +102,7 @@ const Dashboard = () => {
               <DayList curr={null} prev={prev} readOnly={true} />
             </>
           ))}
-        {!prevWeeks.length && (
+        {prevWeeks.length === 0 && (
           <p className="text-base py-4 flex justify-center w-full">
             Past weeks will be displayed here.
           </p>
