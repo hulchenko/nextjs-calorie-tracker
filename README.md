@@ -2,8 +2,7 @@
 
 This application allows you to track your daily calorie intake and manage your health goals. It provides a user-friendly interface for logging meals, monitoring progress, and maintaining a healthy lifestyle.
 
-<img src="public/images/screen-desktop.png" />
-<img src="public/images/screen-mobile.png" />
+<img src="https://raw.githubusercontent.com/hulchenko/nextjs-calorie-tracker/refs/heads/main/src/public/images/screen-desktop.png" alt="App Screenshot Desktop" width="500" height="500"/> <img src="https://raw.githubusercontent.com/hulchenko/nextjs-calorie-tracker/refs/heads/main/src/public/images/screen-mobile.png" alt="App Screenshot Mobile" width="500" height="500"/>
 
 ### Features:
 
