@@ -1,4 +1,4 @@
-import "server-only"; // prevents functions to be used in client
+"use server"; // prevents functions to be used in client
 import { SessionUser } from "@/types/Session";
 import { JWTPayload, SignJWT, jwtVerify } from "jose";
 import { cookies } from "next/headers";

@@ -20,9 +20,9 @@ This application allows you to track your daily calorie intake and manage your h
 
 - TypeScript
 - Next.js
-- Neon Database (PostgreSQL)
-- Tailwind CSS (styling)
-- Chakra UI (UI components)
+- Neon PostgreSQL
+- Tailwind CSS
+- Chakra UI
 
 ### Live Demo:
 
