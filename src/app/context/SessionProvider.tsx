@@ -9,7 +9,7 @@ import { createContext, useContext, useEffect, useRef, useState } from "react";
 export const SessionProvider = ({ children, initialSession }) => {
   const [session, setSession] = useState<Session | null>(initialSession);
 
-  const authenticated = useRef(false); // keep track of the user's authenticated state. Its value persists between renders, unlike useState()
+  const authenticated = useRef<boolean>(false); // keep track of the user's authenticated state. Its value persists between renders, unlike useState()
   const router = useRouter();
 
   const handleAuthenticated = () => {
@@ -25,9 +25,9 @@ export const SessionProvider = ({ children, initialSession }) => {
     const getSession = async () => {
       try {
         const response = await fetch("/api/auth/session");
-        const session = await response.json();
+        const curr = await response.json();
         if (response.ok) {
-          setSession(session);
+          setSession(curr);
           authenticated.current = true;
         } else {
           setSession(null);
@@ -51,7 +51,7 @@ export const SessionProvider = ({ children, initialSession }) => {
   }, []);
 
   return (
-    <SessionContext.Provider value={{ session, setSession }}>
+    <SessionContext.Provider value={{ session, authenticated }}>
       {children}
     </SessionContext.Provider>
   );
@@ -59,10 +59,10 @@ export const SessionProvider = ({ children, initialSession }) => {
 
 const SessionContext = createContext<{
   session: Session | null;
-  setSession: (session: Session | null) => void;
+  authenticated: React.MutableRefObject<boolean>;
 }>({
   session: null,
-  setSession: () => {},
+  authenticated: { current: false },
 }); // define passing value
 
 export const useSession = () => useContext(SessionContext); // expose passing value

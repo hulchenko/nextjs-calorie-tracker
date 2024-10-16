@@ -11,7 +11,7 @@ const Navigation = () => {
   const toast = useToast();
   const router = useRouter();
   const currentPath = usePathname();
-  const { session, setSession } = useSession();
+  const { session, authenticated } = useSession();
 
   const authStateHandler = async () => {
     if (session) {
@@ -23,7 +23,7 @@ const Navigation = () => {
           const { error } = await response.json();
           throw error;
         }
-        setSession(null);
+        authenticated.current = false;
         router.push("/login");
         toast({ title: "Signed out", status: "info" });
       } catch (error) {

@@ -10,7 +10,7 @@ const SignInForm = () => {
   const toast = useToast();
   const router = useRouter();
 
-  const { setSession } = useSession();
+  const { authenticated } = useSession();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [isFormValid, setIsFormValid] = useState({
@@ -42,8 +42,7 @@ const SignInForm = () => {
           const { error } = await response.json();
           throw error;
         }
-        const sessionData = await response.json();
-        setSession(sessionData);
+        authenticated.current = true;
         router.push("/dashboard");
         toast({ title: "Signed in", status: "info" });
       } catch (error) {
