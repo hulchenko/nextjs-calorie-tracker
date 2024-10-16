@@ -50,11 +50,11 @@ const Dashboard = () => {
       const percent = getProgressPercent(goals);
       setWeeklyGoal(goals);
       setProgress(percent);
+      setLoading((prev) => ({
+        ...prev,
+        week: false,
+      }));
     }
-    setLoading((prev) => ({
-      ...prev,
-      week: false,
-    }));
   }, [week]);
 
   if (loading.user || loading.week) {
@@ -94,13 +94,13 @@ const Dashboard = () => {
         </Text>
         {prevWeeks.length > 0 &&
           prevWeeks.map((prev) => (
-            <>
+            <div key={prev.week_id}>
               <Divider />
               <p className="flex items-start justify-start w-full pl-4 pt-4 text-gray-400">
                 Week of {moment.utc(prev.start_date).format("ll")}
               </p>
               <DayList curr={null} prev={prev} readOnly={true} />
-            </>
+            </div>
           ))}
         {prevWeeks.length === 0 && (
           <p className="text-base py-4 flex justify-center w-full">

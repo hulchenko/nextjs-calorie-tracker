@@ -23,7 +23,7 @@ export const WeekProvider = ({ children }) => {
             const incWeekStart = moment.utc(week.start_date).format("L");
             const currWeekStart = moment.utc(firstWeekDay).format("L");
             return incWeekStart === currWeekStart;
-          }) || null;
+          }) || defaultWeek(userId);
 
         const prev = weeksDB.filter((week) => {
           const incWeekStart = moment.utc(week.start_date).format("L");
