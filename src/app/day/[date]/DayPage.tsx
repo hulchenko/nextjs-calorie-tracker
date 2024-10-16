@@ -120,7 +120,7 @@ const DayPage = ({ date }) => {
         <MealInputForm readOnly={readOnly} setSaveReady={setSaveReady} />
         {saveReady && (
           <button
-            className="fixed bottom-1 left-4 bg-teal-700 hover:bg-teal-600  text-white py-4 p-6 mt-2 rounded lg:bottom-40 lg:left-auto lg:right-24"
+            className="fixed bottom-1 left-4 bg-teal-700 hover:bg-teal-600  text-white py-4 p-6 mt-2 rounded lg:bottom-40 lg:left-auto lg:right-24 z-10"
             onClick={submitHandler}
             hidden={readOnly}
           >

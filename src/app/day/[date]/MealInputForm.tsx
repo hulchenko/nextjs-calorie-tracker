@@ -78,7 +78,7 @@ const MealInputForm = ({ readOnly, setSaveReady }) => {
             {"Looks like you haven't added any meals."}
           </p>
           <button
-            className="bg-teal-700 text-white py-4 p-6 mt-2 rounded hover:bg-teal-600"
+            className="bg-teal-700 text-white py-4 p-6 mt-2 rounded hover:bg-teal-600 z-10"
             onClick={onOpen}
             hidden={readOnly}
           >
@@ -89,7 +89,7 @@ const MealInputForm = ({ readOnly, setSaveReady }) => {
       )}
       {mealList?.length > 0 && mealList?.length < 9 && (
         <button
-          className="fixed bottom-1 right-4 bg-teal-700  text-white py-4 p-6 mt-2 rounded lg:bottom-40 lg:right-52 hover:bg-teal-600"
+          className="fixed bottom-1 right-4 bg-teal-700  text-white py-4 p-6 mt-2 rounded lg:bottom-40 lg:right-52 hover:bg-teal-600 z-10"
           onClick={onOpen}
           hidden={readOnly}
         >

@@ -94,7 +94,7 @@ const Dashboard = () => {
         </Text>
         {prevWeeks.length > 0 &&
           prevWeeks.map((prev) => (
-            <div key={prev.week_id}>
+            <div className="w-full" key={prev.week_id}>
               <Divider />
               <p className="flex items-start justify-start w-full pl-4 pt-4 text-gray-400">
                 Week of {moment.utc(prev.start_date).format("ll")}
