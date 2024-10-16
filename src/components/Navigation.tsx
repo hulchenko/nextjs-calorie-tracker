@@ -11,7 +11,7 @@ const Navigation = () => {
   const toast = useToast();
   const router = useRouter();
   const currentPath = usePathname();
-  const { session, authenticated } = useSession();
+  const { session, authenticated, setSession } = useSession();
 
   const authStateHandler = async () => {
     if (session) {
@@ -24,6 +24,7 @@ const Navigation = () => {
           throw error;
         }
         authenticated.current = false;
+        setSession(null);
         router.push("/login");
         toast({ title: "Signed out", status: "info" });
       } catch (error) {

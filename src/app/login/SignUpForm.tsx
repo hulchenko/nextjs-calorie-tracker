@@ -30,7 +30,7 @@ import React from "react";
 const SignUpForm = () => {
   const toast = useToast();
   const router = useRouter();
-  const { authenticated } = useSession();
+  const { authenticated, setSession } = useSession();
 
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [showPassword, setShowPassword] = useState(false);
@@ -72,10 +72,11 @@ const SignUpForm = () => {
           const { error } = await response.json();
           throw error;
         }
-        const { user } = await response.json();
+        const sessionData = await response.json();
+        setSession(sessionData);
         authenticated.current = true;
         toast({
-          title: `Welcome, ${user.name}!`,
+          title: `Welcome, ${sessionData.user.name}!`,
           status: "success",
         });
         router.push("/dashboard");

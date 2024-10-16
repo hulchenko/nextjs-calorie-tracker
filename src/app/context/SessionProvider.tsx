@@ -16,6 +16,7 @@ export const SessionProvider = ({ children, initialSession }) => {
     if (authenticated.current) {
       // kick out authenticated user to /login on expired session
       router.push("/login");
+      setSession(null);
       authenticated.current = false;
     }
   };
@@ -46,12 +47,12 @@ export const SessionProvider = ({ children, initialSession }) => {
       if (authenticated.current) {
         getSession();
       }
-    }, 5 * 60 * 1000); // every 5 minutes
+    }, 30 * 1000); // every 30 sec
     return () => clearInterval(sessionCheck); // clean up interval
   }, []);
 
   return (
-    <SessionContext.Provider value={{ session, authenticated }}>
+    <SessionContext.Provider value={{ session, setSession, authenticated }}>
       {children}
     </SessionContext.Provider>
   );
@@ -59,9 +60,11 @@ export const SessionProvider = ({ children, initialSession }) => {
 
 const SessionContext = createContext<{
   session: Session | null;
+  setSession: (session: Session | null) => void;
   authenticated: React.MutableRefObject<boolean>;
 }>({
   session: null,
+  setSession: () => {},
   authenticated: { current: false },
 }); // define passing value
 
